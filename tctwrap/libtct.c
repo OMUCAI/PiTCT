@@ -1,0 +1,28 @@
+#include "libtct/program.h"
+#include <Python.h>
+
+int (*programs[8])(const char *filename) = {
+    create_program, selfloop_program, trim_program,   printdes_program,
+    sync_program,   meet_program,     supcon_program, allevents_program};
+
+static PyObject *call_program(PyObject *self, PyObject *args) {
+  const char *prm_filename;
+  int program;
+
+  if (!PyArg_ParseTuple(args, "is", &program, &prm_filename))
+    return NULL;
+  return PyLong_FromLong((long)programs[program](prm_filename));
+}
+
+static PyMethodDef LibTCTMethods[] = {{"call_program",
+                                       (PyCFunction)call_program, METH_VARARGS,
+                                       "Call LibTCT programs."},
+                                      {NULL, NULL, 0, NULL}};
+
+static struct PyModuleDef libtctmodule = {PyModuleDef_HEAD_INIT, "libtct", NULL,
+                                          -1, LibTCTMethods};
+
+PyMODINIT_FUNC
+PyInit_libtct(void) {
+  return PyModule_Create(&libtctmodule);
+}
