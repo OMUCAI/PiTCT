@@ -1,0 +1,34 @@
+# tctwrap
+Python binding TCT
+
+## Requirement
+Python >= 3.7
+
+## Build
+1. install poetry as build mananger 
+```bash
+$ pip install poetry
+```
+
+2. install dependency
+```bash
+$ poetry install
+```
+
+3. build tctwrap
+```bash
+$ poetry build
+```
+
+tctwrap install file is generated in dist/ folder.
+
+## tctwrap Install
+1. copy tctwrap-***.whl
+2. Install tctwrap
+```bash
+pip install tctwrap-****.whl
+```
+
+## How To Use
+Please see examples folder.
+
