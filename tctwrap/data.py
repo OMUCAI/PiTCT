@@ -2,9 +2,12 @@ import umsgpack
 import graphviz as gv
 from pathlib import Path
 from datetime import datetime
+import tempfile
+from .util import is_env_notebook
+import base64
 
 DES_FILE_EXTENSION = ".DES"
-
+BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
 class PlantDisplay(object):
     def __init__(self, plant: str, color: bool = False):
@@ -49,11 +52,7 @@ class PlantDisplay(object):
                     else:
                         self.__graph.edge(str(label), str(tran[1]), label=str(tran[0]))
 
-
-    def save(
-        self,
-        filename: str,
-        fileformat: str,
+    def set_attr(self,
         layout="dot",
         dpi=96,
         label=None,
@@ -74,7 +73,38 @@ class PlantDisplay(object):
         if len(kwargs) > 0:
             self.__graph.attr("graph", **kwargs)
 
+    def save(
+        self,
+        filename: str,
+        fileformat: str,
+        layout="dot",
+        dpi=96,
+        label=None,
+        timelabel=True,
+        **kwargs
+    ):
+        self.set_attr(layout=layout, dpi=dpi, label=label, timelabel=timelabel, **kwargs)
+
         self.__graph.render(filename, format=fileformat, cleanup=True)
 
-    def render(self):
-        return self.__graph
+    def render(self,
+        layout="dot",
+        dpi=96,
+        label=None,
+        timelabel=True,
+        format="png",
+        **kwargs
+    ):
+        self.set_attr(layout=layout, dpi=dpi, label=label, timelabel=timelabel, **kwargs)
+        if is_env_notebook():
+            # Jupyter Environment
+            return self
+        else:
+            # shell
+            return self.__graph.render(tempfile.mktemp('.gv'), view=True, format=format, cleanup=True)
+
+    def _repr_html_(self):
+        svg = self.__graph._repr_svg_()
+        # svg文字列をb64エンコードしてから埋め込み
+        html = BASE_HTML.format("100%", base64.b64encode(svg.encode()))
+        return html
