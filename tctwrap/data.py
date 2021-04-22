@@ -75,3 +75,6 @@ class PlantDisplay(object):
             self.__graph.attr("graph", **kwargs)
 
         self.__graph.render(filename, format=fileformat, cleanup=True)
+
+    def render(self):
+        return self.__graph
