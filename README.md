@@ -1,5 +1,5 @@
 # tctwrap
-Python binding TCT
+Python TCT binding
 
 ## Requirement
 Python >= 3.7
