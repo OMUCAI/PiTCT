@@ -28,7 +28,16 @@ tctwrap install file is generated in dist/ folder.
 ```bash
 pip install tctwrap-****.whl
 ```
+3. Install graphviz(mac, linux)
+- Mac
+```bash
+$ brew install graphviz
+```
 
+- Linux(Ubuntu)
+```bash
+$ apt install graphviz
+```
 ## How To Use
-Please see examples folder.
+Please see [examples folder](./examples).
 
