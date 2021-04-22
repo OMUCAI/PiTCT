@@ -106,5 +106,5 @@ class PlantDisplay(object):
     def _repr_html_(self):
         svg = self.__graph._repr_svg_()
         # svg文字列をb64エンコードしてから埋め込み
-        html = BASE_HTML.format("100%", base64.b64encode(svg.encode()))
+        html = BASE_HTML.format("100%", base64.b64encode(svg.encode()).decode())
         return html
