@@ -54,7 +54,7 @@ class PlantDisplay(object):
 
     def set_attr(self,
         layout="dot",
-        dpi=96,
+        dpi=None,
         label=None,
         timelabel=True,
         **kwargs
@@ -69,7 +69,10 @@ class PlantDisplay(object):
         else:
             self.__graph.attr("graph", label=new_label)
 
-        self.__graph.attr("graph", layout=layout, dpi=str(dpi))
+        if dpi:
+            self.__graph.attr("graph", dpi=str(dpi))
+        
+        self.__graph.attr("graph", layout=layout)
         if len(kwargs) > 0:
             self.__graph.attr("graph", **kwargs)
 
@@ -89,7 +92,7 @@ class PlantDisplay(object):
 
     def render(self,
         layout="dot",
-        dpi=96,
+        dpi=None,
         label=None,
         timelabel=True,
         format="png",
