@@ -28,5 +28,6 @@ int sync_program(const char *filename);
 int meet_program(const char *filename);
 int supcon_program(const char *filename);
 int allevents_program(const char *filename);
+int mutex_program(const char *filename);
 
 #endif

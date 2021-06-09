@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 from .libtct import call_program as __call
 
@@ -155,6 +156,28 @@ def allevents(new_name: str, plant_name: str):
     gen_prm(prm_filename, prm_string)
 
     if __call(7, prm_filename) != 0:
+        raise RuntimeError("error: allevents, check %s" % prm_filename)
+    else:
+        del_prm(prm_filename)
+
+
+def mutex(name_3: str, plant_name: str, name_2: str, state_pair: List[tuple]):
+    for name in [plant_name, name_2]:
+        if not Path(name + DES_FILE_EXTENSION).exists():
+            raise FileNotFoundError()
+
+    prm_filename = "mutex_%s.prm" % plant_name
+    state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
+    
+    prm_string = "{name1}\n{name2}\n{name3}\n{statepair}".format(
+        name1=plant_name,
+        name2=name_2,
+        name3=name_3,
+        statepair=f"\n".join(state_pair_list) 
+    )
+    gen_prm(prm_filename, prm_string)
+
+    if __call(8, prm_filename) != 0:
         raise RuntimeError("error: allevents, check %s" % prm_filename)
     else:
         del_prm(prm_filename)
