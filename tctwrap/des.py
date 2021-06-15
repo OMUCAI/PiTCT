@@ -18,6 +18,30 @@ def del_prm(filename: str):
 
 
 def create(name: str, size: int, trans: list, marker: list):
+    """Create
+
+    Create an automaton model of DES
+
+    Args:
+        name (str): DES model name.
+        size (int): number of states.
+        trans (list): transition tuple list. [(state, event, next state), (...)]
+        marker (list): marker states list.
+
+    Raises:
+        RuntimeError: Cannot create .DES file.
+
+    Examples:
+        >>> delta = [(0,11,1),
+                     (1,10,0),
+                     (1,12,2),
+                     (2,14,3),
+                     (2,13,0),
+                     (0,15,4)]
+        >>> Qm = [0,1]
+        >>> Q = 5
+        >>> create("TEST", Q, delta, Qm)
+    """
     prm_filename = "create_%s.prm" % name
 
     marker.append(-1)
