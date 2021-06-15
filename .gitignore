@@ -193,3 +193,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+## Customize ##
+.DS_Store
+!Makefile
