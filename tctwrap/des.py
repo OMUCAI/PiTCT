@@ -44,9 +44,8 @@ def create(name: str, size: int, trans: list, marker: list):
     """
     prm_filename = "create_%s.prm" % name
 
-    marker.append(-1)
-
     marker_list = ["%d" % mark for mark in marker]
+    marker_list.append("-1")
     trans_list = ["%d %d %d" % ent for ent in trans]
 
     prm_string = "{des_name}\n{state_num}\n{marker_states}\n{transitions}\n"
