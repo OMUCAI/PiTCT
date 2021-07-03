@@ -184,7 +184,7 @@ def allevents(new_name: str, plant_name: str):
         del_prm(prm_filename)
 
 
-def mutex(name_3: str, plant_name: str, name_2: str, state_pair: List[tuple]):
+def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     for name in [plant_name, name_2]:
         if not Path(name + DES_FILE_EXTENSION).exists():
             raise FileNotFoundError()
@@ -195,7 +195,7 @@ def mutex(name_3: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     prm_string = "{name1}\n{name2}\n{name3}\n{statepair}".format(
         name1=plant_name,
         name2=name_2,
-        name3=name_3,
+        name3=new_name,
         statepair=f"\n".join(state_pair_list) 
     )
     gen_prm(prm_filename, prm_string)
@@ -203,4 +203,26 @@ def mutex(name_3: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     if __call(8, prm_filename) != 0:
         raise RuntimeError("error: allevents, check %s" % prm_filename)
     else:
+        del_prm(prm_filename)
+
+def complement(new_name: str, plant_name: str, auxiliary_events: list):
+    if not Path(plant_name + DES_FILE_EXTENSION).exists():
+        raise FileNotFoundError()
+
+    prm_filename = "complement_%s.prm" % plant_name
+    auxiliary_events_list = [f"{event}" for event in auxiliary_events] 
+
+    prm_string = "{name1}\n{name2}\n{eventpair}".format(
+        name1=plant_name,
+        name2=new_name,
+        eventpair="\n".join(auxiliary_events_list)
+    )
+    gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(9, prm_filename)
+    if ret_code == -1:
+        raise RuntimeError("error: can't read filename. name: {new_name}, {plant_name}")
+    elif ret_code == -2:
+        raise MemoryError("Out of Memory.")
+    elif ret_code != -1:
         del_prm(prm_filename)

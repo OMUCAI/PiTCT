@@ -599,3 +599,59 @@ int mutex_program(const char *filename) {
     return -6;
   }
 }
+
+int complement_program(const char *filename) {
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return -2;
+  }
+
+  state_node *t1;
+  INT_S s1, init;
+  INT_T *list, slist;
+  INT_T e;
+  INT_OS ee;
+  INT_B ok;
+
+  t1 = NULL;
+  s1 = 0;
+  list = NULL;
+  slist = 0;
+
+  /* Use "fgets" as names could have spaces in it */
+  if (fgets(name1, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+  }
+  name1[strlen(name1) - 1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+  }
+  name2[strlen(name2) - 1] = '\0';
+
+  while (fscanf(f1, "%d", &ee) != EOF) {
+    e = (INT_T)ee;
+    addordlist(e, &list, slist, &ok);
+    if (ok)
+      slist++;
+  }
+
+  fclose(f1);
+  // remove(prm_file);
+
+  init = 0L;
+  getdes(name1, &s1, &init, &t1);
+
+  complement1(&s1, &t1, slist, list);
+  reach(&s1, &t1);
+
+  if (mem_result != 1) {
+    filedes(name2, s1, init, t1);
+  } else {
+    // ctct_result(CR_OUT_OF_MEMORY);
+    // exit(0);
+    return -2;
+  }
+}
