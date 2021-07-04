@@ -30,5 +30,7 @@ int supcon_program(const char *filename);
 int allevents_program(const char *filename);
 int mutex_program(const char *filename);
 int complement_program(const char *filename);
+int nonconflict_program(const char *filename);
+
 
 #endif

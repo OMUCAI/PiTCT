@@ -226,3 +226,27 @@ def complement(new_name: str, plant_name: str, auxiliary_events: list):
         raise MemoryError("Out of Memory.")
     elif ret_code != -1:
         del_prm(prm_filename)
+
+def nonconflict(des1: str, des2: str) -> bool:
+    for name in [des1, des2]:
+        if not Path(name + DES_FILE_EXTENSION).exists():
+            raise FileNotFoundError()
+    
+    prm_filename = "nonconflict_%s.prm" % des1
+    prm_string = "{name1}\n{name2}".format(
+        name1=des1,
+        name2=des2,
+    )
+    gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(10, prm_filename)
+    if ret_code == -1:
+        raise RuntimeError(f"Error: Cannot read filename. name: {des1}, {des2}")
+    elif ret_code == -2:
+        raise MemoryError("Out of Memory.")
+    elif ret_code == 0:
+        return False
+    elif ret_code == 1:
+        return True
+    else:
+        raise RuntimeError("Unknown Error.")

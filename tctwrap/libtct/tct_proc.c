@@ -90,3 +90,30 @@ INT_B print_transitions(FILE *out, state_node *t1, INT_S s1) {
   }
   return false;
 }
+
+INT_B nonconflict(INT_S s, state_node *t) {
+  INT_S state;
+
+  if (s == 0)
+    return true;
+
+  /* Make all the "reached" variable to false.
+     This is needed because b_reach assumes this field is set to false
+     before calling it. */
+  for (state = 0; state < s; state++)
+    t[state].reached = false;
+
+  for (state = 0; state < s; state++) {
+    if (t[state].marked) {
+      t[state].reached = true;
+      b_reach(t[state].next, state, &t, s);
+    }
+  }
+
+  for (state = 0; state < s; state++) {
+    if (!t[state].reached) {
+      return false;
+    }
+  }
+  return true;
+}

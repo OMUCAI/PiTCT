@@ -655,3 +655,68 @@ int complement_program(const char *filename) {
     return -2;
   }
 }
+
+int nonconflict_program(const char *filename) {
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return -1;
+  }
+  state_node *t1, *t2, *t3;
+  INT_S s1, s2, s3, init;
+  INT_B is_nonconflict;
+  INT_S *macro_ab, *macro_c;
+
+  t1 = t2 = t3 = NULL;
+  s1 = s2 = s3 = 0;
+  is_nonconflict = false;
+  macro_c = macro_ab = NULL;
+
+  /* Use "fgets" as names could have spaces in it */
+  if (fgets(name1, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+    return -1;
+  }
+  name1[strlen(name1) - 1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+    return -1;
+  }
+  name2[strlen(name2) - 1] = '\0';
+
+  fclose(f1);
+  // remove(prm_file);
+
+  init = 0L;
+  getdes(name1, &s1, &init, &t1);
+
+  init = 0L;
+  getdes(name2, &s2, &init, &t2);
+
+  is_nonconflict = false;
+
+  nc_meet2(s1, t1, s2, t2, &s3, &t3, &macro_ab, &macro_c);
+  is_nonconflict = nonconflict(s3, t3);
+
+  if (mem_result == 1) {
+    // ctct_result(CR_OUT_OF_MEMORY);
+    return -2;
+  } else {
+    // ctct_result_flag(CR_OK, is_nonconflict);
+    // return is_nonconflict;
+  }
+
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  freedes(s3, &t3);
+  free(macro_ab);
+  free(macro_c);
+  // exit(0);
+  return is_nonconflict;
+}
