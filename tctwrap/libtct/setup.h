@@ -11,6 +11,19 @@ extern "C" {
 #define DES_FILE_VERSION "2.0"
 #define _MAX_PATH 260
 
+// Check x64 or x32
+// C
+#include <stdint.h>
+
+#if INTPTR_MAX == INT64_MAX
+// 64-bit
+  #define _x64_
+#elif INTPTR_MAX == INT32_MAX
+// 32-bit
+#else
+#error Unknown pointer size or missing size macros!
+#endif
+
 extern INT_OS autotest;
 extern INT_OS ring_active;
 extern INT_OS debug_mode;
