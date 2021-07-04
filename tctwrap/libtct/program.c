@@ -720,3 +720,69 @@ int nonconflict_program(const char *filename) {
   // exit(0);
   return is_nonconflict;
 }
+
+int condat_program(const char *filename) {
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return -1;
+  }
+  state_node *t1, *t2, *t3, *t4;
+  INT_S s1, s2, s3, s4, init;
+  INT_S *macro_ab, *macro_c;
+
+  macro_ab = NULL;
+  macro_c = NULL;
+  t1 = t2 = t3 = t4 = NULL;
+  s1 = s2 = s3 = s4 = 0;
+
+  /* Use "fgets" as names could have spaces in it */
+  if (fgets(name1, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+  }
+  name1[strlen(name1) - 1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+  }
+  name2[strlen(name2) - 1] = '\0';
+
+  if (fgets(name3, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+  }
+  name3[strlen(name3) - 1] = '\0';
+
+  fclose(f1);
+  // remove(prm_file);
+
+  init = 0L;
+  getdes(name1, &s1, &init, &t1);
+  getdes(name2, &s2, &init, &t2);
+
+  meet2(s1, t1, s2, t2, &s3, &t3, &macro_ab, &macro_c);
+  freedes(s2, &t2);
+  t2 = NULL;
+  free(macro_ab);
+
+  condat1(t1, s1, s2, s3, t3, &s4, &t4, macro_c);
+
+  if (mem_result != 1) {
+    filedes(name3, s4, -1L, t4);
+    return 0;
+  } else {
+    return -2;
+    // ctct_result(CR_OUT_OF_MEMORY);
+    // exit(0);
+  }
+}

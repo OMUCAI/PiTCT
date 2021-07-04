@@ -245,8 +245,32 @@ def nonconflict(des1: str, des2: str) -> bool:
     elif ret_code == -2:
         raise MemoryError("Out of Memory.")
     elif ret_code == 0:
+        del_prm(prm_filename)
         return False
     elif ret_code == 1:
+        del_prm(prm_filename)
         return True
     else:
         raise RuntimeError("Unknown Error.")
+
+
+def condat(new_name: str, plant_name: str, sup_name: str):
+    for name in [plant_name, sup_name]:
+        if not Path(name + DES_FILE_EXTENSION).exists():
+            raise FileNotFoundError()
+    
+    prm_filename = "condat_%s.prm" % new_name
+    prm_string = "{name1}\n{name2}\n{name3}".format(
+        name1=plant_name,
+        name2=sup_name,
+        name3=new_name
+    )
+    gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(11, prm_filename)
+    if ret_code == -1:
+        raise RuntimeError(f"Error: Cannot read filename. name: {plant_name}, {sup_name}")
+    elif ret_code == -2:
+        raise MemoryError("Out of Memory.")
+    else:
+        del_prm(prm_filename)
