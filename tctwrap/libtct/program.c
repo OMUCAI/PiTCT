@@ -3,6 +3,7 @@
 #include "des_proc.h"
 #include "tct_io.h"
 #include "tct_proc.h"
+#include "supred.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -784,5 +785,124 @@ int condat_program(const char *filename) {
     return -2;
     // ctct_result(CR_OUT_OF_MEMORY);
     // exit(0);
+  }
+}
+
+int supreduce_program(const char *filename) {
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return -1;
+  }
+  state_node *t1, *t2, *t3, *t4;
+  INT_S s1, s2, s3, s4, init;
+  INT_S lb;
+  float cr;
+  INT_OS supreduce_flag;
+  INT_OS mode;
+  INT_OS slb_flag;
+
+  t1 = t2 = t3 = t4 = NULL;
+  s1 = s2 = s3 = s4 = 0;
+  lb = 0;
+  cr = 0.0;
+  mode = 0;
+
+  /* Use "fgets" as names could have spaces in it */
+  if (fgets(name1, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+  }
+  name1[strlen(name1) - 1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+    return -1;
+  }
+  name2[strlen(name2) - 1] = '\0';
+
+  if (fgets(name3, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+    return -1;
+  }
+  name3[strlen(name3) - 1] = '\0';
+
+  if (fgets(name4, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    // remove(prm_file);
+    // ctct_result(CR_PRM_ERR);
+    // exit(0);
+    return -1;
+  }
+  name4[strlen(name4) - 1] = '\0';
+
+  fscanf(f1, "%d\n", &mode);
+  fscanf(f1, "%d\n", &slb_flag);
+
+  fclose(f1);
+  // remove(prm_file);
+
+  strcpy(long_name1, "");
+  strcpy(long_name2, "");
+  strcpy(long_name3, "");
+  strcpy(long_name4, "");
+  make_filename_ext(long_name1, name1, EXT_DES);
+  make_filename_ext(long_name2, name2, EXT_DES);
+  make_filename_ext(long_name3, name3, EXT_DAT);
+  make_filename_ext(long_name4, name4, EXT_DES);
+
+  // TODO: Implement ex_supreduce
+  // if (mode == 0)
+    supreduce_flag = supreduce(long_name1, long_name2, long_name3, long_name4,
+                               &lb, &cr, slb_flag);
+  // else {
+  //   supreduce_flag = ex_supreduce(long_name1, long_name2, long_name3,
+  //                                 long_name4, &lb, &cr, slb_flag);
+  // }
+
+  if (supreduce_flag == 100) {
+    return 100;
+    // ctct_result(100);
+    // exit(0);
+  }
+
+  if (mem_result != 1) {
+    switch (supreduce_flag) {
+    case 0:
+      break;
+    case -1:
+      filedes(name4, s4, 0L, t4);
+      break;
+    case -2:
+      init = 0;
+      getdes(name2, &s4, &init, &t4);
+      filedes(name4, s4, init, t4);
+      cr = 1;
+      lb = s4;
+      break;
+    }
+
+    if (supreduce_flag > 0) {
+      return -3;
+      // ctct_result(CR_SUPREDUCE_ERR);
+      // exit(0);
+    } else {
+      /* On success, we need to pass the "lb" and "cr" */
+
+      // ctct_result_supreduce(CR_OK, (INT_OS)lb, cr);
+      // exit(0);
+      return 0;
+    }
+  } else {
+    // ctct_result(CR_OUT_OF_MEMORY);
+    return -1;
   }
 }

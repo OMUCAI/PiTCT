@@ -32,5 +32,6 @@ int mutex_program(const char *filename);
 int complement_program(const char *filename);
 int nonconflict_program(const char *filename);
 int condat_program(const char *filename);
+int supreduce_program(const char *filename);
 
 #endif

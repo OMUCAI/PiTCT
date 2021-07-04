@@ -3,7 +3,7 @@ from typing import List
 
 from .libtct import call_program as __call
 
-from .data import DES_FILE_EXTENSION
+from .data import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
 
 
 def gen_prm(filename: str, contents: str):
@@ -274,3 +274,35 @@ def condat(new_name: str, plant_name: str, sup_name: str):
         raise MemoryError("Out of Memory.")
     else:
         del_prm(prm_filename)
+
+
+def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode: int = 0, slb_flg: bool = True):
+    for name in [plant_name, sup_name]:
+        if not Path(name + DES_FILE_EXTENSION).exists():
+            raise FileNotFoundError()
+    
+    if not Path(dat_name + DAT_FILE_EXTENSION).exists():
+        raise FileNotFoundError()
+    
+    prm_filename = "supreduce_%s.prm" % new_name
+    prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{mode}\n{slb_flg}".format(
+        name1=plant_name,
+        name2=sup_name,
+        name3=dat_name,
+        name4=new_name,
+        mode=mode,
+        slb_flg=1 if slb_flg else 0
+    )
+    gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(12, prm_filename)
+    if ret_code == -1:
+        raise RuntimeError(f"Error: Cannot read filename. name: {plant_name}, {sup_name}, {dat_name}")
+    elif ret_code == -2:
+        raise MemoryError("Out of Memory.")
+    elif ret_code == -3:
+        raise RuntimeError("Error: Supreduce Error.")
+    elif ret_code == 0:
+        del_prm(prm_filename)
+    else:
+        raise RuntimeError("Unknown Error")
