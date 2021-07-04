@@ -7,6 +7,7 @@ from .util import is_env_notebook
 import base64
 
 DES_FILE_EXTENSION = ".DES"
+DAT_FILE_EXTENSION = ".DAT"
 BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
 class PlantDisplay(object):
