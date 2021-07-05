@@ -155,11 +155,11 @@ void free_cc_check_table(INT_S size, cc_check_table **data) {
   *data = NULL;
 }
 
-static char signature[8] = {"Z8^0L;1"};
-static char signature_x32[8] = {"Z8^0L;1"};
-static char signature_x64[8] = {"Z8^0L;2"};
-static INT_OS signature_length = 7;
-static INT_OS endian = 0xFF00AA55;
+// static char signature[8] = {"Z8^0L;1"};
+// static char signature_x32[8] = {"Z8^0L;1"};
+// static char signature_x64[8] = {"Z8^0L;2"};
+// static INT_OS signature_length = 7;
+// static INT_OS endian = 0xFF00AA55;
 
 /* "filedes" function */
 INT_OS filedes(char *name, INT_S size, INT_S init, state_node *data) {
@@ -1217,7 +1217,7 @@ void zprintn(INT_S s) {
   strcat(tmp_result, "Ouput.txt");
 
   out = fopen(tmp_result, "a");
-  fprintf(out, "%d", s);
+  fprintf(out, "%ld", s);
   fclose(out);
 }
 void zprintsn(char *str, INT_S s) {
@@ -1228,7 +1228,7 @@ void zprintsn(char *str, INT_S s) {
   strcat(tmp_result, "Ouput.txt");
   out = fopen(tmp_result, "a");
 
-  fprintf(out, "%s%d\n", str, s);
+  fprintf(out, "%s%ld\n", str, s);
   fclose(out);
 }
 void zprint_list(INT_S s, INT_S *list) {
@@ -1241,7 +1241,7 @@ void zprint_list(INT_S s, INT_S *list) {
   out = fopen(tmp_result, "a");
 
   for (i = 0; i < s; i++) {
-    fprintf(out, "%d ", list[i]);
+    fprintf(out, "%ld ", list[i]);
   }
   fprintf(out, "\n");
   fclose(out);
@@ -1272,7 +1272,7 @@ void zprint_par(INT_S s, part_node *par) {
 
   for (i = 0; i < s; i++) {
     for (j = 0; j < par[i].numelts; j++) {
-      fprintf(out, "%d ", par[i].next[j]);
+      fprintf(out, "%ld ", par[i].next[j]);
     }
     fprintf(out, "\n");
   }
@@ -1325,7 +1325,7 @@ void zprint_map(INT_S s, state_map *map) {
 
   for (i = 0; i < s; i++) {
     for (j = 0; j < map[i].numelts; j++)
-      fprintf(out, "%d ", map[i].next[j]);
+      fprintf(out, "%ld ", map[i].next[j]);
     fprintf(out, "\n");
   }
   fclose(out);
@@ -1340,7 +1340,7 @@ void zprint_pair(INT_S s, state_pair *pair) {
   out = fopen(tmp_result, "a");
 
   for (i = 0; i < s; i++) {
-    fprintf(out, "%d  %d \n", pair[i].data1, pair[i].data2);
+    fprintf(out, "%ld  %ld \n", pair[i].data1, pair[i].data2);
   }
   fprintf(out, "\n");
   fclose(out);
@@ -1355,7 +1355,7 @@ void zprint_triple(INT_S s, triple *trip) {
   out = fopen(tmp_result, "a");
 
   for (i = 0; i < s; i++)
-    fprintf(out, "%d  %d   %d\n", trip[i].i, trip[i].e, trip[i].j);
+    fprintf(out, "%ld  %d   %ld\n", trip[i].i, trip[i].e, trip[i].j);
 
   fprintf(out, "\n");
   fclose(out);

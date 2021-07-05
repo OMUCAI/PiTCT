@@ -14,7 +14,7 @@ extern "C" {
 
 // #include "curses.h"
 
-	static char signature[8] = {"Z8^0L;1"};
+	// static char signature[8] = {"Z8^0L;1"};
 	static char signature_x32[8] = {"Z8^0L;1"};
 	static char signature_x64[8] = {"Z8^0L;2"};
 	static INT_OS  signature_length = 7;

@@ -39,7 +39,7 @@ int create_program(const char *filename) {
   }
   name1[strlen(name1) - 1] = '\0';
 
-  fscanf(f1, "%d\n", &s);
+  fscanf(f1, "%ld\n", &s);
 
   t = newdes(s);
 

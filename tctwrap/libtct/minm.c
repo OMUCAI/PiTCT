@@ -825,12 +825,12 @@ void loc_refinement_disable(INT_S*s1, state_node**t1, INT_S sn, state_node*tn)
    INT_S *mapState, *mapState2;
    INT_S s2;
    state_node *t2;
-   part_state *part_array;  INT_S s_part_array;
+   // part_state *part_array; INT_S s_part_array;
    INT_S block_id;
 
-   part_node *par; INT_S s_par;
+   // part_node *par; INT_S s_par;
 
-   s_par = 0; par = NULL;
+   // s_par = 0; par = NULL;
  //  INT_B  any_diff, equal; /* contain_flag, other_flag */
 /*   INT_S which_block; */
 
@@ -851,7 +851,7 @@ void loc_refinement_disable(INT_S*s1, state_node**t1, INT_S sn, state_node*tn)
    ptr_splitblocks.next = NULL; ptr_splitblocks.numelts = 0;
    mapState = NULL; mapState2 = NULL;
    t2 = NULL;
-   part_array = NULL; s_part_array = 0;
+   // part_array = NULL; s_part_array = 0;
 
    event = NULL; s_event = 0;
 
@@ -1306,7 +1306,7 @@ FREEMEM:
    }
 
    if (ptr_splitblocks.next != NULL) free(ptr_splitblocks.next);
-   if (part_array != NULL) free(part_array);
+   // if (part_array != NULL) free(part_array);
 }
 
 void loc_refinement(INT_S*s1, state_node**t1, INT_S s_par, part_node *par)
@@ -1323,7 +1323,7 @@ void loc_refinement(INT_S*s1, state_node**t1, INT_S s_par, part_node *par)
    INT_S *mapState, *mapState2;
    INT_S s2;
    state_node *t2;
-   part_state *part_array;  INT_S s_part_array;
+   // part_state *part_array;  INT_S s_part_array;
    INT_S block_id;
  //  INT_B  any_diff, equal; /* contain_flag, other_flag */
 /*   INT_S which_block; */
@@ -1341,7 +1341,7 @@ void loc_refinement(INT_S*s1, state_node**t1, INT_S s_par, part_node *par)
    ptr_splitblocks.next = NULL; ptr_splitblocks.numelts = 0;
    mapState = NULL; mapState2 = NULL;
    t2 = NULL;
-   part_array = NULL; s_part_array = 0;
+   // part_array = NULL; s_part_array = 0;
 
    event = NULL; s_event = 0;
 
@@ -1800,7 +1800,7 @@ FREEMEM:
    }
 
    if (ptr_splitblocks.next != NULL) free(ptr_splitblocks.next);
-   if (part_array != NULL) free(part_array);
+   // if (part_array != NULL) free(part_array);
 }
 
 #ifdef __cplusplus
