@@ -599,6 +599,7 @@ int mutex_program(const char *filename) {
   } else {
     return -6;
   }
+  return 0;
 }
 
 int complement_program(const char *filename) {
@@ -655,6 +656,7 @@ int complement_program(const char *filename) {
     // exit(0);
     return -2;
   }
+  return 0;
 }
 
 int nonconflict_program(const char *filename) {
