@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#include "curses.h"
+// #include "curses.h"
 
 	static char signature[8] = {"Z8^0L;1"};
 	static char signature_x32[8] = {"Z8^0L;1"};
