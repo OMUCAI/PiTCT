@@ -233,7 +233,7 @@ def nonconflict(des1: str, des2: str) -> bool:
             raise FileNotFoundError()
     
     prm_filename = "nonconflict_%s.prm" % des1
-    prm_string = "{name1}\n{name2}".format(
+    prm_string = "{name1}\n{name2}\n".format(
         name1=des1,
         name2=des2,
     )
@@ -260,7 +260,7 @@ def condat(new_name: str, plant_name: str, sup_name: str):
             raise FileNotFoundError()
     
     prm_filename = "condat_%s.prm" % new_name
-    prm_string = "{name1}\n{name2}\n{name3}".format(
+    prm_string = "{name1}\n{name2}\n{name3}\n".format(
         name1=plant_name,
         name2=sup_name,
         name3=new_name
@@ -285,7 +285,7 @@ def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode
         raise FileNotFoundError()
     
     prm_filename = "supreduce_%s.prm" % new_name
-    prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{mode}\n{slb_flg}".format(
+    prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{mode}\n{slb_flg}\n".format(
         name1=plant_name,
         name2=sup_name,
         name3=dat_name,
