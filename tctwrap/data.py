@@ -4,15 +4,19 @@ from pathlib import Path
 from datetime import datetime
 import tempfile
 from .util import is_env_notebook
+from .config import Config
 import base64
 
 DES_FILE_EXTENSION = ".DES"
 DAT_FILE_EXTENSION = ".DAT"
 BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
+conf = Config.get_instance()
+
 class PlantDisplay(object):
     def __init__(self, plant: str, color: bool = False):
-        self.__path = Path(plant + DES_FILE_EXTENSION)
+        self.__path = Path(conf.SAVE_FOLDER / (plant + DES_FILE_EXTENSION))
+        print(self.__path)
         self.__byte = self.__path.read_bytes()
         self.__data = umsgpack.unpackb(self.__byte)
 
