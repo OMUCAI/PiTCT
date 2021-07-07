@@ -16,7 +16,6 @@ conf = Config.get_instance()
 class PlantDisplay(object):
     def __init__(self, plant: str, color: bool = False):
         self.__path = Path(conf.SAVE_FOLDER / (plant + DES_FILE_EXTENSION))
-        print(self.__path)
         self.__byte = self.__path.read_bytes()
         self.__data = umsgpack.unpackb(self.__byte)
 
