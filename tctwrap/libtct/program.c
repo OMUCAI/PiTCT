@@ -1,12 +1,14 @@
-#include "program.h"
-#include "des_data.h"
-#include "des_proc.h"
-#include "tct_io.h"
-#include "tct_proc.h"
-#include "supred.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "program.h"
+#include "des_data.h"
+#include "des_proc.h"
+#include "supred.h"
+#include "tct_io.h"
+#include "tct_proc.h"
+#include "mymalloc.h"
 
 typedef char filename1[MAX_FILENAME];
 
@@ -863,8 +865,8 @@ int supreduce_program(const char *filename) {
 
   // TODO: Implement ex_supreduce
   // if (mode == 0)
-    supreduce_flag = supreduce(long_name1, long_name2, long_name3, long_name4,
-                               &lb, &cr, slb_flag);
+  supreduce_flag = supreduce(long_name1, long_name2, long_name3, long_name4,
+                             &lb, &cr, slb_flag);
   // else {
   //   supreduce_flag = ex_supreduce(long_name1, long_name2, long_name3,
   //                                 long_name4, &lb, &cr, slb_flag);
@@ -907,4 +909,88 @@ int supreduce_program(const char *filename) {
     // ctct_result(CR_OUT_OF_MEMORY);
     return -1;
   }
+}
+
+int isomorph_program(const char *filename) {
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return -1;
+  }
+
+  state_node *t1, *t2;
+  INT_S s1, s2, init;
+  INT_B is_iso, flag, identity;
+  INT_S *mapState;
+  INT_S result;
+
+  t1 = t2 = NULL;
+  s1 = s2 = 0;
+  is_iso = false;
+  mapState = NULL;
+  identity = false;
+  result = 0;
+
+  /* Use "fgets" as names could have spaces in it */
+  if (fgets(name1, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+  }
+  name1[strlen(name1) - 1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL) {
+    fclose(f1);
+    return -1;
+  }
+  name2[strlen(name2) - 1] = '\0';
+
+  fclose(f1);
+  // remove(prm_file);
+
+  init = 0L;
+  getdes(name1, &s1, &init, &t1);
+
+  init = 0L;
+  getdes(name2, &s2, &init, &t2);
+
+  if ((strcmp(name1, name2) == 0) || ((s1 == 0) && (s2 == 0))) {
+    is_iso = true;
+    identity = true;
+    result = true;
+    // ctct_result_isomorph(CR_OK, is_iso, identity, 0, NULL);
+    // goto FREE_MEM;
+  } else if (s1 != s2) {
+    result = false;
+    // ctct_result_isomorph(CR_OK, is_iso, identity, 0, NULL);
+    // goto FREE_MEM;
+  } else {
+    /* Need some memory here - Allocate map state */
+    mapState = (INT_S *)CALLOC(s1, sizeof(INT_S));
+
+    if ((s1 != 0) && (mapState == NULL)) {
+      mem_result = 1;
+      // ctct_result(CR_OUT_OF_MEMORY);
+      // goto FREE_MEM;
+    }
+    memset(mapState, -1, sizeof(INT_S) * (s1));
+    mapState[0] = 0;
+
+    flag = true;
+    iso1(s1, s2, t1, t2, &flag, mapState);
+    if (flag) {
+      is_iso = true;
+      result = true;
+    }
+  }
+
+  if (mem_result == 1) {
+    result = -2;
+    // ctct_result(CR_OUT_OF_MEMORY);
+  } else {
+    // ctct_result_isomorph(CR_OK, is_iso, identity, s1, mapState);
+  }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  free(mapState);
+
+  return result;
 }
