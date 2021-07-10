@@ -115,8 +115,8 @@ INT_OS Get_DES(INT_S *tran_number, INT_S *num_states, INT_OS index,
   INT_S base_point;
   INT_S mark_states_number;
 
-  state_node *t1;
-  INT_S size, init = 0L;
+  state_node *t1 = NULL;
+  INT_S size = 0L, init = 0L;
   INT_B is_success;
 
   // remove extension e.g., test.DES -> test 
@@ -3560,7 +3560,7 @@ INT_B Forbidden_Event(char *name) {
   INT_S i, j;
 
   state_node *t1;
-  INT_S size, init = 1L;
+  INT_S size = 0L, init = -1L;
   INT_B is_success;
 
   // remove extension e.g., test.DES -> test 
