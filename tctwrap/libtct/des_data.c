@@ -336,6 +336,9 @@ INT_B getdes(char *name, INT_S *size, INT_S *init, state_node **data) {
         (*data)[i].next[trans].data1 = label;
         (*data)[i].next[trans].data2 = entrance;
       }
+    } else {
+      (*data)[i].numelts = 0;
+      (*data)[i].next = NULL;
     }
     (*data)[i].vocal =
         (INT_V)mpack_node_int(mpack_node_map_cstr(state, "vocal"));
@@ -1155,6 +1158,20 @@ INT_S num_mark_states(state_node *t1, INT_S s1) {
       num_mark++;
   }
   return num_mark;
+}
+
+/* get the marked states list(array) */
+void mark_state_list(state_node *t1, INT_S size, INT_S *result) {
+  // You must allocate memory for the number of marker states..
+  // you can get from num_mark_states function.
+  // Not Add last -1.
+  INT_S i;
+  INT_S result_idx = 0;
+  for(i = 0; i < size; i++) {
+    if(t1[i].marked) {
+      result[result_idx++] = i;
+    }
+  }
 }
 
 /* Return the number of vocal states */

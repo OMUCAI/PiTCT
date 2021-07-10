@@ -1,6 +1,7 @@
 #ifndef _SUPRED_H
 #define _SUPRED_H
 
+#include <stdio.h>
 #include "des_data.h"
 
 #ifdef __cplusplus
@@ -10,7 +11,7 @@ extern "C" {
 extern INT_OS Get_DES(INT_S *, INT_S *, INT_OS, char*);
 extern INT_B Forbidden_Event(char*);
 extern void Final_Result();
-extern INT_OS Txt_DES(INT_S);
+extern INT_OS Txt_DES(FILE *, INT_S);
 extern void Controller_Tree();
 extern INT_B Combined_Tree();
 extern void Tree_Structure_Conversion(char*);

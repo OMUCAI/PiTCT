@@ -183,6 +183,7 @@ extern INT_B inlist(INT_T, INT_T *, INT_T);
 extern void add_quad(INT_S, INT_T, INT_S, INT_V, quad__t **, INT_S, INT_B *);
 extern INT_B check_des_sanity(state_node *, INT_S);
 extern INT_S num_mark_states(state_node *, INT_S);
+extern void mark_state_list(state_node *, INT_S, INT_S *);
 extern INT_S num_vocal_output(state_node *, INT_S);
 
 extern void recode_min(INT_S, state_node *, INT_S, state_node *, INT_S *);
