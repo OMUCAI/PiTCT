@@ -116,11 +116,20 @@ INT_OS Get_DES(INT_S *tran_number, INT_S *num_states, INT_OS index,
   INT_S mark_states_number;
 
   state_node *t1;
-  INT_S size, init;
-  getdes(name, &size, &init, &t1);
+  INT_S size, init = 0L;
+  INT_B is_success;
 
+  // remove extension e.g., test.DES -> test 
+  char short_name[MAX_FILENAME];
+  strncpy(short_name, name, strlen(name) - 4);
+  short_name[strlen(name) - 4] = '\0';
+
+  is_success = getdes(short_name, &size, &init, &t1);
+  if (!is_success) {
+    return 2;
+  }
   // read x64 DES
-  num_states = size;
+  *num_states = size;
 
   /* Read the marked states */
   mark_states_number = num_mark_states(t1, size);
@@ -143,8 +152,8 @@ INT_OS Get_DES(INT_S *tran_number, INT_S *num_states, INT_OS index,
       mem_result = 1;
       return 6;
     }
-    mark_state_list(t1, size, c_marked_states);
-    c_marked_states[mark_states_number] = -1;
+    mark_state_list(t1, size, p_marked_states);
+    p_marked_states[mark_states_number] = -1;
   }
 
   /* Read the transitions */
@@ -3551,8 +3560,18 @@ INT_B Forbidden_Event(char *name) {
   INT_S i, j;
 
   state_node *t1;
-  INT_S size, init;
-  getdes(name, &size, &init, &t1);
+  INT_S size, init = 1L;
+  INT_B is_success;
+
+  // remove extension e.g., test.DES -> test 
+  char short_name[MAX_FILENAME];
+  strncpy(short_name, name, strlen(name) - 4);
+  short_name[strlen(name) - 4] = '\0';
+
+  is_success = getdes(short_name, &size, &init, &t1);
+  if (!is_success) {
+    return false;
+  }
   num_states = size;
 
   /* Read the transitions */
@@ -3575,7 +3594,7 @@ INT_B Forbidden_Event(char *name) {
       }
     }
   }
-  return 0;
+  return true;
 }
 
 
