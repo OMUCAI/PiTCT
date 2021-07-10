@@ -202,7 +202,7 @@ INT_OS Get_DES(INT_S *tran_number, INT_S *num_states, INT_OS index,
         controller[3 * base_point + 2] = i;
         base_point += 1;
       }
-      for (INT_S j = 0; j < t1[i].numelts; i++) {
+      for (j = 0; j < t1[i].numelts; j++) {
         controller[3 * base_point] = i;
         controller[3 * base_point + 2] =
             t1[i].next[j].data2; //(int) (yy & 0x003FFFFF);
@@ -217,7 +217,7 @@ INT_OS Get_DES(INT_S *tran_number, INT_S *num_states, INT_OS index,
         plant[3 * base_point + 2] = i;
         base_point += 1;
       }
-      for (INT_S j = 0; j < t1[i].numelts; i++) {
+      for (j = 0; j < t1[i].numelts; j++) {
         plant[3 * base_point] = i;
         plant[3 * base_point + 2] =
             t1[i].next[j].data2; //(int) (yy & 0x003FFFFF);
