@@ -157,12 +157,14 @@ INT_OS Get_DES(INT_S *tran_number, INT_S *num_states, INT_OS index,
   }
 
   /* Read the transitions */
-  // address = ftell(in);
-
   *tran_number = 0;
 
   for (i = 0; i < size; i++) {
-    *tran_number += t1[i].numelts;
+    if(t1[i].numelts == 0) {
+      *tran_number += 1;
+    } else {
+      *tran_number += t1[i].numelts;  
+    }
   }
 
   if (index == 0) {
