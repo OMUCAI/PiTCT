@@ -10,9 +10,7 @@ class Singleton(object):
 
 class Config(Singleton):
     def __init__(self):
-        self.__dict__ = {
-            'SAVE_FOLDER': Path()
-        }
+        self.SAVE_FOLDER = Path.cwd()
     
     def __getitem__(self, key):
         return self.__dict__[key]
