@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tctwrap"
-version = "0.2.7"
+version = "0.2.9"
 description = "Python TCT Wrapper"
 authors = ["Shoma Matsui <matsui@shoma.cc>"]
 license = "Apache-2.0"
