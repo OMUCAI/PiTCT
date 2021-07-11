@@ -73,7 +73,7 @@ struct virtual_stack {
 // Selfloop_Node2,Refinement2 are called in Supreduce3: New Control
 // Consistency(Dx = Dx')
 
-INT_OS Txt_DES(FILE *, INT_S);
+INT_OS Txt_DES(char *name, INT_S);
 void Controller_Tree();
 INT_B Combined_Tree();
 INT_OS Set_State_No_of_Plant(INT_S);
@@ -3828,7 +3828,7 @@ void Tree_Structure_Conversion(char *name) {
 /*I use this module to convert the .txt file into .des file so that CTCT
  * software*/
 /*can use this simplified controller directly.*/
-INT_OS Txt_DES(FILE *out, INT_S number_of_states) {
+INT_OS Txt_DES(char *name, INT_S number_of_states) {
   INT_S init = 0;
 
   INT_S mark_state = 0;
@@ -3840,6 +3840,11 @@ INT_OS Txt_DES(FILE *out, INT_S number_of_states) {
   INT_B ok;
   INT_T event;
   INT_S next;
+
+  // remove extension e.g., test.DES -> test 
+  char short_name[MAX_FILENAME];
+  strncpy(short_name, name, strlen(name) - 4);
+  short_name[strlen(name) - 4] = '\0';
 
   state_node *t1;
   t1 = newdes(number_of_states);
@@ -3878,7 +3883,7 @@ INT_OS Txt_DES(FILE *out, INT_S number_of_states) {
     }
   }
 
-  filedes(out, number_of_states, init, t1);
+  filedes(short_name, number_of_states, init, t1);
 
   if (mem_result == 1) {
     return -1;
@@ -4658,7 +4663,7 @@ INT_OS supreduce1(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -4852,12 +4857,12 @@ INT_OS supreduce1(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
   *fnum = tmp_data;
-  fclose(out);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
@@ -4922,7 +4927,7 @@ INT_OS supreduce2(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -5118,12 +5123,12 @@ INT_OS supreduce2(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
   *fnum = tmp_data;
-  fclose(out);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
@@ -5187,7 +5192,7 @@ INT_OS supreduce3(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -5381,12 +5386,12 @@ INT_OS supreduce3(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
   *fnum = tmp_data;
-  fclose(out);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
@@ -5449,7 +5454,7 @@ INT_OS supreduce4(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -5643,12 +5648,12 @@ INT_OS supreduce4(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
   *fnum = tmp_data;
-  fclose(out);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
@@ -5713,7 +5718,7 @@ INT_OS supreduce5(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i, j;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -6010,11 +6015,11 @@ INT_OS supreduce5(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
-  fclose(out);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
@@ -6112,7 +6117,7 @@ INT_OS supreduce6(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -6318,11 +6323,11 @@ INT_OS supreduce6(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
-  fclose(out);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
@@ -6388,7 +6393,7 @@ INT_OS supreduce(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   INT_S trace_mark;
   INT_OS return_code = 0, flag;
   INT_S i;
-  FILE *out;
+  // FILE *out;
 
   /* Initial all arrays to NULL */
   c_marked_states = NULL;
@@ -6594,11 +6599,11 @@ INT_OS supreduce(char *name1, char *name2, char *name3, char *name4, INT_S *lb,
   compress_ratio = ((float)num_states) / ((float)tmp_data);
   *cr = compress_ratio;
 
-  out = fopen(name4, "wb");
-  if (out == NULL)
-    return 1;
-  flag = Txt_DES(out, tmp_data);
-  fclose(out);
+  // out = fopen(name4, "wb");
+  // if (out == NULL)
+  //   return 1;
+  flag = Txt_DES(name4, tmp_data);
+  // fclose(out);
 
   free(simpler_controller);
   simpler_controller = NULL;
