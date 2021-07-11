@@ -1,4 +1,4 @@
-from distutils.core import Extension
+from setuptools import Extension
 from pathlib import Path
 
 build_file_c = [str(cfile) for cfile in Path("tctwrap/").glob("**/*.c")]
