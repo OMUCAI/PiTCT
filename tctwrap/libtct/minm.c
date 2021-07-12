@@ -813,7 +813,7 @@ FREEMEM:
 
 void loc_refinement_disable(INT_S*s1, state_node**t1, INT_S sn, state_node*tn)
 {
-	   INT_S i, s;                /* Counter */
+   INT_S i, s;                /* Counter */
    INT_T j, t;                /* Counter */
    INT_B  ok;                /* Boolean flag */
    INT_S ii, jj;              /* Tempory variables */

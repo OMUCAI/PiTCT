@@ -423,7 +423,7 @@ void addordlist1(INT_T e, INT_S j, tran_node **L, INT_T size, INT_B *ok) {
       if (e == (*L)[pos - 1].data1 && j == (*L)[pos - 1].data2) {
         found = true;
       } else if (e > (*L)[pos - 1].data1 ||
-                 e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2) {
+                (e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2)) {
         lower = pos + 1;
       } else {
         upper = pos - 1;
@@ -516,7 +516,7 @@ INT_B inordlist2(INT_T e, INT_S j, tran_node *L, INT_T size) {
       if (e == L[pos - 1].data1 && j == L[pos - 1].data2) {
         found = true;
       } else if (e > L[pos - 1].data1 ||
-                 e == L[pos - 1].data1 && j > L[pos - 1].data2) {
+                (e == L[pos - 1].data1 && j > L[pos - 1].data2)) {
         lower = pos + 1;
       } else {
         upper = pos - 1;
@@ -775,7 +775,7 @@ void addstatepair(INT_S e, INT_S j, state_pair **L, INT_S size, INT_B *ok) {
       if (e == (*L)[pos - 1].data1 && j == (*L)[pos - 1].data2) {
         found = true;
       } else if (e > (*L)[pos - 1].data1 ||
-                 e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2) {
+                (e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2)) {
         lower = pos + 1;
       } else {
         upper = pos - 1;
@@ -835,7 +835,7 @@ INT_B instatepair(INT_S e, INT_S j, state_pair **L, INT_S size) {
       if (e == (*L)[pos - 1].data1 && j == (*L)[pos - 1].data2) {
         found = true;
       } else if (e > (*L)[pos - 1].data1 ||
-                 e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2) {
+                (e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2)) {
         lower = pos + 1;
       } else {
         upper = pos - 1;
@@ -973,7 +973,7 @@ void delete_ordlist1(INT_T e, INT_S j, tran_node **L, INT_T size, INT_B *ok) {
       if (e == (*L)[pos - 1].data1 && j == (*L)[pos - 1].data2) {
         found = true;
       } else if (e > (*L)[pos - 1].data1 ||
-                 e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2) {
+                (e == (*L)[pos - 1].data1 && j > (*L)[pos - 1].data2)) {
         lower = pos + 1;
       } else {
         upper = pos - 1;

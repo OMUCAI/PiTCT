@@ -37,7 +37,7 @@ INT_S s_tmpu_stack;
 INT_S stack_flag = 0;
 static cc_check_table *track_table;
 static INT_S s_track_table;
-static INT_B iterate_flag, *mergelist;
+static INT_B *mergelist;
 static part_node *state_par;
 static part_node *cross_state_par;
 
@@ -504,10 +504,10 @@ void divide_nodes(struct node *root_node_1, struct node *root_node_2,
 
 void merge_state(struct node *loc_root_node, INT_S state_1, INT_S state_2) {
   INT_S temp3, temp4, temp_state, tmp_state_1, tmp_state_2;
-  struct equivalent_state_set **temp5, *temp6, **temp7, *temp8; //,**temp9;
+  struct equivalent_state_set **temp5, *temp6, *temp8; //**temp7, **temp9;
   INT_S k, tmp_state;
 
-  temp7 = NULL;
+//   temp7 = NULL;
 
   temp3 = loc_root_node[state_1].equal_set->state_number;
   temp4 = loc_root_node[state_2].equal_set->state_number;
@@ -628,7 +628,7 @@ void merge_state(struct node *loc_root_node, INT_S state_1, INT_S state_2) {
 }
 void merge_tmp_state(struct node *root_node_1, INT_S state_1, INT_S state_2) {
   INT_S temp3, temp4, temp_state, tmp_state_1, tmp_state_2;
-  struct equivalent_state_set **temp5, *temp6, **temp7, *temp8; //,**temp9;
+  struct equivalent_state_set **temp5, *temp6, *temp8; //**temp7, **temp9;
   //		INT_S  tmp_state;
   //		INT_B merge_flag;
 
@@ -637,7 +637,7 @@ void merge_tmp_state(struct node *root_node_1, INT_S state_1, INT_S state_2) {
   if (state_1 == 416 && state_2 == 555)
     state_1 = state_1;
 
-  temp7 = NULL;
+//   temp7 = NULL;
 
   temp3 = root_node_1[state_1].equal_set->state_number;
   temp4 = root_node_1[state_2].equal_set->state_number;
@@ -720,12 +720,12 @@ void merge_tmp_state(struct node *root_node_1, INT_S state_1, INT_S state_2) {
 }
 void merge_state_trans(struct node *root_node_1, INT_S state_1, INT_S state_2) {
   INT_S temp3, temp4, temp_state, tmp_state_1, tmp_state_2;
-  struct equivalent_state_set **temp5, *temp6, **temp7, *temp8; //,**temp9;
+  struct equivalent_state_set **temp5, *temp6, *temp8; //**temp7, **temp9;
   struct transitions **temp1, *temp2;
   //		INT_S  tmp_state;
   //		INT_B merge_flag;
 
-  temp7 = NULL;
+//   temp7 = NULL;
 
   temp3 = root_node_1[state_1].equal_set->state_number;
   temp4 = root_node_1[state_2].equal_set->state_number;
@@ -1184,7 +1184,7 @@ INT_OS Selfloop_Node2(INT_S base_state, INT_S tmp_state, INT_S nodel,
   INT_S node_1, node_2, c_flag, flag, r_flag_1, r_flag_2;
   INT_S tmpu_point, tmpu_point_1, tmpu_point_2, k;
   struct forbidden_event_set *temp1, *temp11, *temp12;
-  struct transitions *temp2; //, *temp22;
+//   struct transitions *temp2; //, *temp22;
   struct equivalent_state_set *temp6, *temp7;
   INT_S tmp_state_1, tmp_state_2;
   INT_B cc_flag;
@@ -1192,7 +1192,7 @@ INT_OS Selfloop_Node2(INT_S base_state, INT_S tmp_state, INT_S nodel,
   node_1 = base_state;
   node_2 = tmp_state;
   temp1 = 0;
-  temp2 = 0;
+//   temp2 = 0;
 
   temp6 = root_node[root_node[node_1].equal_set->state_number].equal_set;
   r_flag_1 = 0;
@@ -1471,15 +1471,15 @@ INT_OS Selfloop_Node3(INT_S base_state, INT_S tmp_state, INT_S nodel,
                       INT_OS indexx) {
   INT_S node_1, node_2, c_flag, flag, r_flag_1, r_flag_2;
   INT_S tmpu_point, tmpu_point_1, tmpu_point_2; //,k;
-  struct forbidden_event_set *temp1;            //, *temp11;
-  struct transitions *temp2;                    // *temp22;
+//   struct forbidden_event_set *temp1;            //, *temp11;
+//   struct transitions *temp2;                    // *temp22;
   struct equivalent_state_set *temp6, *temp7;
   INT_S tmp_state_1, tmp_state_2;
 
   node_1 = base_state;
   node_2 = tmp_state;
-  temp1 = 0;
-  temp2 = 0;
+//   temp1 = 0;
+//   temp2 = 0;
 
   temp6 = root_node[root_node[node_1].equal_set->state_number].equal_set;
   r_flag_1 = 0;
@@ -3178,7 +3178,7 @@ void Reduction3() {
   INT_S i, j;
   INT_S state_1, state_2;
   *tmpu_stack = -1;
-
+  
   //  if (temp5) {} /* Remove compiler warning */
   // if (temp6) {} /* Remove compiler warning */
 

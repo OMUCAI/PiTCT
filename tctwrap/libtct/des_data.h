@@ -53,6 +53,10 @@ extern "C" {
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
+// C Language Max Macro.
+// max macro cannot use linux gcc compiler. 
+#define CMAX(a, b) (((a) > (b)) ? (a) : (b))
+
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif

@@ -797,16 +797,18 @@ int supreduce_program(const char *filename) {
   if (f1 == NULL) {
     return -1;
   }
-  state_node *t1, *t2, *t3, *t4;
-  INT_S s1, s2, s3, s4, init;
+  // state_node *t1, *t2, *t3, *t4;
+  // INT_S s1, s2, s3, s4, init;
+  state_node *t4;
+  INT_S s4, init;
   INT_S lb;
   float cr;
   INT_OS supreduce_flag;
   INT_OS mode;
   INT_OS slb_flag;
 
-  t1 = t2 = t3 = t4 = NULL;
-  s1 = s2 = s3 = s4 = 0;
+  t4 = NULL;
+  s4 = 0;
   lb = 0;
   cr = 0.0;
   mode = 0;
@@ -919,15 +921,15 @@ int isomorph_program(const char *filename) {
 
   state_node *t1, *t2;
   INT_S s1, s2, init;
-  INT_B is_iso, flag, identity;
+  INT_B  flag; //is_iso, identity
   INT_S *mapState;
   INT_S result;
 
   t1 = t2 = NULL;
   s1 = s2 = 0;
-  is_iso = false;
+  // is_iso = false;
   mapState = NULL;
-  identity = false;
+  // identity = false;
   result = 0;
 
   /* Use "fgets" as names could have spaces in it */
@@ -953,8 +955,8 @@ int isomorph_program(const char *filename) {
   getdes(name2, &s2, &init, &t2);
 
   if ((strcmp(name1, name2) == 0) || ((s1 == 0) && (s2 == 0))) {
-    is_iso = true;
-    identity = true;
+    // is_iso = true;
+    // identity = true;
     result = true;
     // ctct_result_isomorph(CR_OK, is_iso, identity, 0, NULL);
     // goto FREE_MEM;
@@ -977,7 +979,7 @@ int isomorph_program(const char *filename) {
     flag = true;
     iso1(s1, s2, t1, t2, &flag, mapState);
     if (flag) {
-      is_iso = true;
+      // is_iso = true;
       result = true;
     }
   }

@@ -56,7 +56,7 @@ void meet_x64(INT_S s1,
    *t3  = NULL;
    
    // Common case: Output size doesn't exceed input size. Dynamically resize macro64_c later if necessary, to reduce peak memory usage.
-   INT_S macro64_c_size = max(s1,s2);
+   INT_S macro64_c_size = CMAX(s1,s2);
    *macro64_c  = (unsigned long long*) CALLOC(macro64_c_size, sizeof(unsigned long long));
    if (*macro64_c == NULL) {
       mem_result = 1;
