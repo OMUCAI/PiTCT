@@ -8,8 +8,10 @@ extern "C" {
 #endif
 
 /* Common definitions */
+#ifndef __cplusplus
 #define false 0
 #define true 1
+#endif
 
 /* Some constants */
 
