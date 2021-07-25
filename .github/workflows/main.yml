@@ -61,5 +61,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/*
           tag: ${{ github.ref }}
-          overwrite: false
+          overwrite: true
           file_glob: true
