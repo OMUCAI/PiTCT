@@ -92,7 +92,8 @@ class PlantDisplay(object):
     ):
         self.set_attr(layout=layout, dpi=dpi, label=label, timelabel=timelabel, **kwargs)
 
-        self.__graph.render(filename, format=fileformat, cleanup=True)
+        path_filename = Path(conf.SAVE_FOLDER / filename)
+        self.__graph.render(path_filename, format=fileformat, cleanup=True)
 
     def render(self,
         layout="dot",
