@@ -366,3 +366,23 @@ def isomorph(des1_name: str, des2_name: str):
         return True
     else:
         raise RuntimeError("Unknown Error")
+
+def printdat(new_name: str, dat_name: str):
+    _check_prm(dat_name + DAT_FILE_EXTENSION)
+    
+    prm_filename = "printdat_%s.prm" % dat_name
+    prm_string = "{name1}\n{name2}\n".format(
+        name1=_get_path(dat_name),
+        name2=_get_path(new_name)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(14, prm_path)
+    if ret_code == -1:
+        raise RuntimeError(f"Error: Cannot read filename. name: {dat_name}, {new_name}")
+    elif ret_code == -2:
+        raise MemoryError("Out of Memory.")
+    elif ret_code == 0:
+        del_prm(prm_filename)
+    else:
+        raise RuntimeError("Unknown Error")

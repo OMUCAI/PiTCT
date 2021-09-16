@@ -34,5 +34,6 @@ int nonconflict_program(const char *filename);
 int condat_program(const char *filename);
 int supreduce_program(const char *filename);
 int isomorph_program(const char *filename);
+int printdat_program(const char *filename);
 
 #endif

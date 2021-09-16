@@ -996,3 +996,61 @@ int isomorph_program(const char *filename) {
 
   return result;
 }
+
+int printdat_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return -1;
+  }
+
+	INT_S result;
+	INT_S init;
+	FILE *out;
+	INT_S s1; state_node *t1;
+
+	s1 = 0; t1 = NULL;
+
+	result = 0;
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return -1;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return -1;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+	fclose(f1);
+
+	init = -1L;
+	getdes(name1, &s1, &init, &t1);
+
+	make_filename_ext(long_name2, name2, EXT_TXT);
+	out = fopen(long_name2, "w");
+
+	print_dat_header_stat(out, name1, compute_controllable(t1,s1));
+
+	if (count_tran(t1, s1) > 0) {
+		print_dat(out, t1, s1);
+		fprintf(out, "\n");
+	} else {
+		fprintf(out, "empty.\n");
+	}
+
+	fclose(f1);
+	freedes(s1, &t1);
+
+	if(result != 0){
+		if(mem_result == 1)	{			
+			return -2;			
+		}
+		return 0;
+	}
+}

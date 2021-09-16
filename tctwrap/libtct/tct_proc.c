@@ -117,3 +117,58 @@ INT_B nonconflict(INT_S s, state_node *t) {
   }
   return true;
 }
+
+void print_dat_header_stat(FILE *out, char *name1, INT_B controllable) {
+  fprintf(out, "%s\n", name1);
+  fprintf(out, "\n\n");
+  fprintf(out, "Control data are displayed as a list of supervisor states\n");
+  fprintf(out, "where disabling occurs, together with the events that must\n");
+  fprintf(out, "be disabled there.\n\n");
+  fprintf(out, "%s is ", name1);
+  if (controllable)
+    fprintf(out, "CONTROLLABLE");
+  else
+    fprintf(out, "NOT CONTROLLABLE");
+  fprintf(out, "\n\n");
+  fprintf(out, "control data:\n");
+}
+
+INT_B print_dat(FILE *out, state_node *t1, INT_S s1) {
+  INT_S k, i, prevNumTran;
+  INT_T j;
+  INT_B leftSide;
+
+  leftSide = false;
+  prevNumTran = 0;
+
+  fprintf(out, "\n");
+  for (i = 0; i < s1; i++) {
+    if (t1[i].numelts > 0) {
+      if ((prevNumTran > 6) || (t1[i].numelts > 6) || (leftSide == false)) {
+        fprintf(out, "\n");
+        fprintf(out, "%4s", " ");
+        leftSide = true;
+      } else {
+        for (k = prevNumTran; k <= 6; k++)
+          fprintf(out, "%5s", " ");
+        leftSide = false;
+      }
+      fprintf(out, "%4ld:", i);
+      prevNumTran = t1[i].numelts;
+    }
+
+    for (j = 0; j < t1[i].numelts; j++) {
+      if (t1[i].next[j].data1 == EEE)
+        fprintf(out, "e    ");
+      else
+        fprintf(out, "%4d ", t1[i].next[j].data1);
+
+      if ((j != 0) && ((j % 12) == 0) && (j < prevNumTran - 1)) {
+        fprintf(out, "\n");
+        fprintf(out, "%9s", " ");
+      }
+    }
+  }
+  fprintf(out, "\n");
+  return false;
+}
