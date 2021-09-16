@@ -13,7 +13,7 @@ BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
 conf = Config.get_instance()
 
-class PlantDisplay(object):
+class AutomatonDisplay(object):
     def __init__(self, plant: str, color: bool = False):
         self.__path = Path(conf.SAVE_FOLDER / (plant + DES_FILE_EXTENSION))
         self.__byte = self.__path.read_bytes()

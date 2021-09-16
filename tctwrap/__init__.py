@@ -1,2 +1,2 @@
 from tctwrap.des import *
-from tctwrap.data import PlantDisplay
+from tctwrap.data import AutomatonDisplay
