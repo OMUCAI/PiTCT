@@ -36,6 +36,23 @@ def _get_path(filename: str):
     f = Path(conf.SAVE_FOLDER / filename)
     return str(f)
 
+
+def _check_ret_code(ret_code: int):
+    """check return code
+    if return error code, this function raise Error.
+
+    Args:
+        retcode (int): Return code from c lang function
+    """
+    if ret_code == -1:
+        raise FileExistsError("Error: Cannot open prm file. Please check if the prm file exists.")
+    elif ret_code == -2:
+        raise MemoryError("Error: Out of Memory.")
+    elif ret_code == -3:
+        raise RuntimeError("Error: Unexpected string found while loading the prm file. ")
+    elif ret_code == -4:
+        raise RuntimeError("Error: Supreduce internal error.")
+
 def init(name: str, overwrite: bool = False):
     p = Path(name)
     if not overwrite and p.exists():
@@ -86,11 +103,9 @@ def create(name: str, size: int, trans: list, marker: list):
     )
 
     prm_path = gen_prm(prm_filename, prm_string)
-
-    if __call(0, prm_path) != 0:
-        raise RuntimeError("error: create, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(0, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def selfloop(new_name: str, plant_name: str, lst: list):
@@ -107,10 +122,9 @@ def selfloop(new_name: str, plant_name: str, lst: list):
 
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(1, prm_path) != 0:
-        raise RuntimeError("error: selfloop, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(1, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def trim(new_name: str, plant_name: str):
@@ -124,10 +138,9 @@ def trim(new_name: str, plant_name: str):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(2, prm_path) != 0:
-        raise RuntimeError("error: trim, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(2, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def printdes(new_name: str, plant_name: str):
@@ -141,10 +154,9 @@ def printdes(new_name: str, plant_name: str):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(3, prm_path) != 0:
-        raise RuntimeError("error: printdes, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(3, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def sync(new_plant: str, *plant_names: str):
@@ -161,10 +173,9 @@ def sync(new_plant: str, *plant_names: str):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(4, prm_path) != 0:
-        raise RuntimeError("error: sync, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(4, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def meet(new_plant: str, *plant_names: str):
@@ -181,10 +192,9 @@ def meet(new_plant: str, *plant_names: str):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(5, prm_path) != 0:
-        raise RuntimeError("error: meet, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(5, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def supcon(sup: str, plant: str, spec: str):
@@ -200,10 +210,9 @@ def supcon(sup: str, plant: str, spec: str):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(6, prm_path) != 0:
-        raise RuntimeError("error: supcon, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(6, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def allevents(new_name: str, plant_name: str):
@@ -218,10 +227,9 @@ def allevents(new_name: str, plant_name: str):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(7, prm_path) != 0:
-        raise RuntimeError("error: allevents, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(7, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
@@ -239,10 +247,10 @@ def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
-    if __call(8, prm_path) != 0:
-        raise RuntimeError("error: allevents, check %s" % prm_filename)
-    else:
-        del_prm(prm_filename)
+    ret_code = __call(8, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
+
 
 def complement(new_name: str, plant_name: str, auxiliary_events: list):
     _check_prm(plant_name + DES_FILE_EXTENSION)
@@ -258,12 +266,9 @@ def complement(new_name: str, plant_name: str, auxiliary_events: list):
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(9, prm_path)
-    if ret_code == -1:
-        raise RuntimeError("error: can't read filename. name: {new_name}, {plant_name}")
-    elif ret_code == -2:
-        raise MemoryError("Out of Memory.")
-    elif ret_code != -1:
-        del_prm(prm_filename)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
+
 
 def nonconflict(des1: str, des2: str) -> bool:
     for name in [des1, des2]:
@@ -277,15 +282,11 @@ def nonconflict(des1: str, des2: str) -> bool:
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(10, prm_path)
-    if ret_code == -1:
-        raise RuntimeError(f"Error: Cannot read filename. name: {des1}, {des2}")
-    elif ret_code == -2:
-        raise MemoryError("Out of Memory.")
-    elif ret_code == 0:
-        del_prm(prm_filename)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
+    if ret_code == 0:
         return False
     elif ret_code == 1:
-        del_prm(prm_filename)
         return True
     else:
         raise RuntimeError("Unknown Error.")
@@ -304,12 +305,8 @@ def condat(new_name: str, plant_name: str, sup_name: str):
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(11, prm_path)
-    if ret_code == -1:
-        raise RuntimeError(f"Error: Cannot read filename. name: {plant_name}, {sup_name}")
-    elif ret_code == -2:
-        raise MemoryError("Out of Memory.")
-    else:
-        del_prm(prm_filename)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode: int = 0, slb_flg: bool = True):
@@ -330,16 +327,8 @@ def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(12, prm_path)
-    if ret_code == -1:
-        raise RuntimeError(f"Error: Cannot read filename. name: {plant_name}, {sup_name}, {dat_name}")
-    elif ret_code == -2:
-        raise MemoryError("Out of Memory.")
-    elif ret_code == -3:
-        raise RuntimeError("Error: Supreduce Error.")
-    elif ret_code == 0:
-        del_prm(prm_filename)
-    else:
-        raise RuntimeError("Unknown Error")
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
 
 
 def isomorph(des1_name: str, des2_name: str):
@@ -354,15 +343,11 @@ def isomorph(des1_name: str, des2_name: str):
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(13, prm_path)
-    if ret_code == -1:
-        raise RuntimeError(f"Error: Cannot read filename. name: {des1_name}, {des2_name}")
-    elif ret_code == -2:
-        raise MemoryError("Out of Memory.")
-    elif ret_code == 0:
-        del_prm(prm_filename)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
+    if ret_code == 0:
         return False
     elif ret_code == 1:
-        del_prm(prm_filename)
         return True
     else:
         raise RuntimeError("Unknown Error")
@@ -378,11 +363,5 @@ def printdat(new_name: str, dat_name: str):
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(14, prm_path)
-    if ret_code == -1:
-        raise RuntimeError(f"Error: Cannot read filename. name: {dat_name}, {new_name}")
-    elif ret_code == -2:
-        raise MemoryError("Out of Memory.")
-    elif ret_code == 0:
-        del_prm(prm_filename)
-    else:
-        raise RuntimeError("Unknown Error")
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)

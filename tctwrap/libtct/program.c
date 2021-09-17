@@ -21,7 +21,7 @@ static char long_name4[MAX_FILENAME];
 int create_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   // INT_T slist, *list;
@@ -37,7 +37,7 @@ int create_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
@@ -78,17 +78,17 @@ int create_program(const char *filename) {
   filedes(name1, s, init, t);
 
   if (mem_result == 1) {
-    return -1;
+    return ERR_MEM;
   }
   freedes(s, &t);
 
-  return 0;
+  return RESULT_OK;
 }
 
 int selfloop_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1;
@@ -106,13 +106,13 @@ int selfloop_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -132,16 +132,16 @@ int selfloop_program(const char *filename) {
   if (mem_result != 1) {
     filedes(name2, s1, init, t1);
   } else {
-    return -1;
+    return ERR_MEM;
   }
 
-  return 0;
+  return RESULT_OK;
 }
 
 int trim_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1;
@@ -152,13 +152,13 @@ int trim_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -172,16 +172,16 @@ int trim_program(const char *filename) {
   if (mem_result != 1) {
     filedes(name2, s1, init, t1);
   } else {
-    return -1;
+    return ERR_MEM;
   }
 
-  return 0;
+  return RESULT_OK;
 }
 
 int printdes_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   INT_S result;
@@ -197,13 +197,13 @@ int printdes_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -247,13 +247,13 @@ int printdes_program(const char *filename) {
     return -1;
   }
 
-  return 0;
+  return RESULT_OK;
 }
 
 int sync_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1, *t2, *t3;
@@ -273,7 +273,7 @@ int sync_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name3, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name3[strlen(name3) - 1] = '\0';
 
@@ -285,7 +285,7 @@ int sync_program(const char *filename) {
     /* Use "fgets" as names could have spaces in it */
     if (fgets(names1[i], MAX_FILENAME, f1) == NULL) {
       fclose(f1);
-      return -1;
+      return ERR_PRM_FILE;
     }
     names1[i][strlen(names1[i]) - 1] = '\0';
     init = 0L;
@@ -333,16 +333,16 @@ int sync_program(const char *filename) {
     init = 0L;
     filedes(name3, s1, init, t1);
   } else {
-    return -1;
+    return ERR_MEM;
   }
 
-  return 0;
+  return RESULT_OK;
 }
 
 int meet_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1, *t2, *t3;
@@ -358,7 +358,7 @@ int meet_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name3, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name3[strlen(name3) - 1] = '\0';
 
@@ -370,7 +370,7 @@ int meet_program(const char *filename) {
     /* Use "fgets" as names could have spaces in it */
     if (fgets(names1[i], MAX_FILENAME, f1) == NULL) {
       fclose(f1);
-      return -1;
+      return ERR_PRM_FILE;
     }
     names1[i][strlen(names1[i]) - 1] = '\0';
   }
@@ -406,16 +406,16 @@ int meet_program(const char *filename) {
     free(macro_c);
   } else {
     free(macro_c);
-    return -1;
+    return ERR_MEM;
   }
 
-  return 0;
+  return RESULT_OK;
 }
 
 int supcon_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1, *t2, *t3;
@@ -430,19 +430,19 @@ int supcon_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
   if (fgets(name3, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name3[strlen(name3) - 1] = '\0';
 
@@ -461,15 +461,15 @@ int supcon_program(const char *filename) {
   if (mem_result != 1) {
     filedes(name3, s3, init, t3);
   } else {
-    return -1;
+    return ERR_MEM;
   }
-  return 0;
+  return RESULT_OK;
 }
 
 int allevents_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1, *t2;
@@ -486,13 +486,13 @@ int allevents_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -533,16 +533,16 @@ int allevents_program(const char *filename) {
     init = 0L;
     filedes(name2, s2, init, t2);
   } else {
-    return -1;
+    return ERR_MEM;
   }
 
-  return 0;
+  return RESULT_OK;
 }
 
 int mutex_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -2;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1, *t2, *t3;
@@ -563,19 +563,19 @@ int mutex_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -3;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -4;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
   if (fgets(name3, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -5;
+    return ERR_PRM_FILE;
   }
   name3[strlen(name3) - 1] = '\0';
 
@@ -599,15 +599,15 @@ int mutex_program(const char *filename) {
   if (mem_result != 1) {
     filedes(name3, s3, init, t3);
   } else {
-    return -6;
+    return ERR_MEM;
   }
-  return 0;
+  return RESULT_OK;
 }
 
 int complement_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -2;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1;
@@ -625,13 +625,13 @@ int complement_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -656,15 +656,15 @@ int complement_program(const char *filename) {
   } else {
     // ctct_result(CR_OUT_OF_MEMORY);
     // exit(0);
-    return -2;
+    return ERR_MEM;
   }
-  return 0;
+  return RESULT_OK;
 }
 
 int nonconflict_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
   state_node *t1, *t2, *t3;
   INT_S s1, s2, s3, init;
@@ -682,7 +682,7 @@ int nonconflict_program(const char *filename) {
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
@@ -691,7 +691,7 @@ int nonconflict_program(const char *filename) {
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -711,7 +711,7 @@ int nonconflict_program(const char *filename) {
 
   if (mem_result == 1) {
     // ctct_result(CR_OUT_OF_MEMORY);
-    return -2;
+    return ERR_MEM;
   } else {
     // ctct_result_flag(CR_OK, is_nonconflict);
     // return is_nonconflict;
@@ -729,7 +729,7 @@ int nonconflict_program(const char *filename) {
 int condat_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
   state_node *t1, *t2, *t3, *t4;
   INT_S s1, s2, s3, s4, init;
@@ -743,7 +743,7 @@ int condat_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
@@ -752,7 +752,7 @@ int condat_program(const char *filename) {
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
@@ -761,7 +761,7 @@ int condat_program(const char *filename) {
 
   if (fgets(name3, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
@@ -784,9 +784,9 @@ int condat_program(const char *filename) {
 
   if (mem_result != 1) {
     filedes(name3, s4, -1L, t4);
-    return 0;
+    return RESULT_OK;
   } else {
-    return -2;
+    return ERR_MEM;
     // ctct_result(CR_OUT_OF_MEMORY);
     // exit(0);
   }
@@ -795,7 +795,7 @@ int condat_program(const char *filename) {
 int supreduce_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
   // state_node *t1, *t2, *t3, *t4;
   // INT_S s1, s2, s3, s4, init;
@@ -816,7 +816,7 @@ int supreduce_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
@@ -828,7 +828,7 @@ int supreduce_program(const char *filename) {
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -837,7 +837,7 @@ int supreduce_program(const char *filename) {
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name3[strlen(name3) - 1] = '\0';
 
@@ -846,7 +846,7 @@ int supreduce_program(const char *filename) {
     // remove(prm_file);
     // ctct_result(CR_PRM_ERR);
     // exit(0);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name4[strlen(name4) - 1] = '\0';
 
@@ -897,7 +897,7 @@ int supreduce_program(const char *filename) {
     }
 
     if (supreduce_flag > 0) {
-      return -3;
+      return ERR_SUPREDUCE;
       // ctct_result(CR_SUPREDUCE_ERR);
       // exit(0);
     } else {
@@ -905,18 +905,18 @@ int supreduce_program(const char *filename) {
 
       // ctct_result_supreduce(CR_OK, (INT_OS)lb, cr);
       // exit(0);
-      return 0;
+      return RESULT_OK;
     }
   } else {
     // ctct_result(CR_OUT_OF_MEMORY);
-    return -1;
+    return ERR_MEM;
   }
 }
 
 int isomorph_program(const char *filename) {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
   state_node *t1, *t2;
@@ -935,13 +935,13 @@ int isomorph_program(const char *filename) {
   /* Use "fgets" as names could have spaces in it */
   if (fgets(name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name1[strlen(name1) - 1] = '\0';
 
   if (fgets(name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
-    return -1;
+    return ERR_PRM_FILE;
   }
   name2[strlen(name2) - 1] = '\0';
 
@@ -985,7 +985,7 @@ int isomorph_program(const char *filename) {
   }
 
   if (mem_result == 1) {
-    result = -2;
+    result = ERR_MEM;
     // ctct_result(CR_OUT_OF_MEMORY);
   } else {
     // ctct_result_isomorph(CR_OK, is_iso, identity, s1, mapState);
@@ -1001,7 +1001,7 @@ int printdat_program(const char *filename)
 {
   FILE *f1 = fopen(filename, "r");
   if (f1 == NULL) {
-    return -1;
+    return ERR_FILE_OPEN;
   }
 
 	INT_S init;
@@ -1014,14 +1014,14 @@ int printdat_program(const char *filename)
 	if (fgets(name1, MAX_FILENAME, f1) == NULL)
 	{
 		fclose(f1);
-		return -1;
+		return ERR_PRM_FILE;
 	}
 	name1[strlen(name1)-1] = '\0';
 
 	if (fgets(name2, MAX_FILENAME, f1) == NULL)
 	{
 		fclose(f1);
-		return -1;
+		return ERR_PRM_FILE;
 	}
 	name2[strlen(name2)-1] = '\0';
 
@@ -1046,7 +1046,7 @@ int printdat_program(const char *filename)
 	freedes(s1, &t1);
 
   if(mem_result == 1)	{			
-    return -2;
+    return ERR_MEM;
   }
-  return 0;
+  return RESULT_OK;
 }

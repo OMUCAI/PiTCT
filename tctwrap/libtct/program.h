@@ -20,6 +20,12 @@
 #define LOC_TEMP_NAME "###"
 #define OBS_TEMP_NAME "$$$"
 
+#define RESULT_OK 0          // no problem
+#define ERR_FILE_OPEN -1     // fopen error
+#define ERR_MEM -2           // out of memory
+#define ERR_PRM_FILE -3      // prm content error
+#define ERR_SUPREDUCE -4     // supreduce internal error
+
 int create_program(const char *filename);
 int selfloop_program(const char *filename);
 int trim_program(const char *filename);
