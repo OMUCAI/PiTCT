@@ -1004,14 +1004,12 @@ int printdat_program(const char *filename)
     return -1;
   }
 
-	INT_S result;
 	INT_S init;
 	FILE *out;
 	INT_S s1; state_node *t1;
 
 	s1 = 0; t1 = NULL;
 
-	result = 0;
 	/* Use "fgets" as names could have spaces in it */
 	if (fgets(name1, MAX_FILENAME, f1) == NULL)
 	{
@@ -1044,13 +1042,11 @@ int printdat_program(const char *filename)
 		fprintf(out, "empty.\n");
 	}
 
-	fclose(f1);
+  fclose(out);
 	freedes(s1, &t1);
 
-	if(result != 0){
-		if(mem_result == 1)	{			
-			return -2;			
-		}
-		return 0;
-	}
+  if(mem_result == 1)	{			
+    return -2;
+  }
+  return 0;
 }
