@@ -1,4 +1,5 @@
 from pathlib import Path
+from tctwrap.dat_info import DatInfo
 from typing import List
 
 from .libtct import call_program as __call
@@ -352,7 +353,7 @@ def isomorph(des1_name: str, des2_name: str):
     else:
         raise RuntimeError("Unknown Error")
 
-def printdat(new_name: str, dat_name: str):
+def printdat(new_name: str, dat_name: str) -> DatInfo:
     _check_prm(dat_name + DAT_FILE_EXTENSION)
     
     prm_filename = "printdat_%s.prm" % dat_name
@@ -365,3 +366,8 @@ def printdat(new_name: str, dat_name: str):
     ret_code = __call(14, prm_path)
     _check_ret_code(ret_code)
     del_prm(prm_filename)
+
+    with open(conf.SAVE_FOLDER / (new_name + ".TXT")) as f:
+        text = f.read()
+    
+    return DatInfo(text=text)
