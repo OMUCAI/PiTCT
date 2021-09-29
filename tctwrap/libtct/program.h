@@ -16,6 +16,7 @@
 #define EXT_GIF ".GIF"
 #define EXT_SPL ".SPL"
 #define EXT_CSV ".CSV"
+#define EXT_RST ".RST"
 
 #define LOC_TEMP_NAME "###"
 #define OBS_TEMP_NAME "$$$"
@@ -41,5 +42,6 @@ int condat_program(const char *filename);
 int supreduce_program(const char *filename);
 int isomorph_program(const char *filename);
 int printdat_program(const char *filename);
+int getdes_parameter_program(const char *filename);
 
 #endif

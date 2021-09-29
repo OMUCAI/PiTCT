@@ -371,3 +371,43 @@ def printdat(new_name: str, dat_name: str) -> DatInfo:
         text = f.read()
     
     return DatInfo(text=text)
+
+
+def getdes_parameter(name: str, format: int = 0) -> list:
+    if format == 0:
+        _check_prm(name + DES_FILE_EXTENSION)
+    else:
+        _check_prm(name + DAT_FILE_EXTENSION)
+    
+    prm_filename = "getdes_parameter_%s.prm" % name
+    result_filename = "getdes_result"
+    prm_string = "{name1}\n{result_name}\n{format}".format(
+        name1=_get_path(name),
+        result_name=_get_path(result_filename),
+        format=format
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(15, prm_path)
+    _check_ret_code(ret_code)
+    del_prm(prm_filename)
+
+    with open(_get_path(result_filename + '.RST')) as f:
+        res = []
+        for l in f:
+            res.append(l.rstrip())
+
+    if res[0] != '0':
+        raise RuntimeError("Getdes return other than OK code.")
+    
+    if res[4] == '2':
+        is_controllable = None  # No check 
+    else:
+        is_controllable = (res[4] == '1')
+
+    return {
+        'state_size': int(res[1]),
+        'tran_size': int(res[2]),
+        'is_deterministic': res[3] == '1',
+        'is_controllable': is_controllable,
+    }

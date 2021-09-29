@@ -1044,3 +1044,69 @@ int printdat_program(const char *filename)
   }
   return RESULT_OK;
 }
+
+
+int getdes_parameter_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+  FILE *out;
+	state_node *t1;
+	INT_S s1, init, tran_size;
+	INT_B is_determin, is_controllable;
+	int format;
+
+	t1 = NULL; 
+	s1 = 0;
+	tran_size = -1;
+
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+	make_filename_ext(long_name2, name2, EXT_RST);
+
+	fscanf(f1, "%d\n", &format);
+
+	fclose(f1);
+
+	init = format;    
+	getdes(name1, &s1, &init, &t1);
+	if(mem_result == 1){
+		return ERR_MEM;
+	}
+
+	tran_size = count_tran(t1,s1);
+
+	is_determin = is_deterministic(t1,s1);
+
+	if(format == -1)
+		is_controllable = compute_controllable(t1, s1);
+	else
+		is_controllable = 2; // No check code
+
+  out = fopen(long_name2, "w");
+	if (out == NULL) 
+		return ERR_FILE_OPEN;       /* Can do not much here so just return */
+	fprintf(out, "%d\n", RESULT_OK);
+	fprintf(out, "%d\n", s1);
+	fprintf(out, "%d\n", tran_size);
+	fprintf(out, "%d\n", is_determin);
+	fprintf(out, "%d\n", is_controllable);
+	fprintf(out, "\n");
+	fclose(out);
+	// ctct_result_des_parameter(RESULT_OK, s1, tran_size, is_determin, is_controllable);
+	return RESULT_OK;
+}
