@@ -24,7 +24,7 @@ def _check_prm(filename: str):
     if prm.exists():
         return True
     else:
-        raise FileNotFoundError("File {prm} is not exists. Please create {name}.")
+        raise FileNotFoundError(f"File {filename} is not exists. Please create {filename}.")
 
 def _get_path(filename: str):
     """get file path
