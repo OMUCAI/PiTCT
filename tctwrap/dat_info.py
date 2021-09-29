@@ -19,13 +19,17 @@ class DatInfo:
         control_data_rawlist = splited[12:-2]
         control_data = {}
         for line in control_data_rawlist:
-            result = re.findall(r'\d+:\s*\d+', line)  # e.g. ['0:  15', '3:  11']
+            result = re.findall(r'\d+:\s*\d+\s{1,4}\d*', line)  # e.g. ['0:  15   13', '3:  11']
             for one in result:
-                extruct_data = one.replace(' ', '').split(':')  # e.g. ['0', '15']
-                key = int(extruct_data[0])  # e.g. 0
-                value = int(extruct_data[1])  # e.g. 15
+                extruct_data = one.split(':')  # e.g. (['0', '  15   13 '])
+                state = int(extruct_data[0])  # e.g. (0)
+                prohibit_raw = extruct_data[1]  # e.g. ('  15   13 ')
+                prohibit = re.sub('(^\s*|\s*$)', '', prohibit_raw)  # remove start and end space e.g. ('15   13')
+                prohibit = re.sub('\s+', ',', prohibit)  # replace space to , e.g. ('15,13')
+                prohibit = prohibit.split(',')  # split by ',' (e.g. '15,13' -> ['15','13'])
+                prohibit = [int(i) for i in prohibit]  # change int e.g. ([15, 13])
 
-                control_data[key] = value
+                control_data[state] = prohibit
         return control_data
 
     def __str__(self) -> str:
