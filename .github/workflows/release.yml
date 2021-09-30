@@ -59,12 +59,12 @@ jobs:
           file_glob: true
           
       
-      - name: Upload sdist to release
-        uses: svenstaro/upload-release-action@v2
-        if: ${{ matrix.python == '3.9' && matrix.os == 'ubuntu-latest' }}
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*.tar.gz
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
+      # - name: Upload sdist to release
+      #   uses: svenstaro/upload-release-action@v2
+      #   if: ${{ matrix.python == '3.9' && matrix.os == 'ubuntu-latest' }}
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     file: dist/*.tar.gz
+      #     tag: ${{ github.ref }}
+      #     overwrite: true
+      #     file_glob: true
