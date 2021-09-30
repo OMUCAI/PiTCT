@@ -1,5 +1,5 @@
 from pathlib import Path
-from tctwrap.dat_info import DatInfo
+from pytct.dat_info import DatInfo
 from typing import List
 
 from .libtct import call_program as __call

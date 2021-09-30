@@ -1,2 +1,2 @@
-from tctwrap.des import *
-from tctwrap.data import AutomatonDisplay
+from pytct.des import *
+from pytct.data import AutomatonDisplay
