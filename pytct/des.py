@@ -4,55 +4,11 @@ from typing import List
 
 from .libtct import call_program as __call
 
-from .data import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
+from .automaton_display import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
 from .config import Config
+from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path
 
 conf = Config.get_instance()
-
-def gen_prm(filename: str, contents: str) -> str:
-    prm = Path(conf.SAVE_FOLDER / filename)
-    prm.write_text(contents)
-    return str(prm)
-
-def del_prm(filename: str):
-    p = Path(conf.SAVE_FOLDER / filename)
-    if p.exists():
-        p.unlink()
-
-def _check_prm(filename: str):
-    prm = Path(conf.SAVE_FOLDER / filename)
-    if prm.exists():
-        return True
-    else:
-        raise FileNotFoundError(f"File {filename} is not exists. Please create {filename}.")
-
-def _get_path(filename: str):
-    """get file path
-
-    create .DES or .DAT file path that consider save folder settings by init function.
-
-    Args:
-        filename (str): File path, including file extension.
-    """
-    f = Path(conf.SAVE_FOLDER / filename)
-    return str(f)
-
-
-def _check_ret_code(ret_code: int):
-    """check return code
-    if return error code, this function raise Error.
-
-    Args:
-        retcode (int): Return code from c lang function
-    """
-    if ret_code == -1:
-        raise FileExistsError("Error: Cannot open prm file. Please check if the prm file exists.")
-    elif ret_code == -2:
-        raise MemoryError("Error: Out of Memory.")
-    elif ret_code == -3:
-        raise RuntimeError("Error: Unexpected string found while loading the prm file. ")
-    elif ret_code == -4:
-        raise RuntimeError("Error: Supreduce internal error.")
 
 def init(name: str, overwrite: bool = False):
     p = Path(name)
@@ -97,7 +53,7 @@ def create(name: str, size: int, trans: list, marker: list):
 
     prm_string = "{des_name}\n{state_num}\n{marker_states}\n{transitions}\n"
     prm_string = prm_string.format(
-        des_name=_get_path(name),
+        des_name=get_path(name),
         state_num=size,
         marker_states=" ".join(marker_list),
         transitions="\n".join(trans_list),
@@ -105,185 +61,185 @@ def create(name: str, size: int, trans: list, marker: list):
 
     prm_path = gen_prm(prm_filename, prm_string)
     ret_code = __call(0, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def selfloop(new_name: str, plant_name: str, lst: list):
-    _check_prm(plant_name + DES_FILE_EXTENSION)
+    check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "selfloop_%s.prm" % plant_name
 
     selfloop_list = ["%d" % state for state in lst]
     prm_string = "{name1}\n{name2}\n{ls}\n".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(new_name),
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
         ls="\n".join(selfloop_list)
     )
 
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(1, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def trim(new_name: str, plant_name: str):
-    _check_prm(plant_name + DES_FILE_EXTENSION)
+    check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "trim_%s.prm" % plant_name
 
     prm_string = "{name1}\n{name2}\n".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(new_name)
+        name1=get_path(plant_name),
+        name2=get_path(new_name)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(2, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def printdes(new_name: str, plant_name: str):
-    _check_prm(plant_name + DES_FILE_EXTENSION)
+    check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "print_%s.prm" % plant_name
 
     prm_string = "{name1}\n{name2}\n".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(new_name)
+        name1=get_path(plant_name),
+        name2=get_path(new_name)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(3, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def sync(new_plant: str, *plant_names: str):
     for plant_name in plant_names:
-        _check_prm(plant_name + DES_FILE_EXTENSION)
+        check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "sync_%s.prm" % new_plant
-    plant_names_with_path = list(map(lambda x: _get_path(x), plant_names))
+    plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
     prm_string = "{name1}\n{num}\n{names}\n".format(
-        name1=_get_path(new_plant),
+        name1=get_path(new_plant),
         num=len(plant_names),
         names="\n".join(plant_names_with_path)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(4, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def meet(new_plant: str, *plant_names: str):
     for plant_name in plant_names:
-        _check_prm(plant_name + DES_FILE_EXTENSION)
+        check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "meet_%s.prm" % new_plant
-    plant_names_with_path = list(map(lambda x: _get_path(x), plant_names))
+    plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
     prm_string = "{name1}\n{num}\n{names}\n".format(
-        name1=_get_path(new_plant),
+        name1=get_path(new_plant),
         num=len(plant_names),
         names="\n".join(plant_names_with_path)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(5, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def supcon(sup: str, plant: str, spec: str):
     for plant_name in [plant, spec]:
-        _check_prm(plant_name + DES_FILE_EXTENSION)
+        check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "supcon_%s.prm" % sup
 
     prm_string = "{name1}\n{name2}\n{supervisor}\n".format(
-        name1=_get_path(plant),
-        name2=_get_path(spec),
-        supervisor=_get_path(sup)
+        name1=get_path(plant),
+        name2=get_path(spec),
+        supervisor=get_path(sup)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(6, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def allevents(new_name: str, plant_name: str):
-    _check_prm(plant_name + DES_FILE_EXTENSION)
+    check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "trim_%s.prm" % plant_name
 
     prm_string = "{name1}\n{name2}\n{entry}\n".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(new_name),
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
         entry=1
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(7, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     for name in [plant_name, name_2]:
-        _check_prm(name + DES_FILE_EXTENSION)
+        check_exist(name + DES_FILE_EXTENSION)
 
     prm_filename = "mutex_%s.prm" % plant_name
     state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
     
     prm_string = "{name1}\n{name2}\n{name3}\n{statepair}".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(name_2),
-        name3=_get_path(new_name),
+        name1=get_path(plant_name),
+        name2=get_path(name_2),
+        name3=get_path(new_name),
         statepair=f"\n".join(state_pair_list) 
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(8, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def complement(new_name: str, plant_name: str, auxiliary_events: list):
-    _check_prm(plant_name + DES_FILE_EXTENSION)
+    check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "complement_%s.prm" % plant_name
     auxiliary_events_list = [f"{event}" for event in auxiliary_events] 
 
     prm_string = "{name1}\n{name2}\n{eventpair}".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(new_name),
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
         eventpair="\n".join(auxiliary_events_list)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(9, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def nonconflict(des1: str, des2: str) -> bool:
     for name in [des1, des2]:
-        _check_prm(name + DES_FILE_EXTENSION)
+        check_exist(name + DES_FILE_EXTENSION)
 
     prm_filename = "nonconflict_%s.prm" % des1
     prm_string = "{name1}\n{name2}\n".format(
-        name1=_get_path(des1),
-        name2=_get_path(des2),
+        name1=get_path(des1),
+        name2=get_path(des2),
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(10, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
     if ret_code == 0:
         return False
@@ -295,56 +251,56 @@ def nonconflict(des1: str, des2: str) -> bool:
 
 def condat(new_name: str, plant_name: str, sup_name: str):
     for name in [plant_name, sup_name]:
-        _check_prm(name + DES_FILE_EXTENSION)
+        check_exist(name + DES_FILE_EXTENSION)
     
     prm_filename = "condat_%s.prm" % new_name
     prm_string = "{name1}\n{name2}\n{name3}\n".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(sup_name),
-        name3=_get_path(new_name)
+        name1=get_path(plant_name),
+        name2=get_path(sup_name),
+        name3=get_path(new_name)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(11, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode: int = 0, slb_flg: bool = True):
     for name in [plant_name, sup_name]:
-        _check_prm(name + DES_FILE_EXTENSION)
+        check_exist(name + DES_FILE_EXTENSION)
     
-    _check_prm(dat_name + DAT_FILE_EXTENSION)
+    check_exist(dat_name + DAT_FILE_EXTENSION)
     
     prm_filename = "supreduce_%s.prm" % new_name
     prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{mode}\n{slb_flg}\n".format(
-        name1=_get_path(plant_name),
-        name2=_get_path(sup_name),
-        name3=_get_path(dat_name),
-        name4=_get_path(new_name),
+        name1=get_path(plant_name),
+        name2=get_path(sup_name),
+        name3=get_path(dat_name),
+        name4=get_path(new_name),
         mode=mode,
         slb_flg=1 if slb_flg else 0
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(12, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
 
 def isomorph(des1_name: str, des2_name: str):
     for name in [des1_name, des2_name]:
-        _check_prm(name + DES_FILE_EXTENSION)
+        check_exist(name + DES_FILE_EXTENSION)
     
     prm_filename = "isomorph_%s.prm" % des1_name
     prm_string = "{name1}\n{name2}\n".format(
-        name1=_get_path(des1_name),
-        name2=_get_path(des2_name)
+        name1=get_path(des1_name),
+        name2=get_path(des2_name)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(13, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
     if ret_code == 0:
         return False
@@ -354,17 +310,17 @@ def isomorph(des1_name: str, des2_name: str):
         raise RuntimeError("Unknown Error")
 
 def printdat(new_name: str, dat_name: str) -> DatInfo:
-    _check_prm(dat_name + DAT_FILE_EXTENSION)
+    check_exist(dat_name + DAT_FILE_EXTENSION)
     
     prm_filename = "printdat_%s.prm" % dat_name
     prm_string = "{name1}\n{name2}\n".format(
-        name1=_get_path(dat_name),
-        name2=_get_path(new_name)
+        name1=get_path(dat_name),
+        name2=get_path(new_name)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(14, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
     with open(conf.SAVE_FOLDER / (new_name + ".TXT")) as f:
@@ -375,24 +331,24 @@ def printdat(new_name: str, dat_name: str) -> DatInfo:
 
 def getdes_parameter(name: str, format: int = 0) -> list:
     if format == 0:
-        _check_prm(name + DES_FILE_EXTENSION)
+        check_exist(name + DES_FILE_EXTENSION)
     else:
-        _check_prm(name + DAT_FILE_EXTENSION)
+        check_exist(name + DAT_FILE_EXTENSION)
     
     prm_filename = "getdes_parameter_%s.prm" % name
     result_filename = "getdes_result"
     prm_string = "{name1}\n{result_name}\n{format}".format(
-        name1=_get_path(name),
-        result_name=_get_path(result_filename),
+        name1=get_path(name),
+        result_name=get_path(result_filename),
         format=format
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(15, prm_path)
-    _check_ret_code(ret_code)
+    check_ret_code(ret_code)
     del_prm(prm_filename)
 
-    with open(_get_path(result_filename + '.RST')) as f:
+    with open(get_path(result_filename + '.RST')) as f:
         res = []
         for l in f:
             res.append(l.rstrip())
