@@ -1,2 +1,2 @@
 from pytct.des import *
-from pytct.data import AutomatonDisplay
+from pytct.automaton_display import AutomatonDisplay
