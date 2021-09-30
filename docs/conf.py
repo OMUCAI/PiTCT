@@ -17,12 +17,12 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'tctwrap'
+project = 'PyTCT'
 copyright = '2021, Shoma Matsui, Masahiro Konishi'
 author = 'Shoma Matsui, Masahiro Konishi'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.1'
+release = '0.5.0'
 
 
 # -- General configuration ---------------------------------------------------
