@@ -40,7 +40,7 @@ jobs:
           
       - name: Build
         run: |
-          poetry build
+          poetry build -f wheel
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
