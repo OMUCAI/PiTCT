@@ -1,4 +1,4 @@
-import tctwrap as tct
+import pytct
 
 delta = [(0,11,1),
          (1,10,0),
@@ -7,9 +7,9 @@ delta = [(0,11,1),
          (2,13,0),
          (0,15,4)]
 Qm = [0,1]
-tct.create("test", 5, delta, Qm)
+pytct.create("test", 5, delta, Qm)
 
-disp = tct.PlantDisplay("test")
+disp = pytct.AutomatonDisplay("test")
 
 disp.render()
 
