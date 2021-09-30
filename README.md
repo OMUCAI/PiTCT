@@ -1,5 +1,5 @@
-# tctwrap
-Python TCT binding
+# PyTCT
+Python TCT binding Library
 
 ## Requirement
 Python >= 3.7
@@ -15,18 +15,18 @@ $ pip install poetry
 $ poetry install
 ```
 
-3. build tctwrap
+3. build PyTCT
 ```bash
 $ poetry build
 ```
 
-tctwrap install file is generated in dist/ folder.
+PyTCT distributable file is generated in dist/ folder.
 
-## tctwrap Install
-1. copy tctwrap-***.whl
-2. Install tctwrap
+## PyTCT Install
+1. copy PyTCT-***.whl
+2. Install PyTCT
 ```bash
-pip install tctwrap-****.whl
+pip install PyTCT-****.whl
 ```
 3. Install graphviz(mac, linux)
 - Mac
@@ -38,6 +38,10 @@ $ brew install graphviz
 ```bash
 $ apt install graphviz
 ```
+
+- Windows  
+Download graphviz installer from [here](https://graphviz.org/download/)
+
 ## How To Use
 Please see [examples folder](./examples).
 
