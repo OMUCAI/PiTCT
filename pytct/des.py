@@ -2,6 +2,8 @@ from pathlib import Path
 from pytct.dat_info import DatInfo
 from typing import List
 
+from pytct.eventname_conv import EventnameConv
+
 from .libtct import call_program as __call
 
 from .automaton_display import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
@@ -28,7 +30,7 @@ def create(name: str, size: int, trans: list, marker: list):
     Args:
         name (str): DES model name.
         size (int): number of states.
-        trans (list): transition tuple list. [(state, event, next state), (...)]
+        trans (list): transition tuple list. [(state, event, next_state), (...)]
         marker (list): marker states list.
 
     Raises:
@@ -49,7 +51,9 @@ def create(name: str, size: int, trans: list, marker: list):
 
     marker_list = ["%d" % mark for mark in marker]
     marker_list.append("-1")
-    trans_list = ["%d %d %d" % ent for ent in trans]
+
+    conv_trans = EventnameConv.encode_all(name, trans)
+    trans_list = ["%d %d %d" % ent for ent in conv_trans]
 
     prm_string = "{des_name}\n{state_num}\n{marker_states}\n{transitions}\n"
     prm_string = prm_string.format(

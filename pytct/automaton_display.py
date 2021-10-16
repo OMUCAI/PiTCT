@@ -3,6 +3,8 @@ import graphviz as gv
 from pathlib import Path
 from datetime import datetime
 import tempfile
+
+from pytct.eventname_conv import EventnameConv
 from .util import is_env_notebook
 from .config import Config
 import base64
@@ -46,15 +48,16 @@ class AutomatonDisplay(object):
             trans = states[label]["next"]
             if trans is not None:
                 for tran in trans:
+                    label_text = EventnameConv.decode(plant, tran[0])
                     if color:
                         self.__graph.edge(
                             str(label),
                             str(tran[1]),
-                            label=str(tran[0]),
+                            label=label_text,
                             color="red" if tran[0] % 2 == 1 else "green",
                         )
                     else:
-                        self.__graph.edge(str(label), str(tran[1]), label=str(tran[0]))
+                        self.__graph.edge(str(label), str(tran[1]), label=label_text)
 
     def set_attr(self,
         layout="dot",
