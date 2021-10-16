@@ -367,3 +367,11 @@ def getdes_parameter(name: str, format: int = 0) -> list:
         'is_deterministic': res[3] == '1',
         'is_controllable': is_controllable,
     }
+
+def statenum(name: str) -> int:
+    des_info = getdes_parameter(name)
+    return des_info['state_size']
+
+def transnum(name: str) -> int:
+    des_info = getdes_parameter(name)
+    return des_info['tran_size']
