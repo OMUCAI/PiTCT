@@ -1,2 +1,6 @@
-from pytct.des import *
-from pytct.automaton_display import AutomatonDisplay
+from .automaton_display import AutomatonDisplay
+from .des import (
+    init, create, selfloop, trim, printdes, sync, meet, supcon,
+    allevents, mutex, complement, nonconflict, condat, supreduce,
+    isomorph, printdat, getdes_parameter, statenum, transnum
+)
