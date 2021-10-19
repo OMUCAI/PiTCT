@@ -25,7 +25,7 @@ You will need to install a compiler such as GCC beforehand.::
 
 
 2. Installation of Graphviz
-========================
+===========================
 
 PyTCT depend on `Graphviz <https://graphviz.org/>`_.
 
