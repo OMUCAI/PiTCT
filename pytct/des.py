@@ -75,6 +75,8 @@ def selfloop(new_name: str, plant_name: str, lst: list):
     prm_filename = "selfloop_%s.prm" % plant_name
 
     selfloop_list = ["%d" % state for state in lst]
+
+    EventnameConv.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{ls}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -93,6 +95,7 @@ def trim(new_name: str, plant_name: str):
 
     prm_filename = "trim_%s.prm" % plant_name
 
+    EventnameConv.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name)
@@ -127,6 +130,7 @@ def sync(new_plant: str, *plant_names: str):
     prm_filename = "sync_%s.prm" % new_plant
     plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
+    EventnameConv.register(new_plant, *plant_names)
     prm_string = "{name1}\n{num}\n{names}\n".format(
         name1=get_path(new_plant),
         num=len(plant_names),
@@ -146,6 +150,7 @@ def meet(new_plant: str, *plant_names: str):
     prm_filename = "meet_%s.prm" % new_plant
     plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
+    EventnameConv.register(new_plant, *plant_names)
     prm_string = "{name1}\n{num}\n{names}\n".format(
         name1=get_path(new_plant),
         num=len(plant_names),
@@ -164,6 +169,7 @@ def supcon(sup: str, plant: str, spec: str):
 
     prm_filename = "supcon_%s.prm" % sup
 
+    EventnameConv.register(sup, plant, spec)
     prm_string = "{name1}\n{name2}\n{supervisor}\n".format(
         name1=get_path(plant),
         name2=get_path(spec),
@@ -181,6 +187,7 @@ def allevents(new_name: str, plant_name: str):
 
     prm_filename = "trim_%s.prm" % plant_name
 
+    EventnameConv.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{entry}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -200,6 +207,7 @@ def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     prm_filename = "mutex_%s.prm" % plant_name
     state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
     
+    EventnameConv.register(new_name, plant_name, name_2)
     prm_string = "{name1}\n{name2}\n{name3}\n{statepair}".format(
         name1=get_path(plant_name),
         name2=get_path(name_2),
@@ -219,6 +227,7 @@ def complement(new_name: str, plant_name: str, auxiliary_events: list):
     prm_filename = "complement_%s.prm" % plant_name
     auxiliary_events_list = [f"{event}" for event in auxiliary_events] 
 
+    EventnameConv.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{eventpair}".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -236,6 +245,8 @@ def nonconflict(des1: str, des2: str) -> bool:
         check_exist(name + DES_FILE_EXTENSION)
 
     prm_filename = "nonconflict_%s.prm" % des1
+
+    EventnameConv.register(des1, des2)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(des1),
         name2=get_path(des2),
@@ -258,6 +269,8 @@ def condat(new_name: str, plant_name: str, sup_name: str):
         check_exist(name + DES_FILE_EXTENSION)
     
     prm_filename = "condat_%s.prm" % new_name
+
+    EventnameConv.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -277,6 +290,8 @@ def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode
     check_exist(dat_name + DAT_FILE_EXTENSION)
     
     prm_filename = "supreduce_%s.prm" % new_name
+
+    EventnameConv.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{mode}\n{slb_flg}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -297,6 +312,8 @@ def isomorph(des1_name: str, des2_name: str):
         check_exist(name + DES_FILE_EXTENSION)
     
     prm_filename = "isomorph_%s.prm" % des1_name
+
+    EventnameConv.register(des1_name, des2_name)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(des1_name),
         name2=get_path(des2_name)

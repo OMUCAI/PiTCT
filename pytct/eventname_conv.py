@@ -46,3 +46,13 @@ class EventnameConv:
             return conv[event]
         except KeyError:
             return str(event)
+
+    @classmethod
+    def register(cls, name: str, *args):
+        cls.event_encode_dict[name] = {}
+
+        for mixed in args:
+            if not mixed in cls.event_encode_dict.keys():
+                continue
+            tmp_dict = cls.event_encode_dict[mixed]
+            cls.event_encode_dict[name].update(tmp_dict)
