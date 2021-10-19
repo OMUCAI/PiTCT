@@ -10,6 +10,9 @@ Welcome to tctwrap's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   documents/install
+   reference/pytct
+
 
 Indices and tables
 ==================
