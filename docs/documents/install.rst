@@ -1,35 +1,33 @@
-Installation of PyTCT
+.. _install:
+
+1. Installation of PyTCT
 ========================
 
 This part of the documentation covers the installation of PyTCT.
 The first step to using any software package is getting it properly installed.
 
 
-$ Install by pip
---------------------------------
+Install by pip
+----------------------
 
 To install PyTCT, simply run this simple command in your terminal of choice::
 
     $ python -m pip install pytct-***.whl
 
 
-Get the Source Code
--------------------
+Build from Source Code
+-----------------------
 
-Requests is actively developed on GitHub, where the code is
-`always available <https://github.com/psf/requests>`_.
+If you receive tarball, you can build PyTCT from pip.
+You will need to install a compiler such as GCC beforehand.::
 
-You can either clone the public repository::
+    $ python -m pip install PyTCT-***.tar.gz
 
-    $ git clone git://github.com/psf/requests.git
 
-Or, download the `tarball <https://github.com/psf/requests/tarball/main>`_::
+2. Installation of Graphviz
+========================
 
-    $ curl -OL https://github.com/psf/requests/tarball/main
-    # optionally, zipball is also available (for Windows users).
+PyTCT depend on `Graphviz <https://graphviz.org/>`_.
 
-Once you have a copy of the source, you can embed it in your own Python
-package, or install it into your site-packages easily::
-
-    $ cd requests
-    $ python -m pip install .
+Please install graphviz from `Official Installer(Windows) <https://graphviz.org/download/#windows>`_ or 
+`Homebrew(Mac) <https://graphviz.org/download/#mac>`_ or `apt(ubuntu) <https://graphviz.org/download/>`_.
