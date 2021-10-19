@@ -1,9 +1,4 @@
-.. tctwrap documentation master file, created by
-   sphinx-quickstart on Wed Jun 16 00:51:32 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to tctwrap's documentation!
+PyTCT: Python TCT Documentation
 ===================================
 
 .. toctree::
@@ -11,12 +6,5 @@ Welcome to tctwrap's documentation!
    :caption: Contents:
 
    documents/install
+   documents/quick-start
    reference/pytct
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
