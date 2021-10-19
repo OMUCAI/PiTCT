@@ -39,14 +39,30 @@ Let's create automaton model of DES.
              (2,13,0),
              (0,15,4)]
     Qm = [0,1]
-    pytct.create("model1", 5, delta, Qm)
+    pytct.create("model", 5, delta, Qm)
 
 you have to pass four argument to ``create`` function.
 First argument is DES name. it can use any string.
 Second argument is number of state. In this example, there are states from 0 to 4, so the value is 5.
-Third argument is transition tuple. An element must be defined in the order of `(exit state, event, enter state)`
+Third argument is transition tuple. An element must be defined in the order of `(exit state, event, enter state)`.
 Forth argument is marker state list.
 
 Display Automaton of DES
-------------------------
+-------------------------
 
+Once the model has been created, the automaton of DES can be visualized as an image.
+Here is example. ::
+
+    model = pytct.AutomatonDisplay("model")
+    model.render()
+
+You will see the following image.
+
+.. image:: img/model.png
+  :width: 500
+  :alt: Model Image
+
+The ``AutomatonDisplay`` class provides various visualization-related functions.
+
+This completes the introduction of the simple PyTCT functions.
+If you want to know more about the various functions, please go to the next chapter.
