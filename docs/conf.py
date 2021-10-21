@@ -12,8 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../'))
-
+# sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../build/lib.linux-x86_64-3.7/'))
 
 # -- Project information -----------------------------------------------------
 
@@ -22,7 +22,7 @@ copyright = '2021, Shoma Matsui, Masahiro Konishi'
 author = 'Shoma Matsui, Masahiro Konishi'
 
 # The full version, including alpha/beta/rc tags
-release = '0.5.0'
+release = '0.6.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,7 +31,7 @@ release = '0.5.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    # 'sphinx.ext.autodoc',
+    'sphinx.ext.autodoc',
     'sphinx.ext.napoleon'
 ]
 

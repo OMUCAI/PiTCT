@@ -86,11 +86,11 @@ class AutomatonDisplay(object):
     def save(
         self,
         filename: str,
-        fileformat: str,
-        layout="dot",
-        dpi=96,
-        label=None,
-        timelabel=True,
+        fileformat: str = 'png',
+        layout: str = "dot",
+        dpi: int = 96,
+        label: str = None,
+        timelabel: bool = True,
         **kwargs
     ):
         self.set_attr(layout=layout, dpi=dpi, label=label, timelabel=timelabel, **kwargs)
