@@ -119,3 +119,6 @@ class AutomatonDisplay(object):
         # svg文字列をb64エンコードしてから埋め込み
         html = BASE_HTML.format("100%", base64.b64encode(svg.encode()).decode())
         return html
+
+    def _repr_svg_(self):
+        return self.__graph._repr_svg_()
