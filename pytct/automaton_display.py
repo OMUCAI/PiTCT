@@ -6,11 +6,9 @@ import tempfile
 
 from pytct.eventname_conv import EventnameConv
 from .util import is_env_notebook
-from .config import Config
+from .config import Config, DES_FILE_EXTENSION
 import base64
 
-DES_FILE_EXTENSION = ".DES"
-DAT_FILE_EXTENSION = ".DAT"
 BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
 conf = Config.get_instance()

@@ -4,3 +4,4 @@ from .des import (
     allevents, mutex, complement, nonconflict, condat, supreduce,
     isomorph, printdat, getdes_parameter, statenum, transnum
 )
+from .distance import min_distance

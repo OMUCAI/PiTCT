@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Any
 
+DES_FILE_EXTENSION = ".DES"
+DAT_FILE_EXTENSION = ".DAT"
 class Singleton(object):
     @classmethod
     def get_instance(cls):
