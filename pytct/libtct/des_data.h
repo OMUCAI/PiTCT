@@ -50,6 +50,10 @@ extern "C" {
 #define ID_LEV3 "/"
 #define ID_LEV4 "*"
 
+#ifndef MAX_PATH
+#define MAX_PATH 256
+#endif
+
 /* Some macros */
 #ifndef max
 #define max(a, b) (((a) > (b)) ? (a) : (b))
@@ -70,6 +74,7 @@ typedef int INT_OS;
 typedef unsigned char INT_B;
 typedef unsigned short INT_T; /* Event label type  */
 typedef short INT_V;          /* Vocal output type */
+typedef unsigned int DWORD;
 
 extern INT_OS mem_result;
 
