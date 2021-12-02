@@ -6,11 +6,9 @@ import tempfile
 
 from pytct.eventname_conv import EventnameConv
 from .util import is_env_notebook
-from .config import Config
+from .config import Config, DES_FILE_EXTENSION
 import base64
 
-DES_FILE_EXTENSION = ".DES"
-DAT_FILE_EXTENSION = ".DAT"
 BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
 conf = Config.get_instance()
@@ -119,3 +117,6 @@ class AutomatonDisplay(object):
         # svg文字列をb64エンコードしてから埋め込み
         html = BASE_HTML.format("100%", base64.b64encode(svg.encode()).decode())
         return html
+
+    def _repr_svg_(self):
+        return self.__graph._repr_svg_()

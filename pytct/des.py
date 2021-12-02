@@ -6,7 +6,7 @@ from pytct.eventname_conv import EventnameConv
 
 from .libtct import call_program as __call
 
-from .automaton_display import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
+from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
 from .config import Config
 from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path
 
