@@ -9,6 +9,7 @@
 #include "tct_io.h"
 #include "tct_proc.h"
 #include "mymalloc.h"
+#include "obs_check.h"
 
 typedef char filename1[MAX_FILENAME];
 
@@ -1109,4 +1110,72 @@ int getdes_parameter_program(const char *filename)
 	fclose(out);
 	// ctct_result_des_parameter(RESULT_OK, s1, tran_size, is_determin, is_controllable);
 	return RESULT_OK;
+}
+
+int supconrobs_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+	INT_T slist, *list;
+	INT_T s_imagelist, *imagelist;
+	INT_B ok;
+	INT_T e;
+	INT_OS ee;
+	INT_S init, s1;
+	state_node *t1;
+
+	INT_S result;
+
+	slist = s_imagelist = 0;
+	list = imagelist = NULL;
+	t1 = NULL; s1 = 0;
+
+	result = 0;
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+	if (fgets(name3, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name3[strlen(name3)-1] = '\0';
+
+	while( fscanf(f1, "%d" , &ee) != EOF)
+	{
+		e = (INT_T)ee;		
+		addordlist(e, &list, slist,&ok);
+		if(ok) slist ++;
+	}
+	fclose(f1);
+	
+
+	init = 0L;
+	getdes(name1, &s1, &init, &t1);
+	gen_complement_list(t1, s1,	list, slist, &imagelist, &s_imagelist);
+	freedes(s1, &t1); s1 = 0; t1 = NULL;
+
+	result = supconrobs_proc(name3, name1, name2, slist, list, s_imagelist, imagelist);
+
+	if(result == 0){
+		return RESULT_OK;
+	}else{
+		if(mem_result == 1)	{			
+			return ERR_MEM;
+		}
+    return RESULT_OK;
+	}
 }

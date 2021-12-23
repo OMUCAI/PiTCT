@@ -396,3 +396,23 @@ def statenum(name: str) -> int:
 def transnum(name: str) -> int:
     des_info = getdes_parameter(name)
     return des_info['tran_size']
+
+
+def supconrobs(name1: str, name2: str, name3: str, obs: list):
+    for name in [name1, name2, name3]:
+        check_exist(name + DES_FILE_EXTENSION)
+    
+    prm_filename = "supconrobs_%s.prm" % name1
+
+    EventnameConv.register(name1, name2, name3)
+    # TODO: OBS LIST
+    prm_string = "{name1}\n{name2}\n{name3}\n".format(
+        name1=get_path(name1),
+        name2=get_path(name2),
+        name3=get_path(name3)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(16, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)

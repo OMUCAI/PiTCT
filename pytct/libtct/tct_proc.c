@@ -172,3 +172,25 @@ INT_B print_dat(FILE *out, state_node *t1, INT_S s1) {
   fprintf(out, "\n");
   return false;
 }
+
+void gen_complement_list(state_node *t1,
+                         INT_S s1,
+                         INT_T *imagelist, INT_T s_imagelist,
+                         INT_T **list, INT_T *slist)
+{
+   INT_S i;
+   INT_T j;
+   INT_B  ok;
+
+   for (i=0; i < s1; i++)
+   {
+      for (j=0; j < t1[i].numelts; j++)
+      {
+         if (!inlist(t1[i].next[j].data1, imagelist, s_imagelist))
+         {
+            addordlist(t1[i].next[j].data1, list, *slist, &ok);
+            if (ok) (*slist)++;
+         }
+      }
+   }
+}

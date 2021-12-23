@@ -12,3 +12,5 @@ extern INT_B print_dat(FILE *, state_node *, INT_S);
 
 //used in executing script file
 extern INT_B nonconflict(INT_S, state_node *);
+// used in supconrobs
+extern void gen_complement_list(state_node *, INT_S, INT_T *, INT_T , INT_T **, INT_T *);
