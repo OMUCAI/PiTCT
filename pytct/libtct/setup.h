@@ -24,6 +24,17 @@ extern "C" {
 #error Unknown pointer size or missing size macros!
 #endif
 
+#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
+#define PLATFORM_WIN
+#elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__linux__) || defined(linux) || defined(__linux)
+#define PLATFORM_LINUX
+#elif defined(__APPLE__) || defined(__MACH__)
+#define PLATFORM_MAC
+#else
+#error Unknown Platform
+#endif
+
+
 extern INT_OS autotest;
 extern INT_OS ring_active;
 extern INT_OS debug_mode;
