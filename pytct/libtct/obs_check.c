@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include <string.h>
+#include <string.h>
 // #include <ctype.h>
 // #include <io.h>
 
@@ -13,8 +13,8 @@
 #include "mymalloc.h"
 #include "minm1.h"
 // #include "ext_des_proc.h"
-// #include "cnorm.h"
-// #include "higen.h"
+#include "cnorm.h"
+#include "higen.h"
 // #include "cl_tct.h"
 #include "program.h"
 #include "tct_io.h"
