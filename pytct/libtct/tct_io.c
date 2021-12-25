@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
+#include <unistd.h>
+#endif
+
 /* Construct the full filename base on the name and the extension */
 void make_filename_ext(char *longfilename, char *name, char *ext) {
   INT_OS len;
@@ -24,4 +28,14 @@ void make_filename_ext(char *longfilename, char *name, char *ext) {
 
   strcat(longfilename, name);
   strcat(longfilename, ext);
+}
+
+/* Determine if the file exist on the disk */
+INT_OS exist(char* s)
+{
+#if defined(PLATFORM_WIN)
+   return (_access(s, 0) == 0);
+#elif defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
+    return (access(s, 0) == 0);
+#endif
 }

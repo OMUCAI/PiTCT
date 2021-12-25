@@ -21,6 +21,7 @@ extern "C" {
 extern FILE *auto_in;
 
 extern void make_filename_ext(char *, char *, char *);
+extern INT_OS exist(char*);
 
 #ifdef __cplusplus
 }
