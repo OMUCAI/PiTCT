@@ -417,3 +417,22 @@ def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: list):
     ret_code = __call(16, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def project(new_name: str, plant_name: str, obs: list):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+    
+    prm_filename = "project_%s.prm" % new_name
+    obs_list = [f"{num}" for num in obs] 
+
+    EventnameConv.register(new_name, plant_name)
+    prm_string = "{name1}\n{name2}\n{obs}".format(
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
+        obs="\n".join(obs_list)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(17, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)

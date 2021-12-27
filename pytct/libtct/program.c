@@ -1180,3 +1180,60 @@ int supconrobs_program(const char *filename)
     return RESULT_OK;
 	}
 }
+
+
+int project_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+  state_node *t1;
+  INT_S s1, init;
+  INT_T *list, slist;
+  INT_T e;
+  INT_OS ee;
+  INT_B  ok;
+
+  t1 = NULL; s1 = 0;
+  list = NULL; slist = 0;
+
+    /* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+  name2[strlen(name2)-1] = '\0';
+  
+  while( fscanf(f1, "%d" , &ee) != EOF)
+  {
+    e = (INT_T) ee;
+    addordlist(e, &list, slist, &ok);
+    if (ok) slist++;
+  }
+	fclose(f1);
+	
+  init = 0L;   
+  getdes(name1, &s1, &init, &t1);    
+
+  project0(&s1,&t1,slist,list);
+
+  if (mem_result != 1)
+  {
+    init = 0L;
+    filedes(name2, s1, init, t1);
+    return RESULT_OK;
+  }
+  else
+  {
+    return ERR_MEM;
+  }
+}
