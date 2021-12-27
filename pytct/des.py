@@ -403,13 +403,14 @@ def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: list):
         check_exist(name + DES_FILE_EXTENSION)
     
     prm_filename = "supconrobs_%s.prm" % new_name
+    obs_list = [f"{num}" for num in obs] 
 
     EventnameConv.register(new_name, plant_name, spec_name)
-    prm_string = "{name1}\n{name2}\n{name3}\n{obses}".format(
+    prm_string = "{name1}\n{name2}\n{name3}\n{obs}".format(
         name1=get_path(plant_name),
         name2=get_path(spec_name),
         name3=get_path(new_name),
-        obses="\n".join(str(obs))
+        obs="\n".join(obs_list)
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
