@@ -398,18 +398,18 @@ def transnum(name: str) -> int:
     return des_info['tran_size']
 
 
-def supconrobs(name1: str, name2: str, name3: str, obs: list):
-    for name in [name1, name2, name3]:
+def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: list):
+    for name in [plant_name, spec_name]:
         check_exist(name + DES_FILE_EXTENSION)
     
-    prm_filename = "supconrobs_%s.prm" % name1
+    prm_filename = "supconrobs_%s.prm" % new_name
 
-    EventnameConv.register(name1, name2, name3)
-    # TODO: OBS LIST
-    prm_string = "{name1}\n{name2}\n{name3}\n".format(
-        name1=get_path(name1),
-        name2=get_path(name2),
-        name3=get_path(name3)
+    EventnameConv.register(new_name, plant_name, spec_name)
+    prm_string = "{name1}\n{name2}\n{name3}\n{obses}".format(
+        name1=get_path(plant_name),
+        name2=get_path(spec_name),
+        name3=get_path(new_name),
+        obses="\n".join(str(obs))
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
