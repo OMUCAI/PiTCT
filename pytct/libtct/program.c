@@ -416,6 +416,7 @@ int supcon_program(const char *filename) {
   state_node *t1, *t2, *t3;
   INT_S s1, s2, s3, init;
   INT_S *macro_ab, *macro_c;
+  filename1 local_name1, local_name2, local_name3;
 
   macro_ab = NULL;
   macro_c = NULL;
@@ -423,29 +424,29 @@ int supcon_program(const char *filename) {
   s1 = s2 = s3 = 0;
 
   /* Use "fgets" as names could have spaces in it */
-  if (fgets(name1, MAX_FILENAME, f1) == NULL) {
+  if (fgets(local_name1, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
     return ERR_PRM_FILE;
   }
-  name1[strlen(name1) - 1] = '\0';
+  local_name1[strlen(local_name1) - 1] = '\0';
 
-  if (fgets(name2, MAX_FILENAME, f1) == NULL) {
+  if (fgets(local_name2, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
     return ERR_PRM_FILE;
   }
-  name2[strlen(name2) - 1] = '\0';
+  local_name2[strlen(local_name2) - 1] = '\0';
 
-  if (fgets(name3, MAX_FILENAME, f1) == NULL) {
+  if (fgets(local_name3, MAX_FILENAME, f1) == NULL) {
     fclose(f1);
     return ERR_PRM_FILE;
   }
-  name3[strlen(name3) - 1] = '\0';
+  local_name3[strlen(local_name3) - 1] = '\0';
 
   fclose(f1);
 
   init = 0L;
-  getdes(name1, &s1, &init, &t1);
-  getdes(name2, &s2, &init, &t2);
+  getdes(local_name1, &s1, &init, &t1);
+  getdes(local_name2, &s2, &init, &t2);
 
   meet2(s1, t1, s2, t2, &s3, &t3, &macro_ab, &macro_c);
   freedes(s2, &t2);
@@ -454,7 +455,7 @@ int supcon_program(const char *filename) {
   shave1(s1, t1, &s3, &t3, macro_c);
 
   if (mem_result != 1) {
-    filedes(name3, s3, init, t3);
+    filedes(local_name3, s3, init, t3);
   } else {
     return ERR_MEM;
   }
