@@ -26,6 +26,7 @@
 #define ERR_MEM -2           // out of memory
 #define ERR_PRM_FILE -3      // prm content error
 #define ERR_SUPREDUCE -4     // supreduce internal error
+#define ERR_UNKNOWN -5
 
 int create_program(const char *filename);
 int selfloop_program(const char *filename);
@@ -45,5 +46,6 @@ int printdat_program(const char *filename);
 int getdes_parameter_program(const char *filename);
 int supconrobs_program(const char *filename);
 int project_program(const char *filename);
+int localize_program(const char *filename);
 
 #endif
