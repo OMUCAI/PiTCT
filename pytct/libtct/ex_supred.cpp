@@ -9,6 +9,7 @@
 #include <tct_io.h>
 // #include <windows.h>
 // #include <direct.h>
+#include <mio/mmap.hpp>
 
 #include "des_data.h"
 #include "ex_supred.h"
@@ -41,6 +42,7 @@ INT_S *controller,*controller_tree, *simpler_controller, *plant,*c_marked_states
 char **merging_table;
 
 FILE *output;
+typedef void* HANDLE;
 HANDLE *hWaitlist, hMapWaitlist;
 char *pvWaitlist;
 INT_S nFileSize_limit;
@@ -248,6 +250,7 @@ void SetMapView(INT_S nIndex)
     }
     hMapWaitlist = CreateFileMapping(hWaitlist[nViewIndex], NULL, PAGE_READWRITE, 0, 
                                       GetFileSize(hWaitlist[nViewIndex],0), NULL);
+   // mio::basic_mmap
     pvWaitlist = (char*)MapViewOfFile(hMapWaitlist, FILE_MAP_WRITE, 0, 0, 0);
 }
 
@@ -3124,7 +3127,7 @@ INT_OS ex_supreduce(char *name1,
 	  if(_access(path, 0) == -1){
 		  if(_mkdir(path))  
 			  return -1;
-	  }   
+	  }
       for(i = 0; i < nNumWaitlist; i ++){
          sprintf(path, "%s%s%d.dat", prefix, waitlist_dat, i);
          hWaitlist[i] = CreateFile(path, GENERIC_READ | GENERIC_WRITE, 0, NULL,
