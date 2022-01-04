@@ -19,6 +19,7 @@
 #include "setup.h"
 #include "des_supp.h"
 #include "supred2.h"
+#include "multiplatio.h"
 
 
 #ifdef __cplusplus
@@ -43,8 +44,10 @@ char **merging_table;
 
 FILE *output;
 typedef void* HANDLE;
-HANDLE *hWaitlist, hMapWaitlist;
-char *pvWaitlist;
+// FILE *hWaitlist, hMapWaitlist;
+FILE **fp_list;
+mio::mmap_sink rw_mmap;
+// char *pvWaitlist;
 INT_S nFileSize_limit;
 INT_S nWaitlist_limit;
 INT_S nTmpuStack_limit;
@@ -235,6 +238,7 @@ void SetMapView(INT_S nIndex)
     INT_S nTemp, i;
     DWORD nLength;
     char *tmpBuf;
+    FILE *fp;
     
     nViewIndex = nIndex;
     UnmapViewOfFile(pvWaitlist);
@@ -3034,7 +3038,7 @@ INT_OS ex_supreduce(char *name1,
    controller_tree    = NULL;
    simpler_controller = NULL;
    tmpu_stack         = NULL;
-   hWaitlist          = NULL;
+   // hWaitlist          = NULL;
    //record             = NULL;
 
    nFileSize_limit = (INT_S)pow(2.0, 25);
@@ -3110,8 +3114,10 @@ INT_OS ex_supreduce(char *name1,
 	  nSizeWaitlist = 2 * num_states * num_states;
 	  nNumWaitlist =  (INT_S)((float)num_states / nWaitlist_limit)*2 *num_states  + 1;
 
-      hWaitlist = (HANDLE*)CALLOC(nNumWaitlist, sizeof(HANDLE));
-      if(hWaitlist == NULL){
+      // hWaitlist = (HANDLE*)CALLOC(nNumWaitlist, sizeof(HANDLE));
+      fp_list = (FILE**)CALLOC(nNumWaitlist, sizeof(FILE*));
+
+      if(fp_list == NULL){
          mem_result = 1;
          return_code = 30;
          goto FREEMEM;
@@ -3124,39 +3130,45 @@ INT_OS ex_supreduce(char *name1,
       }
 	  //Create folder TempData to store temporary files
 	  sprintf(path, "%s%s", prefix, TmpData);
-	  if(_access(path, 0) == -1){
-		  if(_mkdir(path))  
+	  if(mlt_access(path, 0) == -1){
+		  if(mlt_mkdir(path))  
 			  return -1;
-	  }
+	   }
       for(i = 0; i < nNumWaitlist; i ++){
          sprintf(path, "%s%s%d.dat", prefix, waitlist_dat, i);
-         hWaitlist[i] = CreateFile(path, GENERIC_READ | GENERIC_WRITE, 0, NULL,
-               OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+         fp_list[i] = fopen(path, "w+");
+
+         // hWaitlist[i] = CreateFile(path, GENERIC_READ | GENERIC_WRITE, 0, NULL,
+         //       OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
       }
-      if(WriteFile(hWaitlist[0], tmpBuf, (DWORD)nFileSize_limit, &nLength, NULL) == 0){
+      // if(WriteFile(hWaitlist[0], tmpBuf, (DWORD)nFileSize_limit, &nLength, NULL) == 0){
+      if(fwrite(tmpBuf, sizeof(char), nFileSize_limit, fp_list[0]) == 0){
          mem_result = 1;
          return_code = 30;
          goto FREEMEM;
       }
       free(tmpBuf); tmpBuf = NULL;
 
-      hMapWaitlist = CreateFileMapping(hWaitlist[0], NULL, PAGE_READWRITE, 0, (DWORD)nFileSize_limit, NULL);
-      if(hMapWaitlist == NULL){
-		  mem_result = 1;
+      // hMapWaitlist = CreateFileMapping(hWaitlist[0], NULL, PAGE_READWRITE, 0, (DWORD)nFileSize_limit, NULL);
+      std::error_code error;
+      rw_mmap = mio::make_mmap_sink(fp_list[0], 0, mio::map_entire_file, error);
+
+      if (error) {
+		   mem_result = 1;
          return_code = 30;
          goto FREEMEM;
       }
 
-      pvWaitlist = (char*)MapViewOfFile(hMapWaitlist, FILE_MAP_WRITE, 0, 0, 0);
-      if(pvWaitlist == NULL){
-		  mem_result = 1;
-         return_code = 30;
-         goto FREEMEM;
-      }
+      // pvWaitlist = (char*)MapViewOfFile(hMapWaitlist, FILE_MAP_WRITE, 0, 0, 0);
+      // if(pvWaitlist == NULL){
+		//   mem_result = 1;
+      //    return_code = 30;
+      //    goto FREEMEM;
+      // }
       nFileIndex = nViewIndex = 0;
 
       Ex2_Reduction();
-	  reduce_type = 2;
+	   reduce_type = 2;
    }
    
    /* refine simpler_controller to generate the final text version transition structure of the reduced supervisor */
@@ -3306,15 +3318,16 @@ INT_OS ex_supreduce(char *name1,
 
 FREEMEM:      
    if(approach_flag){
-	   if(pvWaitlist != NULL)
-		   UnmapViewOfFile(pvWaitlist);
-	   if(hMapWaitlist != NULL)
-		   CloseHandle(hMapWaitlist);
+      rw_mmap.unmap();      
+	   // if(pvWaitlist != NULL)
+		//    UnmapViewOfFile(pvWaitlist);
+	   // if(hMapWaitlist != NULL)
+		//    CloseHandle(hMapWaitlist);
 	   for(i = 0; i < nNumWaitlist; i ++){
-		   if(hWaitlist[i] != NULL)
-			   CloseHandle(hWaitlist[i]);
+		   if(fp_list[i] != NULL)
+			   fclose(fp_list[i]);
 	   }
-	   free(hWaitlist);
+	   free(fp_list);
 
 	   // Clear the file in the folder TmpData
 
@@ -3329,8 +3342,7 @@ FREEMEM:
 	   }
 	   _findclose(handle);
 	   sprintf(path, "%s%s", prefix, TmpData);
-	   _rmdir(path);    
-	   
+	   mlt_rmdir(path);
    }
    if (root_node != NULL)
    {
