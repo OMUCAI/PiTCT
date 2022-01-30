@@ -1246,12 +1246,11 @@ int localize_program(const char *filename)
     return ERR_FILE_OPEN;
   }
 	INT_OS result;
-	INT_S sfile, sloc,i;
+	INT_S sfile, sloc, i;
 	char names1[MAX_DESS][MAX_FILENAME];
 	char names2[MAX_DESS][MAX_FILENAME];  
 
 	result = 0;
-
 	/* Use "fgets" as names could have spaces in it */
 	if (fgets(name1, MAX_FILENAME, f1) == NULL)
 	{
@@ -1267,9 +1266,8 @@ int localize_program(const char *filename)
 	}
 	name2[strlen(name2)-1] = '\0';
 
-	fscanf(f1,"%d\n",&sfile);
-
-	for(i = 0; i < sfile; i ++){
+	fscanf(f1,"%lld\n",&sfile);
+	for(i = 0; i < sfile; i++) {
 		if (fgets(names1[i], MAX_FILENAME, f1) == NULL)
 		{
 			fclose(f1);
@@ -1277,15 +1275,14 @@ int localize_program(const char *filename)
 		}
 		names1[i][strlen(names1[i])-1] = '\0';
 	}
-	fscanf(f1,"%d\n",&sloc);
-	for(i = 0; i < sloc; i ++){
+	fscanf(f1,"%lld\n",&sloc);
+	for(i = 0; i < sloc; i++){
 		if (fgets(names2[i], MAX_FILENAME, f1) == NULL)
 		{
 			return ERR_PRM_FILE;
 		}
 		names2[i][strlen(names2[i])-1] = '\0';
 	}
-
 	fclose(f1);
 
 	result = localize_proc(sfile,sloc,name1,name2,names1,names2,0,0); 
