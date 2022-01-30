@@ -436,3 +436,30 @@ def project(new_name: str, plant_name: str, obs: list):
     ret_code = __call(17, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def localize(loc_names: list, plant_name: str, sup_name: str, components: list):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+    check_exist(sup_name + DES_FILE_EXTENSION)
+    for agent in components:
+        check_exist(agent + DES_FILE_EXTENSION)
+    
+    prm_filename = "localize_%s.prm" % plant_name
+    loc_list = [f"{get_path(loc)}" for loc in loc_names]  # str変換
+    components_list = [f"{get_path(com)}" for com in components]
+
+    for loc in loc_names:
+        EventnameConv.register(loc, plant_name, sup_name)
+    prm_string = "{name1}\n{name2}\n{num_component}\n{component}\n{num_loc}\n{loc}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(sup_name),
+        num_component=len(components),
+        component="\n".join(components_list),
+        num_loc=len(loc_names),
+        loc="\n".join(loc_list)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(18, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
