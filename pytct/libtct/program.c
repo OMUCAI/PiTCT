@@ -1296,3 +1296,47 @@ int localize_program(const char *filename)
 	}
   return RESULT_OK;
 }
+
+int minstate_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+  state_node *t1;
+  INT_S s1, init;
+
+  t1 = NULL; s1 = 0;
+    
+    /* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+  name2[strlen(name2)-1] = '\0';
+
+	fclose(f1);
+    
+  init = 0L;
+  getdes(name1, &s1, &init, &t1);
+  
+  reach(&s1, &t1);
+  minimize(&s1, &t1);
+    
+  if (mem_result != 1)
+  {
+    filedes(name2, s1, init, t1); 
+  }
+  else
+  {
+    return ERR_MEM;
+  }
+}

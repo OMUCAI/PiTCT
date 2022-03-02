@@ -47,5 +47,6 @@ int getdes_parameter_program(const char *filename);
 int supconrobs_program(const char *filename);
 int project_program(const char *filename);
 int localize_program(const char *filename);
+int minstate_program(const char *filename);
 
 #endif

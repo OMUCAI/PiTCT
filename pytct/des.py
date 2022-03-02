@@ -463,3 +463,18 @@ def localize(loc_names: list, plant_name: str, sup_name: str, components: list):
     ret_code = __call(18, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def minstate(new_name: str, plant_name: str):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+    prm_filename = "minstate_%s.prm" % new_name
+
+    prm_string = "{name1}\n{name2}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(new_name)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(19, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
