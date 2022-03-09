@@ -486,6 +486,7 @@ def force(new_name: str, plant_name: str, forcible_list: list, preemptible_list:
 
     EventnameConv.register(new_name, plant_name)
 
+    # TODO: consider string event
     forcible = [f"{fl}" for fl in forcible_list]
     preemptible = [f"{pl}" for pl in preemptible_list]
 
@@ -502,3 +503,27 @@ def force(new_name: str, plant_name: str, forcible_list: list, preemptible_list:
     ret_code = __call(20, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def convert(new_name: str, plant_name: str, state_pair: list):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+
+    prm_filename = "convert_%s.prm" % plant_name
+    # TODO: consider string event
+    state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
+    
+    EventnameConv.register(new_name, plant_name)
+    prm_string = "{name1}\n{name2}\n{statepair}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
+        statepair="\n".join(state_pair_list) 
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(21, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
+
+
+def relabel(new_name: str, plant_name: str, state_pair: list):
+    convert(new_name, plant_name, state_pair)

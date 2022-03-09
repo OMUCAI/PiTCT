@@ -11,6 +11,7 @@
 #include "mymalloc.h"
 #include "obs_check.h"
 #include "localize.h"
+#include "higen.h"
 
 typedef char filename1[MAX_FILENAME];
 
@@ -1402,5 +1403,66 @@ int force_program(const char *filename)
 	{
 		return ERR_MEM;
 	}
+  return RESULT_OK;
+}
+
+int convert_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+  state_node *t1, *t2;
+  INT_S s1, s2, init;
+  state_pair *sp;
+  INT_S s_sp;
+  INT_S i,j;
+  INT_B  ok;
+  INT_T *list;
+  INT_T s_list;
+
+  t1 = t2 = NULL;
+  s1 = s2 = 0;
+  sp = NULL;
+  s_sp = 0;
+  list = NULL;
+  s_list = 0;
+    
+  /* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+  name2[strlen(name2)-1] = '\0';
+  
+  while( fscanf(f1, "%lld %lld" , &i, &j) != EOF)
+  {
+    addstatepair(i, j, &sp, s_sp, &ok);
+    if (ok) s_sp++;
+  }
+
+	fclose(f1);
+ 
+  init = 0L;   
+  getdes(name1, &s1, &init, &t1);
+  
+  eventmap_des(t1,s1,&t2,&s2,sp,s_sp,&list,&s_list,&ok);
+
+  if (s_list != 0) 
+  project0(&s2,&t2,s_list,list);
+
+  if (mem_result != 1) {
+    filedes(name2, s2, init, t2);  
+  } else {
+    return ERR_MEM;
+  }
   return RESULT_OK;
 }
