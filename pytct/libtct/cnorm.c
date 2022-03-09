@@ -4,6 +4,7 @@
 #include "des_proc.h"
 #include "cnorm.h"
 #include "mymalloc.h"
+#include "setup.h"
 
 #ifdef __cplusplus
 extern "C" {
