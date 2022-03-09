@@ -295,10 +295,10 @@ INT_B  remap_events(state_node *t1, INT_S s1)
 
        if (new_event > 999) {
           printf("Excessed maximum - re-map events has fail\n");
-          exit(1);
           free(vocal_list);
           free(event_list);
           free(pair);
+          exit(1);
           return false;
        }
 
