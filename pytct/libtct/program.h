@@ -50,5 +50,6 @@ int localize_program(const char *filename);
 int minstate_program(const char *filename);
 int force_program(const char *filename);
 int convert_program(const char *filename);
+int supnorm_program(const char *filename);
 
 #endif

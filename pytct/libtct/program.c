@@ -12,6 +12,7 @@
 #include "obs_check.h"
 #include "localize.h"
 #include "higen.h"
+#include "cnorm.h"
 
 typedef char filename1[MAX_FILENAME];
 
@@ -1461,6 +1462,68 @@ int convert_program(const char *filename)
 
   if (mem_result != 1) {
     filedes(name2, s2, init, t2);  
+  } else {
+    return ERR_MEM;
+  }
+  return RESULT_OK;
+}
+
+int supnorm_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+  state_node *t1, *t2, *t3;
+  INT_S s1, s2, s3, init;
+  INT_T *list;
+  INT_T slist;
+  INT_T e;
+  INT_OS ee;
+  INT_B  ok;
+
+  t1 = t2 = t3 = NULL;
+  s1 = s2 = s3 = 0;
+  list = NULL;  slist = 0;
+    
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+	if (fgets(name3, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+  name3[strlen(name3)-1] = '\0';
+  
+  while( fscanf(f1, "%d" , &ee) != EOF)
+  {
+    e = (INT_T) ee;
+    addordlist(e, &list, slist, &ok);
+    if (ok) slist++;
+  }
+	fclose(f1);
+ 
+  init = 0L;   
+  getdes(name1, &s1, &init, &t1);
+  getdes(name2, &s2, &init, &t2);
+  
+  suprema_normal(t1, s1, t2, s2, &t3, &s3, list, slist);
+
+  if (mem_result != 1) {
+    filedes(name3, s3, init, t3);  
   } else {
     return ERR_MEM;
   }
