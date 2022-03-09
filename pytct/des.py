@@ -478,3 +478,27 @@ def minstate(new_name: str, plant_name: str):
     ret_code = __call(19, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def force(new_name: str, plant_name: str, forcible_list: list, preemptible_list: list, timeout_event: int):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+    prm_filename = "force_%s.prm" % new_name
+
+    EventnameConv.register(new_name, plant_name)
+
+    forcible = [f"{fl}" for fl in forcible_list]
+    preemptible = [f"{pl}" for pl in preemptible_list]
+
+    prm_string = "{name1}\n{name2}\n{timeout}\n{forcible}\n{preemptible}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
+        timeout=timeout_event,
+        forcible="\n".join(forcible),
+        preemptible="\n".join(preemptible)
+    )
+
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(20, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)

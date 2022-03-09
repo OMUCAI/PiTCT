@@ -1339,4 +1339,68 @@ int minstate_program(const char *filename)
   {
     return ERR_MEM;
   }
+  return RESULT_OK;
+}
+
+int force_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+	INT_T s_force_event_list, *force_event_list;
+	INT_T s_preempt_event_list, *preempt_event_list;
+	INT_T timeout_event;
+	INT_B flag, ok;
+	INT_T e;
+	INT_OS ee;
+
+	s_force_event_list = s_preempt_event_list = 0;
+	force_event_list = preempt_event_list = NULL;
+
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+	fscanf(f1, "%d\n", &ee);
+	timeout_event = (INT_T)ee;
+	flag = false;
+	while( fscanf(f1, "%d" , &ee) != EOF)
+	{
+		if(ee == -1){
+			flag = true;
+			continue;
+		}
+		e = (INT_T)ee;
+		if(!flag){			
+			addordlist(e, &force_event_list, s_force_event_list,&ok);
+			if(ok) s_force_event_list ++;
+		}else{
+			addordlist(e, &preempt_event_list, s_preempt_event_list, &ok);
+			if(ok) s_preempt_event_list ++;
+		}
+
+	}
+
+	fclose(f1);
+
+	force_proc(name1, name2, s_force_event_list, force_event_list,
+		s_preempt_event_list, preempt_event_list, timeout_event);
+
+	if(mem_result == 1)
+	{
+		return ERR_MEM;
+	}
+  return RESULT_OK;
 }
