@@ -539,8 +539,8 @@ def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: list):
     EventnameConv.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{null}\n".format(
         name1=get_path(sup_name),
-        name1=get_path(plant_name),
-        name2=get_path(new_name),
+        name2=get_path(plant_name),
+        name3=get_path(new_name),
         null="\n".join(null)
     )
     prm_path = gen_prm(prm_filename, prm_string)
