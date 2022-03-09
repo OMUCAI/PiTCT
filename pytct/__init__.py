@@ -3,6 +3,6 @@ from .des import (
     init, create, selfloop, trim, printdes, sync, meet, supcon,
     allevents, mutex, complement, nonconflict, condat, supreduce,
     isomorph, printdat, getdes_parameter, statenum, transnum, supconrobs,
-    project, localize, minstate, force, convert, relabel, supnorm
+    project, localize, minstate, force, convert, relabel, supnorm, supscop
 )
 from .distance import min_distance

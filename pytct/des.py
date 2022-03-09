@@ -534,6 +534,7 @@ def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: list):
         check_exist(name + DES_FILE_EXTENSION)
 
     prm_filename = "supnorm_%s.prm" % new_name
+    # TODO: consider string event
     null = [f"{num}" for num in null_list] 
 
     EventnameConv.register(new_name, plant_name, sup_name)
@@ -546,5 +547,27 @@ def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: list):
     prm_path = gen_prm(prm_filename, prm_string)
 
     ret_code = __call(22, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
+
+
+def supscop(new_name: str, plant_name: str, sup_name: str, null_list: list):
+    for name in [plant_name, sup_name]:
+        check_exist(name + DES_FILE_EXTENSION)
+
+    prm_filename = "supscop_%s.prm" % new_name
+    # TODO: consider string event
+    null = [f"{num}" for num in null_list] 
+
+    EventnameConv.register(new_name, plant_name, sup_name)
+    prm_string = "{name1}\n{name2}\n{name3}\n{null}\n".format(
+        name1=get_path(sup_name),
+        name2=get_path(plant_name),
+        name3=get_path(new_name),
+        null="\n".join(null)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(23, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
