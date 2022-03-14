@@ -1662,7 +1662,7 @@ int canQC_program(const char *filename)
 	if (result == 0)
 	{
 		/* On success, we need to pass the state partition */
-    out = fopen(long_name2, "w");
+    out = fopen(long_name3, "w");
     if (out == NULL) 
         return ERR_FILE_OPEN;       /* Can do not much here so just return */
     fprintf(out, "%d\n", result);
