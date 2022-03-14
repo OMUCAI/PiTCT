@@ -3,6 +3,7 @@ from typing import Any
 
 DES_FILE_EXTENSION = ".DES"
 DAT_FILE_EXTENSION = ".DAT"
+RST_FILE_EXTENSION = ".RST"
 class Singleton(object):
     @classmethod
     def get_instance(cls):

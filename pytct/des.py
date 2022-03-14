@@ -6,7 +6,7 @@ from pytct.eventname_conv import EventnameConv
 
 from .libtct import call_program as __call
 
-from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION
+from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION, RST_FILE_EXTENSION
 from .config import Config
 from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path
 
@@ -599,3 +599,45 @@ def supqc(new_name: str, plant_name: str, mode: str, null_list: list):
     check_ret_code(ret_code)
     del_prm(prm_filename)
     # TODO: load rst file
+
+
+def observable(plant_1: str, plant_2: str, mode: str, null_list: list) -> bool:
+    for name in [plant_1, plant_2]:
+        check_exist(name + DES_FILE_EXTENSION)
+    prm_filename = "observable_%s.prm" % plant_1
+    result_filename = "observable_result"
+    # TODO: consider string event
+    null = [f"{num}" for num in null_list]
+    if mode == "o":
+        mode_flg = 1
+    elif mode == "so":
+        mode_flg = 2
+    else:
+        raise ValueError("Unknown mode. You can select 'o' or 'so'.")
+    
+    prm_string = "{mode_flg}\n{name1}\n{name2}\n{name3}\n{null}\n".format(
+        mode_flg=mode_flg,
+        name1=get_path(plant_1),
+        name2=get_path(plant_2),
+        name3=get_path(result_filename),
+        null="\n".join(null)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+    ret_code = __call(25, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
+
+    with open(get_path(result_filename + RST_FILE_EXTENSION)) as f:
+        res = []
+        for l in f:
+            res.append(l.rstrip())
+
+    if res[0] != '0':
+        raise RuntimeError("Observable return other than OK code.")
+    
+    if res[1] == '1':
+        is_observable = True
+    else:
+        is_observable = False
+
+    return is_observable

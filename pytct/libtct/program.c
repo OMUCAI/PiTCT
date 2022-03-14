@@ -1674,5 +1674,93 @@ int canQC_program(const char *filename)
 	} else if (mem_result == 1) {
 		return ERR_MEM;
 	}
-	return RESULT_OK;
+	return ERR_UNKNOWN;
+}
+
+
+int obs_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+	state_node *t1;
+	INT_S s1, init;
+	INT_T *list, slist;
+	INT_T *imagelist, s_imagelist;
+	INT_S *statemap, s_statemap;
+	INT_T e;
+	INT_OS ee;
+	INT_B  ok;
+	INT_B  flag;
+	INT_OS result;
+	INT_OS mode; 
+	INT_B  is_observable;
+  FILE *out;
+
+	t1 = NULL; s1 = 0;
+	list = NULL; slist = 0;
+	imagelist = NULL; s_imagelist = 0;
+	statemap = NULL; s_statemap = 0;
+	is_observable = true;
+
+	fscanf(f1, "%d\n", &mode);
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+  /* warn: (pytct) Change API */
+  if (fgets(name3, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name3[strlen(name3)-1] = '\0';
+	make_filename_ext(long_name3, name3, EXT_RST);
+
+	flag = false;
+	while( fscanf(f1, "%d" , &ee) != EOF)
+	{
+		e = (INT_T) ee;
+		addordlist(e, &list, slist, &ok);
+		if (ok) slist++;
+	} 
+	fclose(f1);
+
+	init = 0L;
+	getdes(name1, &s1, &init, &t1);
+	gen_complement_list(t1, s1,	list, slist, &imagelist, &s_imagelist);
+	freedes(s1, &t1); s1 = 0; t1 = NULL;
+	
+
+	result = obs_proc(name1,name2,&s1,&t1,slist,list,s_imagelist,imagelist,mode,&is_observable);
+
+	if (result == 0) {
+    out = fopen(long_name3, "w");
+    if (out == NULL) 
+      return -1;       /* Can do not much here so just return */
+    fprintf(out, "%d\n", CR_OK);
+    fprintf(out, "%d\n", is_observable);
+    // init = 0;
+    // filedes(OBS_TEMP_NAME,s1,init,t1);
+    // fprintf(out,OBS_TEMP_NAME); 
+    // fprintf(out, "\n");
+    fclose(out);
+
+    return RESULT_OK;
+	} else if (mem_result == 1) {
+		return ERR_MEM;
+	}
+  return ERR_UNKNOWN;
 }
