@@ -20,54 +20,54 @@ FILE *out_canqc_debug;
  * Print out the partition for debugging.
  */
 
-void print_partition(INT_S size, part_node *par)
-{
-   INT_S i,j;
+// void print_partition(INT_S size, part_node *par)
+// {
+//    INT_S i,j;
 
-   fprintf(out_canqc_debug, "[");
+//    fprintf(out_canqc_debug, "[");
      
-   for (i=0; i < size; i++)
-   {
-     fprintf(out_canqc_debug, "[");
-     for (j=0; j < par[i].numelts; j++)
-     {
-         fprintf(out_canqc_debug, "%d", par[i].next[j]);
-         if ((j+1) < par[i].numelts)
-             fprintf(out_canqc_debug, ",");
-      }    
-      fprintf(out_canqc_debug, "]"); 
-      if ((i+1) < size)
-         fprintf(out_canqc_debug, ",");
-   }  
-   fprintf(out_canqc_debug, "]");   
-}   
+//    for (i=0; i < size; i++)
+//    {
+//      fprintf(out_canqc_debug, "[");
+//      for (j=0; j < par[i].numelts; j++)
+//      {
+//          fprintf(out_canqc_debug, "%d", par[i].next[j]);
+//          if ((j+1) < par[i].numelts)
+//              fprintf(out_canqc_debug, ",");
+//       }    
+//       fprintf(out_canqc_debug, "]"); 
+//       if ((i+1) < size)
+//          fprintf(out_canqc_debug, ",");
+//    }  
+//    fprintf(out_canqc_debug, "]");   
+// }   
 
 /* 
  * Print out the partition for debugging.
  */
-void print_par(INT_S size, part_node *par)
-{
-   INT_S i,j;
+// void print_par(INT_S size, part_node *par)
+// {
+//    INT_S i,j;
 
-   // clrscr();
-   printf("[");
+//    // clrscr();
+//    printf("[");
      
-   for (i=0; i < size; i++)
-   {
-     printf("[");
-     for (j=0; j < par[i].numelts; j++)
-     {
-         printf("%d", par[i].next[j]);
-         if ((j+1) < par[i].numelts)
-             printf(",");
-      }    
-      printf("]"); 
-      if ((i+1) < size)
-         printf(",");
-   }  
-   printf("]");   
-   printf("\n");
-}   
+//    for (i=0; i < size; i++)
+//    {
+//      printf("[");
+//      for (j=0; j < par[i].numelts; j++)
+//      {
+//          printf("%d", par[i].next[j]);
+//          if ((j+1) < par[i].numelts)
+//              printf(",");
+//       }    
+//       printf("]"); 
+//       if ((i+1) < size)
+//          printf(",");
+//    }  
+//    printf("]");   
+//    printf("\n");
+// }   
 
 
 /*
@@ -194,17 +194,17 @@ void Arrange(INT_S *s_par2, part_node **par2, INT_S *s_par1, part_node **par1, I
    /*
     * Debugging
     */ 
-   if (CANQC_DEBUG == true)
-   {
-      fprintf(out_canqc_debug, "Par2 = Arrange(Par1)\n");
-      fprintf(out_canqc_debug, "Par1 = ");
-      print_partition(*s_par1, *par1);
-      fprintf(out_canqc_debug, "\n");
-      fprintf(out_canqc_debug, "Par2 = ");
-      print_partition(*s_par2, *par2);
-      fprintf(out_canqc_debug, "\n");
-      fprintf(out_canqc_debug, "\n");
-   }   
+   // if (CANQC_DEBUG == true)
+   // {
+   //    fprintf(out_canqc_debug, "Par2 = Arrange(Par1)\n");
+   //    fprintf(out_canqc_debug, "Par1 = ");
+   //    print_partition(*s_par1, *par1);
+   //    fprintf(out_canqc_debug, "\n");
+   //    fprintf(out_canqc_debug, "Par2 = ");
+   //    print_partition(*s_par2, *par2);
+   //    fprintf(out_canqc_debug, "\n");
+   //    fprintf(out_canqc_debug, "\n");
+   // }   
 }    
 
 /*
@@ -310,20 +310,20 @@ void ParMeet(INT_S *s_par3, part_node **par3,
    /*
     * Debugging
     */ 
-   if (CANQC_DEBUG == true)
-   {
-      fprintf(out_canqc_debug, "Par3 = ParMeet(Par1, Par2)\n");
-      fprintf(out_canqc_debug, "Par1 = ");
-      print_partition(s_par1, par1);
-      fprintf(out_canqc_debug, "\n");
-      fprintf(out_canqc_debug, "Par2 = ");
-      print_partition(s_par2, par2);
-      fprintf(out_canqc_debug, "\n");
-      fprintf(out_canqc_debug, "Par3 = ");
-      print_partition(*s_par3, *par3);
-      fprintf(out_canqc_debug, "\n");
-      fprintf(out_canqc_debug, "\n");
-   }                    
+   // if (CANQC_DEBUG == true)
+   // {
+   //    fprintf(out_canqc_debug, "Par3 = ParMeet(Par1, Par2)\n");
+   //    fprintf(out_canqc_debug, "Par1 = ");
+   //    print_partition(s_par1, par1);
+   //    fprintf(out_canqc_debug, "\n");
+   //    fprintf(out_canqc_debug, "Par2 = ");
+   //    print_partition(s_par2, par2);
+   //    fprintf(out_canqc_debug, "\n");
+   //    fprintf(out_canqc_debug, "Par3 = ");
+   //    print_partition(*s_par3, *par3);
+   //    fprintf(out_canqc_debug, "\n");
+   //    fprintf(out_canqc_debug, "\n");
+   // }                    
 }     
 
 INT_S test_suite()
@@ -2995,32 +2995,32 @@ void free_ext_part(INT_S s1,
 	}
 	free(*pn);
 }
-void zprint_ext_par(INT_S s, ext_part_node *ext_par, INT_T *imagelist)
-{
-	FILE *out;
-	INT_S i, j, k;
-	char tmp_result[MAX_PATH];
+// void zprint_ext_par(INT_S s, ext_part_node *ext_par, INT_T *imagelist)
+// {
+// 	FILE *out;
+// 	INT_S i, j, k;
+// 	char tmp_result[MAX_PATH];
 
-	strcpy(tmp_result, "");
-	strcat(tmp_result, prefix);
-	strcat(tmp_result, "Ouput.txt");
-	out = fopen(tmp_result,"a");
+// 	strcpy(tmp_result, "");
+// 	strcat(tmp_result, prefix);
+// 	strcat(tmp_result, "Ouput.txt");
+// 	out = fopen(tmp_result,"a");
 
 
-	for(i = 0; i < s; i ++){
-		fprintf(out, "state - %d\n", i);
-		for(j = 0; j < ext_par[i].numelts; j ++){
-			fprintf(out,"%d: ", imagelist[j]);
-			for(k = 0; k < ext_par[i].data[j].numelts; k ++)
-				fprintf(out,"%d ", ext_par[i].data[j].next[k]);
-			fprintf(out,"\n");
-		}
-		fprintf(out,"\n\n");
-	}
-	fprintf(out,"\n");
+// 	for(i = 0; i < s; i ++){
+// 		fprintf(out, "state - %d\n", i);
+// 		for(j = 0; j < ext_par[i].numelts; j ++){
+// 			fprintf(out,"%d: ", imagelist[j]);
+// 			for(k = 0; k < ext_par[i].data[j].numelts; k ++)
+// 				fprintf(out,"%d ", ext_par[i].data[j].next[k]);
+// 			fprintf(out,"\n");
+// 		}
+// 		fprintf(out,"\n\n");
+// 	}
+// 	fprintf(out,"\n");
 
-	fclose(out);
-}
+// 	fclose(out);
+// }
 // Find event index
 INT_S getindex(INT_T e, INT_T *L, INT_T size)
 {
