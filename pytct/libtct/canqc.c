@@ -2,17 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <io.h>
 
 #include "canqc.h"
 #include "setup.h"
 #include "des_data.h"
 #include "des_proc.h"
 #include "des_supp.h"
-#include "curses.h"
+// #include "curses.h"
 #include "mymalloc.h"
 #include "tct_proc.h"
-#include "ext_des_proc.h"
+// #include "ext_des_proc.h"
 
 INT_B  CANQC_DEBUG = false;
 FILE *out_canqc_debug;
@@ -50,7 +49,7 @@ void print_par(INT_S size, part_node *par)
 {
    INT_S i,j;
 
-   clrscr();
+   // clrscr();
    printf("[");
      
    for (i=0; i < size; i++)
@@ -822,22 +821,22 @@ void eta(INT_S  s1, state_node *t1,
          }   
       }            
        
-      if (debug_mode)
-      {
-         move(22,0); clrtoeol();
-         printw("ETA: %ld %d", s_imagelist2, s1);
-      }   
+      // if (debug_mode)
+      // {
+      //    move(22,0); clrtoeol();
+      //    printw("ETA: %ld %d", s_imagelist2, s1);
+      // }   
        
       for (i=0; i < s1; i++) {
           
-         if (debug_mode) {
-            if ((num_hits % 10000L) == 0L) {
-               move(23,0); clrtoeol();
-               printw("ETA: %ld %d", j, i);
-               refresh();
-            }   
-            num_hits++;
-         } 
+         // if (debug_mode) {
+         //    if ((num_hits % 10000L) == 0L) {
+         //       move(23,0); clrtoeol();
+         //       printw("ETA: %ld %d", j, i);
+         //       refresh();
+         //    }   
+         //    num_hits++;
+         // } 
                    
          if (imagelist2[j] == EEE)
             eta2(s2, t2, i, s_temp, temp);
@@ -985,38 +984,38 @@ void table_to_par(INT_S s, state_node *t, INT_S *s_par, part_node **par)
    } /* for i */ 
 }     
 
-void print_eta(INT_S s, state_node *t, INT_T s_imagelist, INT_T *imagelist)
-{
-   INT_S i,k;
-   INT_T j;
+// void print_eta(INT_S s, state_node *t, INT_T s_imagelist, INT_T *imagelist)
+// {
+//    INT_S i,k;
+//    INT_T j;
      
-   clrscr(); 
-   for (i=0; i < s; i++) {
-      printf("state %d:\n", i);
-      for (k=0; k < s_imagelist; k++) {    
-         printf("  transition   %d: ", imagelist[k]);
-         for (j=0; j < t[i].numelts; j++) {
-            if (t[i].next[j].data1 == imagelist[k])
-               printf("%d ", t[i].next[j].data2);
-         }      
-         printf("\n");
-     }    
+//    clrscr(); 
+//    for (i=0; i < s; i++) {
+//       printf("state %d:\n", i);
+//       for (k=0; k < s_imagelist; k++) {    
+//          printf("  transition   %d: ", imagelist[k]);
+//          for (j=0; j < t[i].numelts; j++) {
+//             if (t[i].next[j].data1 == imagelist[k])
+//                printf("%d ", t[i].next[j].data2);
+//          }      
+//          printf("\n");
+//      }    
 
-     printf("  transition 'm': ");
-     for (j=0; j < t[i].numelts; j++) {
-        if (t[i].next[j].data1 == 1001)    /* "m" = 1001 */
-            printf("%d ", t[i].next[j].data2);
-     }      
-     printf("\n");
+//      printf("  transition 'm': ");
+//      for (j=0; j < t[i].numelts; j++) {
+//         if (t[i].next[j].data1 == 1001)    /* "m" = 1001 */
+//             printf("%d ", t[i].next[j].data2);
+//      }      
+//      printf("\n");
      
-     printf("  transition 'e': ");
-     for (j=0; j < t[i].numelts; j++) {
-        if (t[i].next[j].data1 == EEE)    /* "e" = 1000 */
-            printf("%d ", t[i].next[j].data2);
-     }      
-     printf("\n");     
-   }   
-}
+//      printf("  transition 'e': ");
+//      for (j=0; j < t[i].numelts; j++) {
+//         if (t[i].next[j].data1 == EEE)    /* "e" = 1000 */
+//             printf("%d ", t[i].next[j].data2);
+//      }      
+//      printf("\n");     
+//    }   
+// }
 
 void ParGen(INT_T event, INT_S s2, state_node *t2, 
                          INT_S s_par, part_node* par)
@@ -2210,18 +2209,18 @@ EXTEND_LABEL:
    return result;
 }
 
-void ext_obs_header_continue(char *name3, char*name4, char*name1, char*name2, INT_OS entry_type)
-{
-	printw("NATURAL OBSERVER"); println();
-	println();
-	switch(entry_type){
-	case 1:  printw("(%s,%s) = NATOBS (%s, %s)", name3, name4, name1, name2); break;
-	case 2:  printw("(%s,%s) = NATOBS (%s, %s)", name3, name4, name1, name2); break;
-	case 3:  printw("(%s,%s) = NATOBS (%s, [EVENTLIST])", name3, name4, name1); break;
-	}	
-	println();
-	println();
-}
+// void ext_obs_header_continue(char *name3, char*name4, char*name1, char*name2, INT_OS entry_type)
+// {
+// 	printw("NATURAL OBSERVER"); println();
+// 	println();
+// 	switch(entry_type){
+// 	case 1:  printw("(%s,%s) = NATOBS (%s, %s)", name3, name4, name1, name2); break;
+// 	case 2:  printw("(%s,%s) = NATOBS (%s, %s)", name3, name4, name1, name2); break;
+// 	case 3:  printw("(%s,%s) = NATOBS (%s, [EVENTLIST])", name3, name4, name1); break;
+// 	}	
+// 	println();
+// 	println();
+// }
  
 INT_OS ext_obs_proc(char *name3, char *name4, char *name1, char *name2,
                 INT_T *s_nulllist, INT_T **nulllist,
@@ -2246,18 +2245,18 @@ INT_OS ext_obs_proc(char *name3, char *name4, char *name1, char *name2,
    s_nulist = 0; nulist = NULL;
    s_par = 0; par = NULL;
    
-   if(print_flag){
-	   if(_wherey() > 16){
-		   clear();
-		   ext_obs_header_continue(name3, name4, name1, name2, entry_type);
-	   } 
+   // if(print_flag){
+	//    if(_wherey() > 16){
+	// 	   clear();
+	// 	   ext_obs_header_continue(name3, name4, name1, name2, entry_type);
+	//    } 
 
-	   printw("DES2 (Seed) image: "); println();
-	   print_eventlist(*s_imagelist, *imagelist);  println();
-	   println();
-	   print_flag = false;
+	//    printw("DES2 (Seed) image: "); println();
+	//    print_eventlist(*s_imagelist, *imagelist);  println();
+	//    println();
+	//    print_flag = false;
 
-   }
+   // }
    
    i = 0;
    while(!is_det){
@@ -2274,16 +2273,16 @@ INT_OS ext_obs_proc(char *name3, char *name4, char *name1, char *name2,
           goto EXT_OBS_LABEL;
        }
        if(ext_is_deterministic(t2,s2)){
-		   if(print_flag){
-			   if(_wherey() > 16){
-				   clear();
-				   ext_obs_header_continue(name3, name4, name1, name2, entry_type);
-				   println();
-			   } 
-			   printw("DES4 (Natural observer) image: "); println();
-			   print_eventlist(*s_imagelist, *imagelist); println();
-			   println();
-		   }
+		   // if(print_flag){
+			//    if(_wherey() > 16){
+			// 	   clear();
+			// 	   ext_obs_header_continue(name3, name4, name1, name2, entry_type);
+			// 	   println();
+			//    } 
+			//    printw("DES4 (Natural observer) image: "); println();
+			//    print_eventlist(*s_imagelist, *imagelist); println();
+			//    println();
+		   // }
 
           is_det = true;
           *s_ext_imagelist = *s_imagelist;
