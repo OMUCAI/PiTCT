@@ -52,5 +52,7 @@ int force_program(const char *filename);
 int convert_program(const char *filename);
 int supnorm_program(const char *filename);
 int supscop_program(const char *filename);
+int canQC_program(const char *filename);
+
 
 #endif

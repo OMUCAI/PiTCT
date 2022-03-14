@@ -571,3 +571,31 @@ def supscop(new_name: str, plant_name: str, sup_name: str, null_list: list):
     ret_code = __call(23, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def supqc(new_name: str, plant_name: str, mode: str, null_list: list):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+    prm_filename = "supqc_%s.prm" % new_name
+    result_filename = "supqc_result"
+    # TODO: consider string event
+    null = [f"{num}" for num in null_list]
+    if mode == "qc":
+        mode_flg = 1
+    elif mode == "sqc":
+        mode_flg = 2
+    else:
+        raise ValueError("Unknown mode. You can select 'qc' or 'sqc'.")
+    
+    EventnameConv.register(new_name, plant_name)
+    prm_string = "{mode_flg}\n{name1}\n{name2}\n{name3}\n{null}\n".format(
+        mode_flg=mode_flg,
+        name1=get_path(plant_name),
+        name2=get_path(new_name),
+        name3=get_path(result_filename),
+        null="\n".join(null)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+    ret_code = __call(24, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
+    # TODO: load rst file
