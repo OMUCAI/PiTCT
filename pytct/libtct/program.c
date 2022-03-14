@@ -1764,3 +1764,90 @@ int obs_program(const char *filename)
 	}
   return ERR_UNKNOWN;
 }
+
+int natobs_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+	state_node *t1;
+	INT_S s1, init;
+	INT_T *list, slist;
+	INT_T *imagelist, s_imagelist, *ext_imagelist, s_ext_imagelist;
+	INT_S *statemap, s_statemap;
+	INT_T e;
+	INT_OS ee,i;
+	INT_B ok;
+	INT_OS result;
+
+	t1 = NULL; s1 = 0;
+	list = NULL; slist = 0;
+	imagelist = ext_imagelist = NULL; s_imagelist = s_ext_imagelist = 0;
+	statemap = NULL; s_statemap = 0;
+
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+	if (fgets(name3, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name3[strlen(name3)-1] = '\0';
+
+	while( fscanf(f1, "%d" , &ee) != EOF)
+	{
+		e = (INT_T) ee;
+		addordlist(e, &imagelist, s_imagelist, &ok);
+		if (ok) s_imagelist++;
+	} 
+
+	fclose(f1);
+
+	init = 0L;
+	getdes(name1, &s1, &init, &t1);
+
+	gen_complement_list(t1, s1,	imagelist, s_imagelist, &list, &slist);
+
+	freedes(s1, &t1); s1 = 0; t1 = NULL;
+
+	result = ext_obs_proc(name2, name4, name1, name3, &slist, &list, &s_imagelist, &imagelist,
+		&s_ext_imagelist, &ext_imagelist, &s_statemap, &statemap, 1, 0, 3);
+
+	free(list); free(imagelist);  free(statemap);
+
+	if(result == CR_OK){
+		s1 = 1;
+		t1 = newdes(s1);
+		(t1[0]).marked = true;
+		for(i = 0; i < s_ext_imagelist; i ++){
+			addordlist1(ext_imagelist[i],0, &(t1)[0].next, (t1)[0].numelts, &ok);
+			if(ok) (t1)[0].numelts ++;
+		}
+		if (mem_result != 1)
+		{
+			init = 0L;
+			filedes(name3, s1, init, t1); 
+		}
+		free(ext_imagelist);
+		return RESULT_OK;
+	} else {
+		free(ext_imagelist);
+		if(mem_result == 1)
+			return ERR_MEM;
+		return ERR_UNKNOWN;
+	}
+}

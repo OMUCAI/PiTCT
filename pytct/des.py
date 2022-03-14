@@ -641,3 +641,26 @@ def observable(plant_1: str, plant_2: str, mode: str, null_list: list) -> bool:
         is_observable = False
 
     return is_observable
+
+
+def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: list):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+
+    prm_filename = "natobs_%s.prm" % new_name1
+    # TODO: consider string event
+    image = [f"{num}" for num in image_list] 
+
+    EventnameConv.register(new_name1, plant_name)
+    EventnameConv.register(new_name2, plant_name)
+
+    prm_string = "{name1}\n{name2}\n{name3}\n{image}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(new_name1),
+        name3=get_path(new_name2),
+        image="\n".join(image)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(26, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
