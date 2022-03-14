@@ -1671,7 +1671,7 @@ int canQC_program(const char *filename)
 	  fclose(out);
 
 		return RESULT_OK;
-	}else if (mem_result == 1){
+	} else if (mem_result == 1) {
 		return ERR_MEM;
 	}
 	return RESULT_OK;
