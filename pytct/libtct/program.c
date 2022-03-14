@@ -1921,3 +1921,49 @@ int supobs_program(const char *filename)
 	}
   return RESULT_OK;
 }
+
+
+int bfs_recode_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+	state_node *t1;
+	INT_S s1, s2, init;
+	INT_S *recode_array;
+
+	recode_array = NULL;
+	t1 = NULL; 
+	s1 = s2 = 0;
+
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+
+	fclose(f1);
+
+	init = 0L;
+	getdes(name1, &s1, &init, &t1);
+
+	reach(&s1,&t1);
+	b_recode(s1,&t1,&s2,&recode_array);
+
+	if (mem_result != 1) {
+		filedes(name2, s2, init, t1);
+    return RESULT_OK;
+	} else {
+		return ERR_MEM;
+	}
+}

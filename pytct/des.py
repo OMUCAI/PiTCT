@@ -690,3 +690,20 @@ def suprobs(new_name: str, plant_name: str, sup_name: str, null_list: list, mode
     ret_code = __call(27, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def recode(new_name: str, plant_name: str):
+    check_exist(plant_name + DES_FILE_EXTENSION)
+
+    prm_filename = "record_%s.prm" % new_name
+
+    EventnameConv.register(new_name, plant_name)
+    prm_string = "{name1}\n{name2}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(new_name)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(28, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
