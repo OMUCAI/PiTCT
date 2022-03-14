@@ -55,6 +55,7 @@ int supscop_program(const char *filename);
 int canQC_program(const char *filename);
 int obs_program(const char *filename);
 int natobs_program(const char *filename);
+int supobs_program(const char *filename);
 
 
 #endif

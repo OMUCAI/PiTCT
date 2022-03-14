@@ -664,3 +664,29 @@ def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: list):
     ret_code = __call(26, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def suprobs(new_name: str, plant_name: str, sup_name: str, null_list: list, mode: int = 1):
+    for name in [plant_name, sup_name]:
+        check_exist(name + DES_FILE_EXTENSION)
+
+    if mode != 1:
+        raise ValueError("Unknown Mode. You can select 1.")
+
+    prm_filename = "suprobs_%s.prm" % new_name
+    # TODO: consider string event
+    null = [f"{num}" for num in null_list] 
+
+    EventnameConv.register(new_name, plant_name, sup_name)
+    prm_string = "{name1}\n{name2}\n{name3}\n{mode}\n{null}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(sup_name),
+        name3=get_path(new_name),
+        mode=mode,
+        null="\n".join(null)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(27, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
