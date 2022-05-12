@@ -57,6 +57,7 @@ int obs_program(const char *filename);
 int natobs_program(const char *filename);
 int supobs_program(const char *filename);
 int bfs_recode_program(const char *filename);
+int ext_suprobs_program(const char* filename);
 
 
 #endif

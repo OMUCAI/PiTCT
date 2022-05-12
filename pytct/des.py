@@ -707,3 +707,44 @@ def recode(new_name: str, plant_name: str):
     ret_code = __call(28, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+
+def ext_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lang_name: str,
+               controllable_list: list, null_list: list, algorithm: int):
+    for name in [plant_name, legal_lang_name, ambient_lang_name]:
+        check_exist(name + DES_FILE_EXTENSION)
+    prm_filename = "ext_suprobs_%s.prm" % new_name
+
+    EventnameConv.register(new_name, plant_name, legal_lang_name, ambient_lang_name)
+
+    # TODO: consider string event
+    controllable = [f"{c}" for c in controllable_list]
+    null = [f"{n}" for n in null_list]
+
+    prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{algorithm}\n{controllable}\n{null}\n".format(
+        name1=get_path(plant_name),
+        name2=get_path(legal_lang_name),
+        name3=get_path(ambient_lang_name),
+        name4=get_path(new_name),
+        algorithm=algorithm,
+        controllable="\n".join(controllable),
+        null="\n".join(null)
+    )
+
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(29, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
+
+
+def lb_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lang_name: str,
+               controllable_list: list, null_list: list):
+    alg_flag = 2  # language based
+    ext_suprobs(new_name, plant_name, legal_lang_name, ambient_lang_name, controllable_list, null_list, alg_flag)
+
+
+def tb_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lang_name: str,
+               controllable_list: list, null_list: list):
+    alg_flag = 1  # transition based
+    ext_suprobs(new_name, plant_name, legal_lang_name, ambient_lang_name, controllable_list, null_list, alg_flag)

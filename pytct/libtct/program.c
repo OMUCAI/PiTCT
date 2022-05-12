@@ -1967,3 +1967,111 @@ int bfs_recode_program(const char *filename)
 		return ERR_MEM;
 	}
 }
+
+int ext_suprobs_program(const char* filename) {
+	// original function
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+
+  INT_T  *list, slist, *imagelist, s_imagelist, *contr_list, s_contr_list;
+	INT_S  null_flag;
+	INT_S  init;
+	INT_OS result; 
+	INT_OS mark_flag, alg_flag;
+  INT_T  e;
+  INT_OS ee;
+  INT_B  flag, ok;
+	state_node *t1;
+	INT_S  s1;
+
+	list = imagelist = contr_list = NULL;
+	slist = s_imagelist = s_contr_list = 0;
+	s1 = 0;
+	t1 = NULL;
+	result = -1;
+
+  if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+  
+  if (fgets(name3, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name3[strlen(name3)-1] = '\0';
+
+  if (fgets(name4, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name4[strlen(name4)-1] = '\0';
+
+  // fscanf(f1, "%d\n", &mark_flag);
+  mark_flag = 2;  // force not making information
+  fscanf(f1, "%d\n", &alg_flag);
+
+  while( fscanf(f1, "%d" , &ee) != EOF)
+	{
+		if(ee == -1) {
+			flag = true;
+			continue;
+		}
+		e = (INT_T)ee;
+		if(!flag) {
+      // list of controllable event
+			addordlist(e, &contr_list, s_contr_list, &ok);
+			if(ok) s_contr_list++;
+		} else {
+      // get_imagelist(&s_imagelist, &imagelist, &slist, &list, &null_flag, 7);
+      // support only null list
+			addordlist(e, &list, slist, &ok);
+			if(ok) slist++;
+		}
+	}
+
+
+  init = 0L;
+	if (getdes(name1, &s1, &init, &t1) == false) {
+    return ERR_PRM_FILE;
+	}
+
+  gen_complement_list(t1, s1, list, slist, &imagelist, &s_imagelist);
+	
+	freedes(s1, &t1);
+	s1 = 0; t1 = NULL;
+
+	/*the main program of checking observability*/  
+	if(alg_flag == 1) {
+		result = transition_suprobs_proc(name4, name1, name2, name3, s_contr_list, contr_list, slist, list, s_imagelist, imagelist, mark_flag);
+	} else if(alg_flag == 2) {
+		result = language_suprobs_proc(name4, name1, name2, name3, s_contr_list, contr_list, slist, list, s_imagelist, imagelist, mark_flag);
+	} else	{
+		// do nothing
+	}
+
+  free(list);
+	free(imagelist);
+	free(contr_list);
+
+  if(result == CR_OK) {
+    return RESULT_OK;
+	} else if(mem_result != 1) {
+    return ERR_MEM;
+  } else {
+    return ERR_UNKNOWN;
+  }
+}
