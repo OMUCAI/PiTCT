@@ -4,7 +4,8 @@ from pathlib import Path
 from datetime import datetime
 import tempfile
 
-from pytct.eventname_conv import EventnameConv
+# from pytct.eventname_conv import EventnameConv
+from pytct.name_converter import NameConverter
 from .util import is_env_notebook
 from .config import Config, DES_FILE_EXTENSION
 import base64
@@ -33,29 +34,35 @@ class AutomatonDisplay(object):
 
         # add states
         for label, state in states.items():
+            conv_label = NameConverter.state_decode(plant, label)
             if state["marked"]:
-                self.__graph.node(str(label), shape="doublecircle")
+                self.__graph.node(conv_label, shape="doublecircle")
             else:
-                self.__graph.node(str(label), shape="circle")
+                self.__graph.node(conv_label, shape="circle")
 
         # add the initial entry edge
-        self.__graph.edge("a", "0")
+        initial_state = NameConverter.state_decode(plant, 0)
+        self.__graph.edge("a", initial_state)
 
         # add transitions
         for label in states:
             trans = states[label]["next"]
             if trans is not None:
                 for tran in trans:
-                    label_text = EventnameConv.decode(plant, tran[0])
+                    label_text = NameConverter.event_decode(plant, tran[0])
                     if color:
                         self.__graph.edge(
-                            str(label),
-                            str(tran[1]),
+                            NameConverter.state_decode(plant, label),
+                            NameConverter.state_decode(plant, tran[1]),
                             label=label_text,
                             color="red" if tran[0] % 2 == 1 else "green",
                         )
                     else:
-                        self.__graph.edge(str(label), str(tran[1]), label=label_text)
+                        self.__graph.edge(
+                            NameConverter.state_decode(plant, label),
+                            NameConverter.state_decode(plant, tran[1]),
+                            label=label_text
+                        )
 
     def set_attr(self,
         layout="dot",
