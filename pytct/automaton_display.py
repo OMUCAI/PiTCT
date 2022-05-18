@@ -4,7 +4,6 @@ from pathlib import Path
 from datetime import datetime
 import tempfile
 
-# from pytct.eventname_conv import EventnameConv
 from pytct.name_converter import NameConverter
 from .util import is_env_notebook
 from .config import Config, DES_FILE_EXTENSION

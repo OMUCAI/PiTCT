@@ -2,7 +2,6 @@ from pathlib import Path
 from pytct.dat_info import DatInfo
 from typing import List
 
-# from pytct.eventname_conv import NameConverter
 from pytct.name_converter import NameConverter
 
 from .libtct import call_program as __call
