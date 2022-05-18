@@ -14,7 +14,7 @@ BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 conf = Config.get_instance()
 
 class AutomatonDisplay(object):
-    def __init__(self, plant: str, color: bool = False):
+    def __init__(self, plant: str, convert: bool = True, color: bool = False):
         self.__path = Path(conf.SAVE_FOLDER / (plant + DES_FILE_EXTENSION))
         self.__byte = self.__path.read_bytes()
         self.__data = umsgpack.unpackb(self.__byte)
@@ -33,14 +33,14 @@ class AutomatonDisplay(object):
 
         # add states
         for label, state in states.items():
-            conv_label = NameConverter.state_decode(plant, label)
+            conv_label = NameConverter.state_decode(plant, label, convert)
             if state["marked"]:
                 self.__graph.node(conv_label, shape="doublecircle")
             else:
                 self.__graph.node(conv_label, shape="circle")
 
         # add the initial entry edge
-        initial_state = NameConverter.state_decode(plant, 0)
+        initial_state = NameConverter.state_decode(plant, 0, convert)
         self.__graph.edge("a", initial_state)
 
         # add transitions
@@ -48,18 +48,18 @@ class AutomatonDisplay(object):
             trans = states[label]["next"]
             if trans is not None:
                 for tran in trans:
-                    label_text = NameConverter.event_decode(plant, tran[0])
+                    label_text = NameConverter.event_decode(plant, tran[0], convert)
                     if color:
                         self.__graph.edge(
-                            NameConverter.state_decode(plant, label),
-                            NameConverter.state_decode(plant, tran[1]),
+                            NameConverter.state_decode(plant, label, convert),
+                            NameConverter.state_decode(plant, tran[1], convert),
                             label=label_text,
                             color="red" if tran[0] % 2 == 1 else "green",
                         )
                     else:
                         self.__graph.edge(
-                            NameConverter.state_decode(plant, label),
-                            NameConverter.state_decode(plant, tran[1]),
+                            NameConverter.state_decode(plant, label, convert),
+                            NameConverter.state_decode(plant, tran[1], convert),
                             label=label_text
                         )
 

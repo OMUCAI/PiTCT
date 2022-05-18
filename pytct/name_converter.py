@@ -83,7 +83,10 @@ class NameConverter:
             return state
 
     @classmethod
-    def event_decode(cls, name: str, event: int) -> str:
+    def event_decode(cls, name: str, event: int, convert: bool = True) -> str:
+        if not convert:
+            return str(event)
+        
         if not name in cls.event_encode_dict.keys():
             return str(event)
         
@@ -94,7 +97,10 @@ class NameConverter:
             return str(event)
 
     @classmethod
-    def state_decode(cls, name: str, state: int) -> str:
+    def state_decode(cls, name: str, state: int, convert: bool = True) -> str:
+        if not convert:
+            return str(state)
+
         if not name in cls.state_encode_dict.keys():
             return str(state)
         
