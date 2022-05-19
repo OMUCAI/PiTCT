@@ -53,7 +53,7 @@ def create(name: str, size: int, trans: list, marker: list):
     check_state_num(conv_trans, size)
     trans_list = ["%d %d %d" % ent for ent in conv_trans]
 
-    marker_list = [f"{NameConverter._state_encode(name, mark)}" for mark in marker]
+    marker_list = [f"{NameConverter.state_encode(name, mark, create=False)}" for mark in marker]
     marker_list.append("-1")
 
     prm_string = "{des_name}\n{state_num}\n{marker_states}\n{transitions}\n"

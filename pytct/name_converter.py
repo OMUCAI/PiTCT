@@ -32,18 +32,18 @@ class NameConverter:
 
         encoded = []
         for s, e, ns, *uc in trans_list:
-            state_num = cls._state_encode(name, s)
+            state_num = cls.state_encode(name, s)
             if len(uc) == 0:
                 is_uncontrollable = False
             else:
                 is_uncontrollable = uc[0]
-            event_num = cls._event_encode(name, e, is_uncontrollable)
-            next_state_num = cls._state_encode(name, ns)
+            event_num = cls.event_encode(name, e, is_uncontrollable)
+            next_state_num = cls.state_encode(name, ns)
             encoded.append((state_num, event_num, next_state_num))
         return encoded
 
     @classmethod
-    def _event_encode(cls, name: str, event: Event, is_uncontrollable = False) -> int:
+    def event_encode(cls, name: str, event: Event, is_uncontrollable = False) -> int:
         if isinstance(event, str):
             if not name in cls.event_encode_dict.keys():
                 cls.event_encode_dict[name] = {}
@@ -67,7 +67,7 @@ class NameConverter:
             return event
 
     @classmethod
-    def _state_encode(cls, name: str, state: State) -> int:
+    def state_encode(cls, name: str, state: State, create: bool = True) -> int:
         if isinstance(state, str):
             if not name in cls.state_encode_dict.keys():
                 cls.state_encode_dict[name] = {}
@@ -75,7 +75,8 @@ class NameConverter:
             if state in cls.state_encode_dict[name].values():
                 # alredy register
                 return get_key_from_value(cls.state_encode_dict[name], state)
-
+            elif create is False:
+                raise RuntimeError(f"Undefined State: {state}")
             attach_num = len(cls.state_encode_dict[name].keys())
 
             # register state num : state str mapping
