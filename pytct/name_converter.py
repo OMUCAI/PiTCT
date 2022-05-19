@@ -26,6 +26,10 @@ class NameConverter:
 
     @classmethod
     def encode_all(cls, name: str, trans_list: TransList):
+        if name in cls.state_encode_dict.keys():
+            # reset already exist
+            cls.state_encode_dict[name] = {}
+
         encoded = []
         for s, e, ns, *uc in trans_list:
             state_num = cls._state_encode(name, s)
