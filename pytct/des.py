@@ -8,7 +8,7 @@ from .libtct import call_program as __call
 
 from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION, RST_FILE_EXTENSION
 from .config import Config
-from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path
+from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path, check_state_num
 
 conf = Config.get_instance()
 
@@ -50,6 +50,7 @@ def create(name: str, size: int, trans: list, marker: list):
     prm_filename = "create_%s.prm" % name
 
     conv_trans = NameConverter.encode_all(name, trans)
+    check_state_num(conv_trans, size)
     trans_list = ["%d %d %d" % ent for ent in conv_trans]
 
     marker_list = [f"{NameConverter._state_encode(name, mark)}" for mark in marker]

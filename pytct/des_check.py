@@ -1,4 +1,6 @@
+from logging import warning
 from pathlib import Path
+import warnings
 from .config import Config
 
 conf = Config.get_instance()
@@ -47,3 +49,17 @@ def check_ret_code(ret_code: int):
         raise RuntimeError("Error: Unexpected string found while loading the prm file. ")
     elif ret_code == -4:
         raise RuntimeError("Error: Supreduce internal error.")
+
+
+def check_state_num(trans: list, size: int):
+    max_state = 0
+    for s, a, ns in trans:
+        max_state = max(max_state, s, ns)
+    max_state += 1
+    
+    if max_state == size:
+        return
+    elif max_state > size:
+        raise RuntimeError(f"Error: number of state is too small. It must be set {max_state}")
+    elif max_state < size:
+        warnings.warn(f"Too many number of state. It is recommend to set {max_state}")
