@@ -23,7 +23,6 @@ class NameConverter:
     state_encode_dict = {}
     event_already_use = -1
     event_uncont_already_use = -2
-    state_already_use = -1
 
     @classmethod
     def encode_all(cls, name: str, trans_list: TransList):
@@ -73,8 +72,7 @@ class NameConverter:
                 # alredy register
                 return get_key_from_value(cls.state_encode_dict[name], state)
 
-            attach_num = cls.state_already_use + 1
-            cls.state_already_use = attach_num
+            attach_num = len(cls.state_encode_dict[name].keys())
 
             # register state num : state str mapping
             cls.state_encode_dict[name][attach_num] = state
