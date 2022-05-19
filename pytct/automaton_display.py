@@ -29,7 +29,7 @@ class AutomatonDisplay(object):
             return
 
         # add the initial entry state
-        self.__graph.node("a", shape="point", color="white")
+        self.__graph.node("_a", shape="point", color="white")
 
         # add states
         for label, state in states.items():
@@ -41,7 +41,7 @@ class AutomatonDisplay(object):
 
         # add the initial entry edge
         initial_state = NameConverter.state_decode(plant, 0, convert)
-        self.__graph.edge("a", initial_state)
+        self.__graph.edge("_a", initial_state)
 
         # add transitions
         for label in states:
