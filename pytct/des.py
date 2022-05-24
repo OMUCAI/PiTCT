@@ -3,6 +3,7 @@ from pytct.dat_info import DatInfo
 from typing import List
 
 from pytct.name_converter import NameConverter
+from pytct.typing import State, Event, TransList, StateList
 
 from .libtct import call_program as __call
 
@@ -22,7 +23,7 @@ def init(name: str, overwrite: bool = False):
     
     conf.SAVE_FOLDER = p
 
-def create(name: str, size: int, trans: list, marker: list):
+def create(name: str, size: int, trans: TransList, marker: StateList):
     """Create
 
     Create an automaton model of DES

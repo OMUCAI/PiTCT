@@ -1,11 +1,6 @@
 from typing import List, Tuple, Union
 
-Event = Union[int, str]
-State = Union[int, str]
-Trans1 = Tuple[State, Event, State]
-Trans2 = Tuple[State, Event, State, bool]
-Trans = Union[Trans1, Trans2]
-TransList = List[Trans]
+from pytct.typing import TransList, State, Event
 
 def get_key_from_value(d, val):
     matched = [k for k, v in d.items() if v == val]
