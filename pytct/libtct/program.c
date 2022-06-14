@@ -1976,7 +1976,6 @@ int ext_suprobs_program(const char* filename) {
   }
 
   INT_T  *list, slist, *imagelist, s_imagelist, *contr_list, s_contr_list;
-	INT_S  null_flag;
 	INT_S  init;
 	INT_OS result; 
 	INT_OS mark_flag, alg_flag;
@@ -2024,6 +2023,7 @@ int ext_suprobs_program(const char* filename) {
   mark_flag = 2;  // force not making information
   fscanf(f1, "%d\n", &alg_flag);
 
+  flag = false;
   while( fscanf(f1, "%d" , &ee) != EOF)
 	{
 		if(ee == -1) {
@@ -2042,7 +2042,6 @@ int ext_suprobs_program(const char* filename) {
 			if(ok) slist++;
 		}
 	}
-
 
   init = 0L;
 	if (getdes(name1, &s1, &init, &t1) == false) {
