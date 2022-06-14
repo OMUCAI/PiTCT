@@ -721,6 +721,7 @@ def ext_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_la
 
     # TODO: consider string event
     controllable = [f"{c}" for c in controllable_list]
+    controllable.append("-1")
     null = [f"{n}" for n in null_list]
 
     prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{algorithm}\n{controllable}\n{null}\n".format(
