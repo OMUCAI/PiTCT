@@ -28,10 +28,21 @@ class NameConverter:
         encoded = []
         for s, e, ns, *uc in trans_list:
             state_num = cls.state_encode(name, s)
-            if len(uc) == 0:
+            if isinstance(e, int):
+                # meaningless settings
                 is_uncontrollable = False
+            elif len(uc) == 0:
+                raise RuntimeError("Please set 'u' or 'c'. example: (0, 'event', 1, 'c')")
+            elif len(uc) == 1:
+                str_uc = uc[0]
+                if str_uc == 'u':
+                    is_uncontrollable = True
+                elif str_uc == 'c':
+                    is_uncontrollable = False
+                else:
+                    raise RuntimeError("Unknown argument. Select 'u' or 'c'")
             else:
-                is_uncontrollable = uc[0]
+                raise RuntimeError("Unknown delta argument")
             event_num = cls.event_encode(name, e, is_uncontrollable)
             next_state_num = cls.state_encode(name, ns)
             encoded.append((state_num, event_num, next_state_num))
