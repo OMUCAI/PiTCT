@@ -1,5 +1,7 @@
 from pathlib import Path
+import umsgpack
 from pytct.dat_info import DatInfo
+from pytct.des_info import DesInfo
 from typing import List
 
 from pytct.name_converter import NameConverter
@@ -751,3 +753,21 @@ def tb_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lan
                controllable_list: list, null_list: list):
     alg_flag = 1  # transition based
     ext_suprobs(new_name, plant_name, legal_lang_name, ambient_lang_name, controllable_list, null_list, alg_flag)
+
+
+def des_detail(name: str) -> DesInfo:
+    check_exist(name + DES_FILE_EXTENSION)
+    path = Path(conf.SAVE_FOLDER / (name + DES_FILE_EXTENSION))
+    byte = path.read_bytes()
+    raw_data = umsgpack.unpackb(byte)
+    states = raw_data["states"]
+    """
+    {0: {'marked': True, 'next': [[1, 1], [15, 4]], 'vocal': 0},
+     1: {'marked': True, 'next': [[0, 0], [3, 2]], 'vocal': 0},
+     2: {'marked': False, 'next': [[0, 3], [5, 0]], 'vocal': 0},
+     3: {'marked': False, 'next': None, 'vocal': 0},
+     4: {'marked': False, 'next': None, 'vocal': 0}
+    }
+    """
+    des = DesInfo(states)
+    return des

@@ -4,6 +4,7 @@ from .des import (
     allevents, mutex, complement, nonconflict, condat, supreduce,
     isomorph, printdat, getdes_parameter, statenum, transnum, supconrobs,
     project, localize, minstate, force, convert, relabel, supnorm,
-    supscop, supqc, observable, natobs, suprobs, recode, lb_suprobs, tb_suprobs
+    supscop, supqc, observable, natobs, suprobs, recode, lb_suprobs, tb_suprobs,
+    des_detail
 )
 from .distance import min_distance
