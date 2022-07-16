@@ -34,6 +34,13 @@ class DesInfo:
 
     def __repr__(self) -> str:
         return self._des_dict.__repr__()
+
+    def __iter__(self):
+        yield from self._des_dict.values()
+
+    def __getitem__(self, state: int):
+        return self._des_dict[state]
+
     
 
 
