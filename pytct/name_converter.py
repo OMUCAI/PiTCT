@@ -1,10 +1,25 @@
-from typing import List, Tuple, Union
-
 from pytct.typing import TransList, State, Event
 
 def get_key_from_value(d, val):
+    # get key from dict value.
+    # example: dict = { 0: '111' } 
+    # 0 = get_key_from_value(dict, '111')
+
     matched = [k for k, v in d.items() if v == val]
     return matched[0]
+
+def check_mixed(trans_list: TransList, event_type: type):
+    # Check string or integer state/event are mixed up.
+    state, *_ = trans_list[0]
+    state_type = type(state)
+
+    for s, e, ns, *uc in trans_list:
+        if type(s) != state_type:
+            raise RuntimeError("Discovered that the string and int states are mixed up. Please unify them.")
+        elif type(e) != event_type:
+            raise RuntimeError("Discovered that the string and int event are mixed up. Please unify them.")
+        elif type(ns) != state_type:
+            raise RuntimeError("Discovered that the string and int states are mixed up. Please unify them.")
 
 
 class NameConverter:
@@ -24,6 +39,7 @@ class NameConverter:
     state_encode_dict = {}
     event_already_use = -1
     event_uncont_already_use = -2
+    event_type = type(object)  # use as event type checking
 
     @classmethod
     def reset(cls):
@@ -35,8 +51,14 @@ class NameConverter:
     @classmethod
     def encode_all(cls, name: str, trans_list: TransList) -> TransList:
         cls.state_encode_dict[name] = {}
-        
         encoded = []
+
+        # set event type (first only)
+        if cls.event_type == type(object):
+            cls.event_type = type(trans_list[0][1])
+
+        check_mixed(trans_list, cls.event_type)
+
         for s, e, ns, *uc in trans_list:
             state_num = cls.state_encode(name, s)
             if isinstance(e, int):
