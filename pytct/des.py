@@ -22,6 +22,7 @@ def init(name: str, overwrite: bool = False):
                               f"please set overwrite arg.\nsample: init('{name}', overwrite=True)")
     # create directory.
     p.mkdir(parents=True, exist_ok=True)
+    NameConverter.reset()
     
     conf.SAVE_FOLDER = p
 
