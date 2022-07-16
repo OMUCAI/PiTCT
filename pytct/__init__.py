@@ -5,6 +5,6 @@ from .des import (
     isomorph, printdat, getdes_parameter, statenum, transnum, supconrobs,
     project, localize, minstate, force, convert, relabel, supnorm,
     supscop, supqc, observable, natobs, suprobs, recode, lb_suprobs, tb_suprobs,
-    des_detail
+    des_info
 )
 from .distance import min_distance
