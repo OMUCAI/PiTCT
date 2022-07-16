@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "PyTCT"
-version = "0.7.2"
+version = "0.7.3"
 description = "Python TCT Library"
 authors = ["Shoma Matsui <matsui@shoma.cc>", "Masahiro Konishi <konikoni428@gmail.com>"]
 license = "Apache-2.0"
