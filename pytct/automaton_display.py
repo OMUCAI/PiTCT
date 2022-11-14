@@ -92,7 +92,7 @@ class AutomatonDisplay(object):
         filename: str,
         fileformat: str = 'png',
         layout: str = "dot",
-        dpi: int = 96,
+        dpi: int = 300,
         label: str = None,
         timelabel: bool = True,
         **kwargs
