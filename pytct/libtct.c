@@ -1,4 +1,4 @@
-#include "libtct/program.h"
+#include "../libtct/program.h"
 #include <Python.h>
 
 int (*programs[30])(const char *filename) = {
