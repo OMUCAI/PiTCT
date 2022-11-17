@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "PyTCT"
-version = "0.7.5"
+version = "0.0.0"
 description = "Python TCT Library"
 authors = ["Shoma Matsui <matsui@shoma.cc>", "Masahiro Konishi <konikoni428@gmail.com>"]
 license = "Apache-2.0"
@@ -15,12 +15,14 @@ u-msgpack-python = "^2.7.1"
 graphviz = "^0.16"
 typing-extensions = ">=4.1.0"
 
-[tool.poetry.dev-dependencies]
-black = "^21.6b0"
-flake8 = "^3.9.2"
-Sphinx = "^4.0.2"
-sphinx-rtd-theme = "^0.5.2"
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+flake8 = "^5.0.4"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
 
 [build-system]
-requires = ["poetry_core>=1.0.0", "setuptools"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry_core>=1.0.0", "setuptools", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"

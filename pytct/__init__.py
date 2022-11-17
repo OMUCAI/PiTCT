@@ -8,3 +8,5 @@ from .des import (
     des_info
 )
 from .distance import min_distance
+
+__version__ = '0.0.0'
