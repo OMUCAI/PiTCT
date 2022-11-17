@@ -5,6 +5,9 @@ description = "Python TCT Library"
 authors = ["Shoma Matsui <matsui@shoma.cc>", "Masahiro Konishi <konikoni428@gmail.com>"]
 license = "Apache-2.0"
 build = "build.py"
+include = [
+    { path = "libtct", format = "sdist" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
