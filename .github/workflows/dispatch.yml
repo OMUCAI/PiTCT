@@ -27,9 +27,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pip install poetry poetry-dynamic-versioning
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -37,6 +34,9 @@ jobs:
           python-version: ${{matrix.python}}
           # The target architecture (x86, x64) of the Python interpreter.
           architecture: x64
+
+      - name: Install poetry
+        run: pip install poetry poetry-dynamic-versioning
           
       - name: Build
         run: |
