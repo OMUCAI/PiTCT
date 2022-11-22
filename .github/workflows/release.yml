@@ -25,13 +25,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pipx install poetry
-
-      - name: Install Poetry Plugin
-        run: |
-          poetry self add "poetry-dynamic-versioning[plugin]"
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -40,9 +33,16 @@ jobs:
           # The target architecture (x86, x64) of the Python interpreter.
           architecture: x64
           
+      - name: Install poetry
+        run: pip install poetry poetry-dynamic-versioning
+
+      # poetry dynamic versioning CLI mode
+      - name: Dynamic Versioning
+        run: poetry-dynamic-versioning
+
       - name: Build
         run: |
-          poetry build -f wheel
+          poetry build -f wheel --no-plugins
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
@@ -69,27 +69,27 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pipx install poetry
-
-      - name: Install Poetry Plugin
-        run: |
-          poetry self add "poetry-dynamic-versioning[plugin]"
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           # Version range or exact version of a Python version to use, using SemVer's version range syntax.
-          python-version: '3.9'
+          python-version: '3.10'
           # The target architecture (x86, x64) of the Python interpreter.
           architecture: x64
           
+      - name: Install poetry
+        run: pip install poetry poetry-dynamic-versioning
+
+      # poetry dynamic versioning CLI mode
+      - name: Dynamic Versioning
+        run: poetry-dynamic-versioning
+      
       - name: Build
         run: |
-          poetry build -f sdist
+          poetry build -f sdist --no-plugins
           
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: PyTCT
           path: dist
