@@ -36,7 +36,7 @@ jobs:
           architecture: x64
 
       - name: Install poetry
-        run: pip install poetry poetry-dynamic-versioning
+        run: pip install "poetry" "poetry-dynamic-versioning[plugin]"
           
       - name: Build
         run: |
