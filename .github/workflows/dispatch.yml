@@ -26,6 +26,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: '50'
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -39,8 +41,8 @@ jobs:
         run: pip install "poetry" "poetry-dynamic-versioning"
       
       # Install dependency
-      - name: Install
-        run: poetry install
+      # - name: Install
+      #   run: poetry install
 
       # poetry dynamic versioning CLI mode
       - name: Dynamic Versioning
