@@ -36,14 +36,18 @@ jobs:
           architecture: x64
 
       - name: Install poetry
-        run: pip install "poetry" "poetry-dynamic-versioning[plugin]"
-          
+        run: pip install "poetry" "poetry-dynamic-versioning"
+      
+      # poetry dynamic versioning CLI mode
+      - name: Versioning
+        run: poetry dynamic-versioning
+
       - name: Build
         run: |
-          poetry build
+          poetry build --no-plugins
           
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: PyTCT
           path: dist
