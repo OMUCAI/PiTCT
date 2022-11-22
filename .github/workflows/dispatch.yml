@@ -44,7 +44,7 @@ jobs:
 
       # poetry dynamic versioning CLI mode
       - name: Dynamic Versioning
-        run: poetry dynamic-versioning
+        run: poetry-dynamic-versioning
 
       - name: Build
         run: |
