@@ -39,7 +39,7 @@ jobs:
         run: pip install "poetry" "poetry-dynamic-versioning"
       
       # Install dependency
-      - install:
+      - name: Install
         run: poetry install
 
       # poetry dynamic versioning CLI mode
