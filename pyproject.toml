@@ -2,6 +2,7 @@
 name = "PyTCT"
 version = "0.0.0"
 description = "Python TCT Library"
+documentation = "https://omucai.github.io/PyTCT-docs/"
 authors = ["Shoma Matsui <matsui@shoma.cc>", "Masahiro Konishi <konikoni428@gmail.com>"]
 license = "Apache-2.0"
 build = "build.py"
