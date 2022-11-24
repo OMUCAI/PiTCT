@@ -59,6 +59,16 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+
+      - name: Upload binaries to pytct-docs release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
+          file: dist/*.whl
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+          repo_name: OMUCAI/PyTCT-docs
           
   build-sdist:
     # The type of runner that the job will run on
@@ -103,3 +113,13 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+
+      - name: Upload binaries to pytct-docs release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
+          file: dist/*.tar.gz
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+          repo_name: OMUCAI/PyTCT-docs
