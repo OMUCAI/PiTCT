@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Any
 
 DES_FILE_EXTENSION = ".DES"
+EDES_FILE_EXTENSION = ".EDES"
 DAT_FILE_EXTENSION = ".DAT"
 RST_FILE_EXTENSION = ".RST"
 class Singleton(object):

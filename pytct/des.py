@@ -1,7 +1,9 @@
 from pathlib import Path
+import random
 import umsgpack
 from pytct.dat_info import DatInfo
 from pytct.des_info import DesInfo
+from pytct.ext_des_info import ExtDesInfo
 from typing import List
 
 from pytct.name_converter import NameConverter
@@ -9,7 +11,7 @@ from pytct.typing import State, Event, TransList, StateList
 
 from .libtct import call_program as __call
 
-from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION, RST_FILE_EXTENSION
+from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION, RST_FILE_EXTENSION, EDES_FILE_EXTENSION
 from .config import Config
 from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path, check_state_num
 
@@ -773,3 +775,64 @@ def des_info(name: str) -> DesInfo:
     """
     des = DesInfo(states)
     return des
+
+def _create_ext_des_info(name: str):
+    check_exist(name + DES_FILE_EXTENSION)
+    prm_filename = "get_ext_des_%s.prm" % name
+
+    prm_string = "{name1}\n".format(
+        name1=get_path(name)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(30, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
+
+
+def ext_des_info(name: str) -> ExtDesInfo:
+    _create_ext_des_info(name)
+    check_exist(name + EDES_FILE_EXTENSION)
+    path = Path(conf.SAVE_FOLDER / (name + EDES_FILE_EXTENSION))
+    byte = path.read_bytes()
+    raw_data = umsgpack.unpackb(byte)
+    states = raw_data["states"]
+    edes = ExtDesInfo(states)
+    return edes
+
+def is_reachable(name: str, state_num: int = -1, string: bool = False) -> bool:
+    ext_des = ext_des_info(name)
+    if state_num < 0:
+        # Whether all state is reachable or not
+        return ext_des.all_reached()
+    else:
+        # Whether a state is reachable or not
+        return ext_des.is_reached(state_num)
+
+def is_coreachable(name: str, state_num: int = -1, string: bool = False) -> bool:
+    ext_des = ext_des_info(name)
+    if state_num < 0:
+        # Whether all state is reachable or not
+        return ext_des.all_coreach()
+    else:
+        # Whether a state is reachable or not
+        return ext_des.is_coreach(state_num)
+
+def is_trim(name: str) -> bool:
+    new_name = f"{name}_{random.randint(100, 999)}"
+    trim(new_name, name)
+    return isomorph(new_name, name)
+
+def is_nonblocking(name: str) -> bool:
+    ext_des = ext_des_info(name)
+
+    reached = set(ext_des.reached())
+    coreach = set(ext_des.coreach())
+    return reached.issubset(coreach)
+
+def blocking_states(name: str) -> list:
+    ext_des = ext_des_info(name)
+
+    reached = set(ext_des.reached())
+    coreach = set(ext_des.coreach())
+    return list(reached - coreach)
