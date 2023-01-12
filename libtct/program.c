@@ -2074,3 +2074,49 @@ int ext_suprobs_program(const char* filename) {
     return ERR_UNKNOWN;
   }
 }
+
+// .DES -> .EDES 
+// it is used to check reach, coreach
+int export_ext_des_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+	state_node *t1;
+	INT_S s1, init, state;
+
+	t1 = NULL; 
+	s1 = state = 0;
+
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+	fclose(f1);
+
+	init = 0L;
+	getdes(name1, &s1, &init, &t1);
+
+  // Initialize calculate reach
+  /* Zero all the reach variables */
+  for (state = 0; state < s1; state++)
+    (t1)[state].reached = false;
+
+  (t1)[0].reached = true;
+  b_reach((t1)[0].next, 0L, &t1, s1);
+
+  // calculate coreach
+  coreach2(s1, &t1);
+
+	if (mem_result != 1) {
+		file_extdes(name1, s1, init, t1);
+    return RESULT_OK;
+	} else {
+		return ERR_MEM;
+	}
+}
