@@ -4,6 +4,7 @@ import umsgpack
 from pytct.dat_info import DatInfo
 from pytct.des_info import DesInfo
 from pytct.ext_des_info import ExtDesInfo
+from pytct.distance import path_string
 from typing import List
 
 from pytct.name_converter import NameConverter
@@ -800,7 +801,7 @@ def ext_des_info(name: str) -> ExtDesInfo:
     edes = ExtDesInfo(states)
     return edes
 
-def is_reachable(name: str, state_num: int = -1, string: bool = False) -> bool:
+def is_reachable(name: str, state_num: int = -1) -> bool:
     ext_des = ext_des_info(name)
     if state_num < 0:
         # Whether all state is reachable or not
@@ -809,7 +810,7 @@ def is_reachable(name: str, state_num: int = -1, string: bool = False) -> bool:
         # Whether a state is reachable or not
         return ext_des.is_reached(state_num)
 
-def is_coreachable(name: str, state_num: int = -1, string: bool = False) -> bool:
+def is_coreachable(name: str, state_num: int = -1) -> bool:
     ext_des = ext_des_info(name)
     if state_num < 0:
         # Whether all state is reachable or not
@@ -817,6 +818,32 @@ def is_coreachable(name: str, state_num: int = -1, string: bool = False) -> bool
     else:
         # Whether a state is reachable or not
         return ext_des.is_coreach(state_num)
+
+def reachable_string(name: str, state_num: int) -> list:
+    if not is_reachable(name, state_num):
+        return []
+    path = path_string(name, start=0, goal=state_num)
+    return path
+
+def coreachable_string(name: str, state_num: int, marker_state: int = -1) -> list:
+    if not is_coreachable(name, state_num):
+        return []
+    
+    if marker_state < 0:
+        # auto search (Search all marker states and return the first route found.)
+        markers = des_info(name).marked()
+        for marker in markers:
+            path = path_string(name, start=state_num, goal=marker)
+            if not path:
+                continue
+        return path
+    else:
+        # set marker state
+        is_marker = des_info(name).is_marked(marker_state)
+        if not is_marker:
+            return []
+        path = path_string(name, start=state_num, goal=marker_state)
+        return path
 
 def is_trim(name: str) -> bool:
     new_name = f"{name}_{random.randint(100, 999)}"

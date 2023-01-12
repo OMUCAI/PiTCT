@@ -5,7 +5,8 @@ from .des import (
     isomorph, printdat, getdes_parameter, statenum, transnum, supconrobs,
     project, localize, minstate, force, convert, relabel, supnorm,
     supscop, supqc, observable, natobs, suprobs, recode, lb_suprobs, tb_suprobs,
-    des_info, ext_des_info, is_reachable, is_coreachable, is_trim, is_nonblocking, blocking_states
+    des_info, ext_des_info, is_reachable, is_coreachable, is_trim, is_nonblocking,
+    blocking_states, reachable_string, coreachable_string
 )
 from .distance import min_distance
 
