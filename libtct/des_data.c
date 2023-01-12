@@ -249,6 +249,100 @@ INT_OS filedes(char *name, INT_S size, INT_S init, state_node *data) {
   return 0; /* Success in writing file to disk */
 }
 
+// export extend des file
+INT_OS file_extdes(char *name, INT_S size, INT_S init, state_node *data) {
+  char fullname[_MAX_PATH];
+  INT_S i;
+
+  //   if (z) {}  /* Remove warning in some version of TCT */
+  //   if (yy) {} /* Remove warning in some version of TCT */
+
+  if (init == -1L) /* CONDAT file */
+    sprintf(fullname, "%s%s.EDAT", prefix, name);
+  else
+    sprintf(fullname, "%s%s.EDES", prefix, name);
+
+  /* Use MessagePack to store DES data */
+  /* Setup a writer */
+  mpack_writer_t writer;
+  FILE *out = fopen(fullname, "wb");
+  if (out == NULL) {
+    printf("Could not create file: %s\n", fullname);
+    return 1;
+  }
+  mpack_writer_init_stdfile(&writer, out, true);
+
+  /* Start writing the schema */
+  /*
+    {
+      "name": TCTNAME, // identity field
+      "version": DES_FILE_VERSION, // identity field
+      "size": num_of_states,
+      "init": init_state,
+      "states": {
+        state: {
+          "reached": true_or_false
+          "coreach": true_or_false
+          "marked": true_or_false,
+          "next": [[label, entrance]],
+          "vocal": vocal_state
+        }
+      }
+    }
+  */
+  mpack_start_map(&writer, 5);
+  /* Write some information to indicate the file is a DES file */
+  mpack_write_cstr(&writer, "name");
+  mpack_write_cstr(&writer, TCTNAME);
+  mpack_write_cstr(&writer, "version");
+  mpack_write_cstr(&writer, EDES_FILE_VERSION);
+
+  /* Write the DES size */
+  mpack_write_cstr(&writer, "size");
+  mpack_write_int(&writer, size);
+
+  /* Write the init state */
+  mpack_write_cstr(&writer, "init");
+  mpack_write_int(&writer, init);
+
+  /* Write states, transitions, and vocals */
+  mpack_write_cstr(&writer, "states");
+  mpack_start_map(&writer, size);
+  for (i = 0L; i < size; ++i) {
+    mpack_write_int(&writer, i);
+    mpack_start_map(&writer, 5);
+    mpack_write_cstr(&writer, "reached");
+    mpack_write_bool(&writer, data[i].reached == true);
+    mpack_write_cstr(&writer, "coreach");
+    mpack_write_bool(&writer, data[i].coreach == true);
+    mpack_write_cstr(&writer, "marked");
+    mpack_write_bool(&writer, data[i].marked == true);
+    mpack_write_cstr(&writer, "next");
+    if ((data[i].next != NULL) && (data[i].numelts > 0)) {
+      mpack_start_array(&writer, data[i].numelts);
+      for (size_t n = 0; n < data[i].numelts; ++n) {
+        mpack_start_array(&writer, 2);
+        mpack_write_int(&writer, data[i].next[n].data1);
+        mpack_write_int(&writer, data[i].next[n].data2);
+        mpack_finish_array(&writer);
+      }
+      mpack_finish_array(&writer);
+    } else {
+      mpack_write_nil(&writer);
+    }
+    mpack_write_cstr(&writer, "vocal");
+    mpack_write_i16(&writer, data[i].vocal);
+    mpack_finish_map(&writer);
+  }
+  mpack_finish_map(&writer);
+
+  if (mpack_writer_destroy(&writer) != mpack_ok) {
+    return 1;
+  }
+
+  return 0; /* Success in writing file to disk */
+}
+
 /* GetDes function */
 INT_B getdes(char *name, INT_S *size, INT_S *init, state_node **data) {
   FILE *in = NULL;

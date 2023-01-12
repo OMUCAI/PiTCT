@@ -9,6 +9,7 @@ extern "C" {
 
 #define TCTNAME "libtct"
 #define DES_FILE_VERSION "2.0"
+#define EDES_FILE_VERSION "2.0"
 #define _MAX_PATH 260
 
 // Check x64 or x32

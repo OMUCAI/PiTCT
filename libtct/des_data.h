@@ -172,6 +172,7 @@ extern void free_t_part(INT_S, t_part_node **);
 extern void free_bt_part(INT_S, bt_part_node **);
 extern void free_cc_check_table(INT_S, cc_check_table **);
 extern INT_OS filedes(char *, INT_S, INT_S, state_node *);
+extern INT_OS file_extdes(char *, INT_S, INT_S, state_node *);
 extern INT_B getdes(char *, INT_S *, INT_S *, state_node **);
 extern void export_copy_des(INT_S *, state_node **, INT_S, state_node *);
 extern void reverse_des(INT_S *, state_node **, INT_S, state_node *);
