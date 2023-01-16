@@ -4,8 +4,8 @@ import umsgpack
 from pytct.dat_info import DatInfo
 from pytct.des_info import DesInfo
 from pytct.ext_des_info import ExtDesInfo
-from pytct.distance import path_string
-from typing import List
+from pytct.distance import path_string_list
+from typing import List, Optional
 
 from pytct.name_converter import NameConverter
 from pytct.typing import State, Event, TransList, StateList
@@ -819,31 +819,36 @@ def is_coreachable(name: str, state_num: int = -1) -> bool:
         # Whether a state is reachable or not
         return ext_des.is_coreach(state_num)
 
-def reachable_string(name: str, state_num: int) -> list:
-    if not is_reachable(name, state_num):
-        return []
-    path = path_string(name, start=0, goal=state_num)
-    return path
+def shortest_string(name: str, start_state: int, reach_state: int) -> Optional[str]:
+    path = path_string_list(name, start_state, reach_state)
+    if not path:
+        return None
+    return " ".join(str(p) for p in path)
 
-def coreachable_string(name: str, state_num: int, marker_state: int = -1) -> list:
+def reachable_string(name: str, state_num: int) -> Optional[str]:
+    if not is_reachable(name, state_num):
+        return None
+    return shortest_string(name, start_state=0, reach_state=state_num)
+
+def coreachable_string(name: str, state_num: int, marker_state: int = -1) -> Optional[str]:
     if not is_coreachable(name, state_num):
-        return []
+        return None
     
     if marker_state < 0:
         # auto search (Search all marker states and return the first route found.)
         markers = des_info(name).marked()
         for marker in markers:
-            path = path_string(name, start=state_num, goal=marker)
+            path = path_string_list(name, start=state_num, goal=marker)
             if not path:
                 continue
-        return path
+            return " ".join(str(p) for p in path)
+        return None
     else:
         # set marker state
         is_marker = des_info(name).is_marked(marker_state)
         if not is_marker:
-            return []
-        path = path_string(name, start=state_num, goal=marker_state)
-        return path
+            return None
+        return shortest_string(name, state_num, marker_state)
 
 def is_trim(name: str) -> bool:
     new_name = f"{name}_{random.randint(100, 999)}"
@@ -863,3 +868,11 @@ def blocking_states(name: str) -> list:
     reached = set(ext_des.reached())
     coreach = set(ext_des.coreach())
     return list(reached - coreach)
+
+def marker(name: str) -> list:
+    des = des_info(name)
+    return des.marked()
+
+def trans(name: str) -> list:
+    des = des_info(name)
+    return des.trans()

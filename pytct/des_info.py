@@ -32,6 +32,17 @@ class DesInfo:
         marked = self._des_dict[state]['marked']
         return marked
 
+    def trans(self) -> list:
+        # get transition function \delta
+        delta = []
+        for state_num, info in self._des_dict.items():
+            if info['next'] is None:
+                continue
+            for event, next_state_num in info['next']:
+                d = (state_num, event, next_state_num)
+                delta.append(d)
+        return delta
+
     def __repr__(self) -> str:
         return self._des_dict.__repr__()
 

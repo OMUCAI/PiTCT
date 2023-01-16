@@ -109,7 +109,7 @@ def min_distance(plant: str):
     return result
 
 
-def path_string(plant: str, start: int, goal: int) -> list:
+def path_string_list(plant: str, start: int, goal: int) -> list:
     states = _load_states(plant)
     edges = _create_edge(states)
 
