@@ -4,7 +4,7 @@ import umsgpack
 from pytct.dat_info import DatInfo
 from pytct.des_info import DesInfo
 from pytct.ext_des_info import ExtDesInfo
-from pytct.distance import path_string_list
+from pytct.distance import path_event_list
 from typing import List, Optional
 
 from pytct.name_converter import NameConverter
@@ -820,10 +820,10 @@ def is_coreachable(name: str, state_num: int = -1) -> bool:
         return ext_des.is_coreach(state_num)
 
 def shortest_string(name: str, start_state: int, reach_state: int) -> Optional[str]:
-    path = path_string_list(name, start_state, reach_state)
-    if not path:
+    event_path = path_event_list(name, start_state, reach_state)
+    if not event_path:
         return None
-    return " ".join(str(p) for p in path)
+    return event_path
 
 def reachable_string(name: str, state_num: int) -> Optional[str]:
     if not is_reachable(name, state_num):
@@ -838,10 +838,10 @@ def coreachable_string(name: str, state_num: int, marker_state: int = -1) -> Opt
         # auto search (Search all marker states and return the first route found.)
         markers = des_info(name).marked()
         for marker in markers:
-            path = path_string_list(name, start=state_num, goal=marker)
-            if not path:
+            event_path = path_event_list(name, start=state_num, goal=marker)
+            if not event_path:
                 continue
-            return " ".join(str(p) for p in path)
+            return event_path
         return None
     else:
         # set marker state
