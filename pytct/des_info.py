@@ -1,3 +1,5 @@
+from typing import Optional
+
 class DesInfo:
     def __init__(self, des_states: dict) -> None:
         self._des_dict = des_states
@@ -17,6 +19,14 @@ class DesInfo:
 
         next = self._des_dict[_from]['next']
         return next
+
+    def next_state(self, _from: int, event: int) -> Optional[int]:
+        next = self.next(_from)
+        filter_next = list(filter(lambda x: x[0] == event, next))
+        if not filter_next:
+            return None
+        next_state = filter_next[0][1]
+        return next_state
 
     def marked(self) -> list:
         marked = []

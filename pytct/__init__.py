@@ -10,5 +10,6 @@ from .des import (
     marker, trans, events, display_automaton
 )
 from .distance import min_distance
+from .simulation import simulate_automaton, sample_automaton
 
 __version__ = '0.0.0'
