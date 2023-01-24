@@ -1,6 +1,7 @@
 from pathlib import Path
 import random
 import umsgpack
+from pytct.automaton_display import AutomatonDisplay
 from pytct.dat_info import DatInfo
 from pytct.des_info import DesInfo
 from pytct.ext_des_info import ExtDesInfo
@@ -876,3 +877,6 @@ def marker(name: str) -> list:
 def trans(name: str) -> list:
     des = des_info(name)
     return des.trans()
+
+def display_automaton(name: str, convert: bool = False, color: bool = False, **kwargs) -> AutomatonDisplay:
+    return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
