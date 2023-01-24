@@ -1,4 +1,5 @@
 from pytct.tct_typing import TransList, State, Event
+import warnings
 
 def get_key_from_value(d, val):
     # get key from dict value.
@@ -65,7 +66,9 @@ class NameConverter:
                 # meaningless settings
                 is_uncontrollable = False
             elif len(uc) == 0:
-                raise RuntimeError("Please set 'u' or 'c'. example: (0, 'event', 1, 'c')")
+                warnings.warn("controllable and uncontrollable status is not specified. All states are set to controllable.")
+                is_uncontrollable = False
+                # raise RuntimeError("Please set 'u' or 'c'. example: (0, 'event', 1, 'c')")
             elif len(uc) == 1:
                 str_uc = uc[0]
                 if str_uc == 'u':
