@@ -7,7 +7,7 @@ from .des import (
     supscop, supqc, observable, natobs, suprobs, recode, lb_suprobs, tb_suprobs,
     des_info, ext_des_info, is_reachable, is_coreachable, shortest_string, 
     is_trim, is_nonblocking, blocking_states, reachable_string, coreachable_string, 
-    marker, trans, display_automaton
+    marker, trans, events, display_automaton
 )
 from .distance import min_distance
 

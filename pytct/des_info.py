@@ -43,6 +43,15 @@ class DesInfo:
                 delta.append(d)
         return delta
 
+    def events(self) -> list:
+        events = set()
+        for state_num, info in self._des_dict.items():
+            if info['next'] is None:
+                continue
+            for event, _ in info['next']:
+                events.add(event)
+        return list(events)
+
     def __repr__(self) -> str:
         return self._des_dict.__repr__()
 
