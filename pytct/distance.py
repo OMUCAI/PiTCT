@@ -4,7 +4,8 @@ import heapq
 from typing import List, Tuple
 from .config import Config, DES_FILE_EXTENSION
 
-#https://qiita.com/Yuya-Shimizu/items/eefdc6f854534e90c988
+# https://qiita.com/Yuya-Shimizu/items/eefdc6f854534e90c988 を基に改造
+# !ATTENSTION! Cost 1 fixed
 def _dijkstra(edges, num_node):
     """ 経路の表現
             [終点, 辺の値]
@@ -28,7 +29,8 @@ def _dijkstra(edges, num_node):
         #経路の要素を各変数に格納することで，視覚的に見やすくする
         for factor in edges[min_point]:
             goal = factor[0]   #終点
-            cost  = factor[1]   #コスト
+            cost = 1           #コスト
+            # event = factor[1]  #イベント
 
             #更新条件
             if node[min_point] + cost < node[goal]:
@@ -36,12 +38,13 @@ def _dijkstra(edges, num_node):
 
     return node
 
-
-def _dijkstra_with_route(edges, num_node, start_node, goal_node) -> Tuple[List[int], List]:
+# !ATTENSTION! Cost 1 fixed
+def _dijkstra_with_route(edges, num_node, start_node, goal_node) -> Tuple[List[int], List, List]:
     """ 経路の表現
-            [終点, 辺の値]
-            A, B, C, D, ... → 0, 1, 2, ...とする """
-    node = [float('inf')] * num_node    #スタート地点以外の値は∞で初期化
+        [終点, 辺の値]
+        A, B, C, D, ... → 0, 1, 2, ...とする """
+    node = [float('inf')] * num_node    #スタート地点以外の値は∞で初期化、コスト保存用
+    min_event = [float('inf')] * num_node    #スタート地点以外の値は∞で初期化、イベント保存用
     node[start_node] = 0     #スタートは0で初期化
     
     node_name = []
@@ -52,20 +55,22 @@ def _dijkstra_with_route(edges, num_node, start_node, goal_node) -> Tuple[List[i
         _, min_point = heapq.heappop(node_name)
         last = min_point[-1]
         if last == goal_node:
-            return min_point, node  #道順とコストを出力させている
+            return min_point, node, min_event  #道順とコストを出力させている
 
         #経路の要素を各変数に格納することで，視覚的に見やすくする
         for factor in edges[last]:
             goal = factor[0]   #終点
-            cost = factor[1]   #コスト
+            cost = 1            #コスト
+            event = factor[1]   #イベント
 
             #更新条件
             if node[last] + cost < node[goal]:
                 node[goal] = node[last] + cost     #更新
+                min_event[goal] = event     #更新
                 #ヒープに登録
                 heapq.heappush(node_name, [node[last] + cost, min_point + [goal]])
 
-    return [], []
+    return [], [], []
 
 def _load_states(plant: str):
     conf = Config.get_instance()
@@ -82,8 +87,8 @@ def _create_edge(states) -> list:
     for state in states:
         next_states = states[state]["next"]        
         if next_states is not None:
-            cost = 1
-            edge_list = [[next[1], cost] for next in next_states]
+            # next[1] -> next_state, next[0] -> event
+            edge_list = [[next[1], next[0]] for next in next_states]
             edges.append(edge_list)
         else:
             edges.append([])
@@ -109,17 +114,28 @@ def min_distance(plant: str):
     return result
 
 
-def path_string_list(plant: str, start: int, goal: int) -> list:
+def path_state_list(plant: str, start: int, goal: int) -> list:
     states = _load_states(plant)
     edges = _create_edge(states)
 
     path, _ = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start, goal_node=goal)
     return path
 
+def path_event_list(plant: str, start: int, goal: int) -> list:
+    states = _load_states(plant)
+    edges = _create_edge(states)
+
+    path, _, event = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start, goal_node=goal)
+    # convert event list
+    result = []
+    for i in range(1, len(path)):
+        result.append(event[path[i]])
+    return result
+
 
 # if __name__ == '__main__':
 #     Edges = [
-#         [[1, 4], [2, 3]],             # ← 頂点Aからの辺のリスト
+#         [[1, 4], [2, 3]],             # ← 頂点Aからの辺のリスト　[次の頂点, イベント]
 #         [[2, 1], [3, 1], [4, 5]],   # ← 頂点Bからの辺のリスト
 #         [[5, 2]],                       # ← 頂点Cからの辺のリスト
 #         [[4, 3]],                       # ← 頂点Dからの辺のリスト
@@ -128,7 +144,7 @@ def path_string_list(plant: str, start: int, goal: int) -> list:
 #         []                                # ← 頂点Gからの辺のリスト
 #     ]
 
-    #今の目的地の数は7つ（0~6: A~G）
+    # 今の目的地の数は7つ（0~6: A~G）
     # node_num = 7
     # goal = 6
     # opt_node = _dijkstra(Edges, node_num)
@@ -143,12 +159,13 @@ def path_string_list(plant: str, start: int, goal: int) -> list:
     # print(f"'目的地:そこまでの最小コスト'\n\n{result}")
 
 
-    # opt_root, opt_cost = _dijkstra_with_route(Edges, node_num, 4, 5)    #道順とコストを出力させている
+    # opt_root, opt_cost, opt_event = _dijkstra_with_route(Edges, node_num, 0, 6)    #道順とコストを出力させている
     # #出力を見やすく整理するための変換用辞書型リストの作成
     # root_converter = {}
     # cost_converter = {}
     # print(opt_root)
     # print(opt_cost)
+    # print(opt_event)
     # for i in range(node_num):
     #     root_converter[i] = chr(ord('A') + i)
     #     cost_converter[i] = opt_cost[i]
@@ -160,5 +177,11 @@ def path_string_list(plant: str, start: int, goal: int) -> list:
     #     if i > 0:
     #         result += arrow
     #     result += f"{root_converter[opt_root[i]]}({cost_converter[opt_root[i]]})"
+    # print(f"ノード(そこまでのコスト)\n{result}\n")
 
-    # print(f"ノード(そこまでのコスト)\n\n{result}")
+    # result_2 = ""
+    # for i in range(1, len(opt_root)):
+    #     if i > 1:
+    #         result_2 += arrow
+    #     result_2 += f"{opt_event[opt_root[i]]}"
+    # print(f"イベント\n{result_2}\n")
