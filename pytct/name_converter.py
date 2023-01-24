@@ -1,4 +1,4 @@
-from pytct.typing import TransList, State, Event
+from pytct.tct_typing import TransList, State, Event
 
 def get_key_from_value(d, val):
     # get key from dict value.

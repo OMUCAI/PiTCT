@@ -8,7 +8,7 @@ from pytct.distance import path_string_list
 from typing import List, Optional
 
 from pytct.name_converter import NameConverter
-from pytct.typing import State, Event, TransList, StateList
+from pytct.tct_typing import State, Event, TransList, StateList
 
 from .libtct import call_program as __call
 
