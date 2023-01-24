@@ -882,5 +882,5 @@ def events(name: str) -> list:
     des = des_info(name)
     return des.events()
 
-def display_automaton(name: str, convert: bool = False, color: bool = False, **kwargs) -> AutomatonDisplay:
+def display_automaton(name: str, convert: bool = True, color: bool = False, **kwargs) -> AutomatonDisplay:
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
