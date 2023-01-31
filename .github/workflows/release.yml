@@ -17,7 +17,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python: ['3.7', '3.8', '3.9', '3.10']
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -25,37 +24,38 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: all
+
       - name: Setup Python
         uses: actions/setup-python@v4
+        if: runner.os == 'macOS'
         with:
-          # Version range or exact version of a Python version to use, using SemVer's version range syntax.
-          python-version: ${{matrix.python}}
-          # The target architecture (x86, x64) of the Python interpreter.
-          architecture: x64
-          
-      - name: Install poetry
-        run: pip install poetry poetry-dynamic-versioning
-
-      # poetry dynamic versioning CLI mode
-      - name: Dynamic Versioning
-        run: poetry-dynamic-versioning
-
+          python-version: '3.x'
+      
       - name: Build
-        run: |
-          poetry build -f wheel --no-plugins
+        uses: pypa/cibuildwheel@v2.12.0
+        env:
+          CIBW_ARCHS_LINUX: "auto64 aarch64"
+          CIBW_ARCHS_MACOS: "universal2"
+          CIBW_ARCHS_WINDOWS: "auto64"
+          CIBW_SKIP: "pp*-manylinux_aarch64 cp*-musllinux*"
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
           name: PyTCT
-          path: dist
+          path: ./wheelhouse/*.whl
           retention-days: 7
-          
+      
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*.whl
+          file: ./wheelhouse/*.whl
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
@@ -64,7 +64,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
-          file: dist/*.whl
+          file: ./wheelhouse/*.whl
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
@@ -83,20 +83,16 @@ jobs:
         uses: actions/setup-python@v4
         with:
           # Version range or exact version of a Python version to use, using SemVer's version range syntax.
-          python-version: '3.10'
+          python-version: '3.x'
           # The target architecture (x86, x64) of the Python interpreter.
           architecture: x64
           
       - name: Install poetry
-        run: pip install poetry poetry-dynamic-versioning
-
-      # poetry dynamic versioning CLI mode
-      - name: Dynamic Versioning
-        run: poetry-dynamic-versioning
+        run: pipx install poetry
       
       - name: Build
         run: |
-          poetry build -f sdist --no-plugins
+          pipx run poetry build -f sdist
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
@@ -113,13 +109,3 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
-
-      # - name: Upload binaries to pytct-docs release
-      #   uses: svenstaro/upload-release-action@v2
-      #   with:
-      #     repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
-      #     file: dist/*.tar.gz
-      #     tag: ${{ github.ref }}
-      #     overwrite: true
-      #     file_glob: true
-      #     repo_name: OMUCAI/PyTCT-docs
