@@ -1,3 +1,6 @@
+[project]
+requires-python = ">=3.8"
+
 [tool.poetry]
 name = "PyTCT"
 version = "0.0.0"
@@ -11,7 +14,7 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 u-msgpack-python = "^2.7.1"
 graphviz = "^0.16"
 typing-extensions = ">=4.1.0"
@@ -20,9 +23,19 @@ typing-extensions = ">=4.1.0"
 black = "^22.10.0"
 flake8 = "^5.0.4"
 
+[tool.poetry.group.build.dependencies]
+cibuildwheel = "^2.12.0"
+poetry2setup = "^1.1.0"
+
 [tool.poetry-dynamic-versioning]
 enable = true
 vcs = "git"
+
+[tool.cibuildwheel]
+build = "*"
+skip = "*-musllinux_*"
+archs = ["auto64"]
+before-all = "pip install poetry2setup && poetry2setup > setup.py"
 
 [build-system]
 requires = ["poetry_core>=1.0.0", "setuptools", "poetry-dynamic-versioning"]
