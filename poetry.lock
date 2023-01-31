@@ -329,7 +329,22 @@ files = [
     {file = "u_msgpack_python-2.7.2-py2.py3-none-any.whl", hash = "sha256:00c77bbb65f8f68c8bd2570e0a14dee84aba429629ea78adc713f94da52ee386"},
 ]
 
+[[package]]
+name = "versioneer"
+version = "0.28"
+description = "Easy VCS-based management of project version strings"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "versioneer-0.28-py3-none-any.whl", hash = "sha256:11ffc09427ac99db4ce61bdc85785dae819618d0de28153adfce3085956125a8"},
+    {file = "versioneer-0.28.tar.gz", hash = "sha256:7175ca8e7bb4dd0e3c9779dd2745e5b4a6036304af3f5e50bd896f10196586d6"},
+]
+
+[package.extras]
+toml = ["tomli"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "367d57ef8928fdf4447398b72fde425a0b36a71d1f5901414f0daa1aea64ccb3"
+content-hash = "e3e7568ba301ab6fc4b5c1258bc6f0122ae9d044ab971ca0b656436fe8728426"
