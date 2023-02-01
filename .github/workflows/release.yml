@@ -86,13 +86,9 @@ jobs:
           python-version: '3.x'
           # The target architecture (x86, x64) of the Python interpreter.
           architecture: x64
-          
-      - name: Install poetry
-        run: pipx install poetry
       
       - name: Build
-        run: |
-          pipx run poetry build -f sdist
+        run: pipx run build --sdist
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
