@@ -35,9 +35,10 @@ exclude = ["build", "dist", "libtct"]
 namespaces = false
 
 [tool.cibuildwheel]
-build = "*"
-skip = "*-musllinux_*"
 archs = ["auto64"]
+build = "*"
+build-frontend = "build"
+skip = "*-musllinux_*"
 
 [build-system]
 requires = ["setuptools>=61", "setuptools_scm[toml]>=6.2"]
