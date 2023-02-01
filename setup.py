@@ -1,4 +1,5 @@
-from setuptools import Extension
+# -*- coding: utf-8 -*-
+from setuptools import setup, Extension
 from pathlib import Path
 
 build_file_c = [str(cfile) for cfile in Path("libtct/").glob("**/*.c")] + ["pytct/libtct.c"]
@@ -12,12 +13,4 @@ extensions = [
     )
 ]
 
-def build(setup_kwargs):
-    """
-    This function is mandatory in order to build the extensions.
-    """
-    setup_kwargs.update(
-        {
-            "ext_modules": extensions,
-        }
-    )
+setup(ext_modules=extensions)

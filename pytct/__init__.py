@@ -12,4 +12,6 @@ from .des import (
 from .distance import min_distance
 from .simulation import simulate_automaton, sample_automaton
 
-__version__ = '0.0.0'
+# auto generate by setuptools_scm
+from ._version import version
+__version__ = version
