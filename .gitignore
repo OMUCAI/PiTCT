@@ -198,3 +198,6 @@ dmypy.json
 ## Customize ##
 .DS_Store
 !Makefile
+
+wheelhouse
+pytct/_version.py
