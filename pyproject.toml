@@ -23,16 +23,14 @@ repository = "https://omucai.github.io/PyTCT/"
 dev = [
     "flake8",
     "black",
+    "build"
 ]
 
-[tool.setuptools.dynamic]
-version = {attr = "pytct.version"}
+[tool.setuptools]
+packages = ["pytct"]
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["pytct*"]
-exclude = ["build", "dist", "libtct"]
-namespaces = false
+[tool.setuptools_scm]
+write_to = "pytct/_version.py"
 
 [tool.cibuildwheel]
 archs = ["auto64"]
