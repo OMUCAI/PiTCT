@@ -1,40 +1,44 @@
-[tool.poetry]
+[project]
 name = "PyTCT"
-version = "0.0.0"
+authors = [
+    {name = "Shoma Matsui", email = "matsui@shoma.cc"},
+    {name = "Masahiro Konishi", email = "konikoni428@gmail.com"},
+]
 description = "Python TCT Library"
-documentation = "https://omucai.github.io/PyTCT-docs/"
-authors = ["Shoma Matsui <matsui@shoma.cc>", "Masahiro Konishi <konikoni428@gmail.com>"]
-license = "Apache-2.0"
-build = "build.py"
-include = [
-    { path = "libtct", format = "sdist" },
+dynamic = ["version"]
+keywords = ["pytct", "control", "discrete"]
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    "graphviz>=0.16,<0.17",
+    "typing-extensions>=4.1.0",
+    "u-msgpack-python>=2.7.1,<3.0.0"
 ]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-u-msgpack-python = "^2.7.1"
-graphviz = "^0.16"
-typing-extensions = ">=4.1.0"
+[project.urls]
+documentation = "https://omucai.github.io/PyTCT-docs/"
+repository = "https://omucai.github.io/PyTCT/"
 
-[tool.poetry.group.dev.dependencies]
-black = "^22.10.0"
-flake8 = "^5.0.4"
+[project.optional-dependencies]
+dev = [
+    "flake8",
+    "black",
+]
 
-[tool.poetry.group.build.dependencies]
-cibuildwheel = "^2.12.0"
-poetry2setup = "^1.1.0"
-versioneer = "^0.28"
+[tool.setuptools.dynamic]
+version = {attr = "pytct.version"}
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pytct*"]
+exclude = ["build", "dist", "libtct"]
+namespaces = false
 
 [tool.cibuildwheel]
 build = "*"
 skip = "*-musllinux_*"
 archs = ["auto64"]
-before-all = "pip install poetry2setup && poetry2setup > setup.py"
 
 [build-system]
-requires = ["setuptools", "versioneer[toml]"]
+requires = ["setuptools>=61", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"

@@ -1,0 +1,16 @@
+# -*- coding: utf-8 -*-
+from setuptools import setup, Extension
+from pathlib import Path
+
+build_file_c = [str(cfile) for cfile in Path("libtct/").glob("**/*.c")] + ["pytct/libtct.c"]
+build_file_cpp = [str(cppfile) for cppfile in Path("libtct/").glob("**/*.cpp")]
+build_files = build_file_c + build_file_cpp
+
+extensions = [
+    Extension(
+        "pytct.libtct",
+        sources=build_files
+    )
+]
+
+setup(ext_modules=extensions)
