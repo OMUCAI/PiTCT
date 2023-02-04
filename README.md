@@ -2,34 +2,22 @@
 Python TCT binding Library
 
 ## Requirement
-Python >= 3.7
+Python >= 3.8
 
 ## Build
-1. install [poetry](https://python-poetry.org/) as build mananger 
-
-Linux, macOS, Windows (WSL)
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
+1. (optional) create virtual environment
 ```
-
-Windows (Powershell)
-```powershell
-(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+python -m venv venv
 ```
 
 2. install dependency
 ```bash
-poetry install
+pip install -e "." ".[dev]" 
 ```
 
-3. install plugin
+3. build PyTCT
 ```bash
-poetry self add "poetry-dynamic-versioning[plugin]"
-```
-
-4. build PyTCT
-```bash
-poetry build
+python -m build --wheel --sdist
 ```
 
 PyTCT distributable file is generated in dist/ folder.
@@ -55,7 +43,7 @@ apt install graphviz
 Download graphviz installer from [here](https://graphviz.org/download/)
 
 ## How To Use
-Please see [examples folder](./examples).
+Please see [Documents](https://omucai.github.io/PyTCT-docs/).
 
 
 ## Relate Informatiom
