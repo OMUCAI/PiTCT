@@ -48,7 +48,7 @@ class AutomatonDisplay(object):
             trans = states[label]["next"]
             if trans is not None:
                 for tran in trans:
-                    label_text = NameConverter.event_decode(plant, tran[0], convert)
+                    label_text = NameConverter.event_decode(tran[0], convert)
                     if color:
                         self.__graph.edge(
                             NameConverter.state_decode(plant, label, convert),

@@ -129,7 +129,7 @@ class NameConverter:
             return state
 
     @classmethod
-    def event_decode(cls, name: str, event: int, convert: bool = True) -> str:
+    def event_decode(cls, event: int, convert: bool = True) -> str:
         if not convert:
             return str(event)
         
