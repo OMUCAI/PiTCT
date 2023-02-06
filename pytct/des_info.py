@@ -32,10 +32,9 @@ class DesInfo:
             return result
 
     def next_state(self, state: State, event: Event, convert: bool = True) -> Optional[State]:
-        _from = NameConverter.state_encode(self.name, state, create=False)
         event = NameConverter.event_encode(event, create=False)
 
-        _next = self.next(_from)
+        _next = self.next(state, convert=False)
         filter_next = list(filter(lambda x: x[0] == event, _next))
         if not filter_next:
             return None
