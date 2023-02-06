@@ -79,21 +79,25 @@ class NameConverter:
                     raise RuntimeError("Unknown argument. Select 'u' or 'c'")
             else:
                 raise RuntimeError("Unknown delta argument")
-            event_num = cls.event_encode(name, e, is_uncontrollable)
+            event_num = cls.event_encode(e, is_uncontrollable, create=True)
             next_state_num = cls.state_encode(name, ns)
             encoded.append((state_num, event_num, next_state_num))
         return encoded
 
     @classmethod
-    def event_encode(cls, name: str, event: Event, is_uncontrollable = False) -> int:
+    def event_encode(cls, event: Event, is_uncontrollable = False, create: bool = True) -> int:
         if isinstance(event, str):
             if event in cls.event_encode_dict.values():
                 # alredy register
                 event_num = get_key_from_value(cls.event_encode_dict, event)
                 calc_uncont = event_num % 2 == 0
-                if is_uncontrollable != calc_uncont:
+                if is_uncontrollable != calc_uncont and create:
                     raise RuntimeError(f"Detect same name controllable and uncontrollable event (event: {event}). If you change c or u, please run pytct.init().")
                 return event_num
+            elif create is False:
+                # readonly mode
+                raise RuntimeError(f"Undefined Event: {event}")
+
 
             # calculate event number
             if is_uncontrollable:
@@ -129,28 +133,28 @@ class NameConverter:
             return state
 
     @classmethod
-    def event_decode(cls, event: int, convert: bool = True) -> str:
+    def event_decode(cls, event: int, convert: bool = True) -> Event:
         if not convert:
-            return str(event)
+            return event
         
         try:
             return cls.event_encode_dict[event]
         except KeyError:
-            return str(event)
+            return event
 
     @classmethod
-    def state_decode(cls, name: str, state: int, convert: bool = True) -> str:
+    def state_decode(cls, name: str, state: int, convert: bool = True) -> State:
         if not convert:
-            return str(state)
+            return state
 
         if not name in cls.state_encode_dict.keys():
-            return str(state)
+            return state
         
         conv = cls.state_encode_dict[name]
         try:
             return conv[state]
         except KeyError:
-            return str(state)
+            return state
 
     @classmethod
     def register(cls, name: str, *args):
