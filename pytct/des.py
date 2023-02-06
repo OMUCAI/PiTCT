@@ -775,7 +775,7 @@ def des_info(name: str) -> DesInfo:
      4: {'marked': False, 'next': None, 'vocal': 0}
     }
     """
-    des = DesInfo(states)
+    des = DesInfo(name, states)
     return des
 
 def _create_ext_des_info(name: str):
@@ -799,47 +799,48 @@ def ext_des_info(name: str) -> ExtDesInfo:
     byte = path.read_bytes()
     raw_data = umsgpack.unpackb(byte)
     states = raw_data["states"]
-    edes = ExtDesInfo(states)
+    edes = ExtDesInfo(name, states)
     return edes
 
-def is_reachable(name: str, state_num: int = -1) -> bool:
+def is_reachable(name: str, state: State = -1) -> bool:
     ext_des = ext_des_info(name)
-    if state_num < 0:
+    if isinstance(state, int) and state < 0:
         # Whether all state is reachable or not
         return ext_des.all_reached()
     else:
         # Whether a state is reachable or not
-        return ext_des.is_reached(state_num)
+        return ext_des.is_reached(state)
 
-def is_coreachable(name: str, state_num: int = -1) -> bool:
+def is_coreachable(name: str, state: State = -1) -> bool:
     ext_des = ext_des_info(name)
-    if state_num < 0:
+    if isinstance(state, int) and state < 0:
         # Whether all state is reachable or not
         return ext_des.all_coreach()
     else:
         # Whether a state is reachable or not
-        return ext_des.is_coreach(state_num)
+        return ext_des.is_coreach(state)
 
-def shortest_string(name: str, start_state: int, reach_state: int) -> Optional[str]:
+def shortest_string(name: str, start_state: State, reach_state: State, convert: bool = True) -> Optional[Event]:
     event_path = path_event_list(name, start_state, reach_state)
     if not event_path:
         return None
-    return event_path
+    result = [NameConverter.event_decode(e, convert) for e in event_path]
+    return result
 
-def reachable_string(name: str, state_num: int) -> Optional[str]:
-    if not is_reachable(name, state_num):
+def reachable_string(name: str, state: State, convert: bool = True) -> Optional[Event]:
+    if not is_reachable(name, state):
         return None
-    return shortest_string(name, start_state=0, reach_state=state_num)
+    return shortest_string(name, start_state=0, reach_state=state, convert=convert)
 
-def coreachable_string(name: str, state_num: int, marker_state: int = -1) -> Optional[str]:
-    if not is_coreachable(name, state_num):
+def coreachable_string(name: str, state: State, marker_state: State = -1, convert: bool = True) -> Optional[Event]:
+    if not is_coreachable(name, state):
         return None
     
-    if marker_state < 0:
+    if isinstance(marker_state, int) and marker_state < 0:
         # auto search (Search all marker states and return the first route found.)
-        markers = des_info(name).marked()
+        markers = des_info(name).marked(convert=False)
         for marker in markers:
-            event_path = path_event_list(name, start=state_num, goal=marker)
+            event_path = shortest_string(name, start_state=state, reach_state=marker, convert=convert)
             if not event_path:
                 continue
             return event_path
@@ -849,7 +850,7 @@ def coreachable_string(name: str, state_num: int, marker_state: int = -1) -> Opt
         is_marker = des_info(name).is_marked(marker_state)
         if not is_marker:
             return None
-        return shortest_string(name, state_num, marker_state)
+        return shortest_string(name, start_state=state, reach_state=marker_state, convert=convert)
 
 def is_trim(name: str) -> bool:
     new_name = f"{name}_{random.randint(100, 999)}"
@@ -859,28 +860,29 @@ def is_trim(name: str) -> bool:
 def is_nonblocking(name: str) -> bool:
     ext_des = ext_des_info(name)
 
-    reached = set(ext_des.reached())
-    coreach = set(ext_des.coreach())
+    reached = set(ext_des.reached(convert=False))
+    coreach = set(ext_des.coreach(convert=False))
     return reached.issubset(coreach)
 
-def blocking_states(name: str) -> list:
+def blocking_states(name: str, convert: bool = True) -> StateList:
     ext_des = ext_des_info(name)
 
-    reached = set(ext_des.reached())
-    coreach = set(ext_des.coreach())
-    return list(reached - coreach)
+    reached = set(ext_des.reached(convert=convert))
+    coreach = set(ext_des.coreach(convert=convert))
+    result = list(reached - coreach)
+    return result
 
-def marker(name: str) -> list:
+def marker(name: str, convert: bool = True) -> StateList:
     des = des_info(name)
-    return des.marked()
+    return des.marked(convert=convert)
 
-def trans(name: str) -> list:
+def trans(name: str, convert: bool = True) -> TransList:
     des = des_info(name)
-    return des.trans()
+    return des.trans(convert=convert)
 
-def events(name: str) -> list:
+def events(name: str, convert: bool = True) -> list[Event]:
     des = des_info(name)
-    return des.events()
+    return des.events(convert=convert)
 
 def display_automaton(name: str, convert: bool = True, color: bool = False, **kwargs) -> AutomatonDisplay:
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
