@@ -821,11 +821,10 @@ def is_coreachable(name: str, state: State = -1) -> bool:
         return ext_des.is_coreach(state)
 
 def shortest_string(name: str, start_state: State, reach_state: State, convert: bool = True) -> Optional[Event]:
-    event_path = path_event_list(name, start_state, reach_state)
+    event_path = path_event_list(name, start_state, reach_state, convert=convert)
     if not event_path:
         return None
-    result = [NameConverter.event_decode(e, convert) for e in event_path]
-    return result
+    return event_path
 
 def reachable_string(name: str, state: State, convert: bool = True) -> Optional[Event]:
     if not is_reachable(name, state):
