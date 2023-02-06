@@ -48,6 +48,7 @@ class NameConverter:
         cls.state_encode_dict = {}
         cls.event_already_use = -1
         cls.event_uncont_already_use = -2
+        cls.event_type = type(object)
 
     @classmethod
     def encode_all(cls, name: str, trans_list: TransList) -> TransList:
