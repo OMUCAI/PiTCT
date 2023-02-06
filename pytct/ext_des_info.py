@@ -1,4 +1,6 @@
 from .des_info import DesInfo
+from pytct.name_converter import NameConverter
+from pytct.tct_typing import State
 
 # Extend DES Information
 class ExtDesInfo(DesInfo):
@@ -11,7 +13,8 @@ class ExtDesInfo(DesInfo):
         4: {'reached': True, 'coreach': True, 'marked': False, 'next': None, 'vocal': 0}
     }
     """
-    def is_reached(self, state_num: int) -> bool:
+    def is_reached(self, state: State) -> bool:
+        state_num = NameConverter.state_encode(self.name, state, create=False)
         if state_num >= len(self._des_dict) or state_num < 0:
             raise RuntimeError("Out of index.")
         
@@ -21,14 +24,16 @@ class ExtDesInfo(DesInfo):
     def all_reached(self) -> bool:
         return all(info['reached'] for info in self._des_dict.values())
 
-    def reached(self) -> list:
+    def reached(self, convert: bool = True) -> list[State]:
         reached = []
         for state_num, info in self._des_dict.items():
             if info['reached']:
-                reached.append(state_num)
+                state = NameConverter.state_decode(self.name, state_num, convert=convert)
+                reached.append(state)
         return reached
 
-    def is_coreach(self, state_num: int) -> bool:
+    def is_coreach(self, state: State) -> bool:
+        state_num = NameConverter.state_encode(self.name, state, create=False)
         if state_num >= len(self._des_dict) or state_num < 0:
             raise RuntimeError("Out of index.")
         
@@ -38,11 +43,12 @@ class ExtDesInfo(DesInfo):
     def all_coreach(self) -> bool:
         return all(info['coreach'] for info in self._des_dict.values())
 
-    def coreach(self) -> list:
+    def coreach(self, convert: bool = True) -> list[State]:
         coreach = []
         for state_num, info in self._des_dict.items():
             if info['coreach']:
-                coreach.append(state_num)
+                state = NameConverter.state_decode(self.name, state_num, convert=convert)
+                coreach.append(state)
         return coreach
 
 
