@@ -1,10 +1,5 @@
 from __future__ import annotations
-from typing import Union, Tuple, List  # List, Tupleは3.9から非推奨
-try:
-    from typing import Literal
-except ImportError:
-    # python3.7
-    from typing_extensions import Literal
+from typing import Union, Tuple, List, Literal  # List, Tupleは3.9から非推奨
 
 Event = Union[int, str]
 State = Union[int, str]
