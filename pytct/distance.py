@@ -1,12 +1,13 @@
 import umsgpack
 from pathlib import Path
 import heapq
-from typing import List, Tuple
 from .config import Config, DES_FILE_EXTENSION
+from pytct.tct_typing import State, Event
+from pytct.name_converter import NameConverter
 
 # https://qiita.com/Yuya-Shimizu/items/eefdc6f854534e90c988 を基に改造
 # !ATTENSTION! Cost 1 fixed
-def _dijkstra(edges, num_node):
+def _dijkstra(edges: list, num_node: int):
     """ 経路の表現
             [終点, 辺の値]
             A, B, C, D, ... → 0, 1, 2, ...とする """
@@ -39,7 +40,7 @@ def _dijkstra(edges, num_node):
     return node
 
 # !ATTENSTION! Cost 1 fixed
-def _dijkstra_with_route(edges, num_node, start_node, goal_node) -> Tuple[List[int], List, List]:
+def _dijkstra_with_route(edges: list, num_node: int, start_node: int, goal_node: int) -> tuple[list[int], list, list]:
     """ 経路の表現
         [終点, 辺の値]
         A, B, C, D, ... → 0, 1, 2, ...とする """
@@ -95,9 +96,8 @@ def _create_edge(states) -> list:
     return edges
 
 
-def min_distance(plant: str):
+def min_distance(plant: str, convert: bool = True) -> dict[State, int]:
     states = _load_states(plant)
-
     edges = _create_edge(states)
     marked_list = []
 
@@ -109,27 +109,34 @@ def min_distance(plant: str):
 
     opt_node = _dijkstra(edges=edges, num_node=len(edges))
     result = {}
-    for goal in marked_list:
-        result[goal] = opt_node[goal]
+    for goal_num in marked_list:
+        goal = NameConverter.state_decode(plant, goal_num, convert=convert)
+        result[goal] = opt_node[goal_num]
     return result
 
 
-def path_state_list(plant: str, start: int, goal: int) -> list:
+def path_state_list(plant: str, start: State, goal: State, convert: bool = True) -> list[State]:
     states = _load_states(plant)
     edges = _create_edge(states)
+    start_num = NameConverter.state_encode(plant, start, create=False)
+    goal_num = NameConverter.state_encode(plant, goal, create=False)
 
-    path, _ = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start, goal_node=goal)
-    return path
+    path, _ = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start_num, goal_node=goal_num)
+    conv_path = [NameConverter.state_decode(plant, state, convert=convert) for state in path]
+    return conv_path
 
-def path_event_list(plant: str, start: int, goal: int) -> list:
+def path_event_list(plant: str, start: State, goal: State, convert: bool = True) -> list:
     states = _load_states(plant)
     edges = _create_edge(states)
+    start_num = NameConverter.state_encode(plant, start, create=False)
+    goal_num = NameConverter.state_encode(plant, goal, create=False)
 
-    path, _, event = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start, goal_node=goal)
+    path, _, event = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start_num, goal_node=goal_num)
     # convert event list
     result = []
     for i in range(1, len(path)):
-        result.append(event[path[i]])
+        conv_event = NameConverter.event_decode(event[path[i]], convert=convert)
+        result.append(conv_event)
     return result
 
 
