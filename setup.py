@@ -9,8 +9,14 @@ build_files = build_file_c + build_file_cpp
 extensions = [
     Extension(
         "pytct.libtct",
-        sources=build_files
+        sources=build_files,
+        # extra_compile_args=['-O0']
     )
 ]
 
+# lldb debug #
+# put libtct.***.so in pytct directory
+# lldb venv/bin/python
+# br set --file program.c --line 100
+# run sample.py
 setup(ext_modules=extensions)
