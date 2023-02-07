@@ -14,8 +14,7 @@
 #include "higen.h"
 #include "cnorm.h"
 #include "canqc.h"
-
-typedef char filename1[MAX_FILENAME];
+#include "ext_proc.h"
 
 static filename1 name1, name2, name3, name4, names1[MAX_DESS];
 static char long_name1[MAX_FILENAME];
@@ -2115,6 +2114,75 @@ int export_ext_des_program(const char *filename)
 
 	if (mem_result != 1) {
 		file_extdes(name1, s1, init, t1);
+    return RESULT_OK;
+	} else {
+		return ERR_MEM;
+	}
+}
+
+int eh_sync_program(const char *filename)
+{
+  FILE *f1 = fopen(filename, "r");
+  if (f1 == NULL) {
+    return ERR_FILE_OPEN;
+  }
+
+  INT_S num_of_sync;
+  state_node *t3;
+  INT_S s3;
+  INT_T s_blockevents, *blockevents;
+  INT_S s_pn;
+  part_node *pn;
+  FILE *out;
+
+  num_of_sync = 0;
+  t3 = NULL;
+  s3 = 0;
+  s_blockevents = 0;
+  blockevents = NULL;
+  s_pn = 0;
+  pn = NULL;
+
+	/* Use "fgets" as names could have spaces in it */
+	if (fgets(name1, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name1[strlen(name1)-1] = '\0';
+
+  if (fgets(name2, MAX_FILENAME, f1) == NULL)
+	{
+		fclose(f1);
+		return ERR_PRM_FILE;
+	}
+	name2[strlen(name2)-1] = '\0';
+  make_filename_ext(long_name2, name2, EXT_TXT);
+
+  fscanf(f1, "%ld\n", &num_of_sync);
+
+  for (INT_S i = 0; i < num_of_sync; i++) {
+    if (fgets(names1[i], MAX_FILENAME, f1) == NULL)
+    {
+      fclose(f1);
+      return ERR_PRM_FILE;
+    }
+    names1[i][strlen(names1[i])-1] = '\0';
+  }
+	fclose(f1);
+
+	ehsync1(num_of_sync, name1, names1, &t3, &s3, &blockevents, &s_blockevents, &s_pn, &pn);
+
+	if (mem_result != 1) {
+    out = fopen(long_name2, "w");
+    for(INT_S i = 0; i < s_pn; i ++){
+      fprintf(out, "%ld: ", i);
+      for(INT_S j = 0; j < pn[i].numelts; j ++){
+        fprintf(out, "<%ld> %ld    ", j, pn[i].next[j]);
+      }
+      fprintf(out, "\n");
+    }
+    fclose(out);
     return RESULT_OK;
 	} else {
 		return ERR_MEM;

@@ -76,6 +76,8 @@ typedef unsigned short INT_T; /* Event label type  */
 typedef short INT_V;          /* Vocal output type */
 typedef unsigned int DWORD;
 
+typedef char filename1[MAX_FILENAME];
+
 extern INT_OS mem_result;
 
 /* Try to pack in as much as possible */

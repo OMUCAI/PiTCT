@@ -59,5 +59,6 @@ int supobs_program(const char *filename);
 int bfs_recode_program(const char *filename);
 int ext_suprobs_program(const char* filename);
 int export_ext_des_program(const char* filename);
+int eh_sync_program(const char* filename);
 
 #endif
