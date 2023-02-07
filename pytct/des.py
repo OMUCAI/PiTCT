@@ -13,7 +13,7 @@ from pytct.tct_typing import State, Event, TransList, StateList
 
 from .libtct import call_program as __call
 
-from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION, RST_FILE_EXTENSION, EDES_FILE_EXTENSION
+from .config import DAT_FILE_EXTENSION, DES_FILE_EXTENSION, RST_FILE_EXTENSION, EDES_FILE_EXTENSION, TXT_FILE_EXTENSION
 from .config import Config
 from .des_check import gen_prm, del_prm, check_exist, check_ret_code, get_path, check_state_num
 
@@ -906,3 +906,10 @@ def eh_sync(name: str, *plant_names: str):
     ret_code = __call(31, prm_path)
     check_ret_code(ret_code)
     del_prm(prm_filename)
+
+    with open(conf.SAVE_FOLDER / (name + TXT_FILE_EXTENSION)) as f:
+        text = f.read()
+    
+    for line in text.splitlines():
+        state_num, state_str = line.split(": ")
+        NameConverter.state_encode(name, state_str)

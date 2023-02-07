@@ -2175,10 +2175,11 @@ int eh_sync_program(const char *filename)
 
 	if (mem_result != 1) {
     out = fopen(long_name2, "w");
-    for(INT_S i = 0; i < s_pn; i ++){
+    for(INT_S i = 0; i < s_pn; i++){
       fprintf(out, "%ld: ", i);
-      for(INT_S j = 0; j < pn[i].numelts; j ++){
-        fprintf(out, "<%ld> %ld    ", j, pn[i].next[j]);
+      for(INT_S j = 0; j < pn[i].numelts; j++){
+        fprintf(out, "%ld", pn[i].next[j]);
+        if (j < pn[i].numelts - 1) fprintf(out, ",");
       }
       fprintf(out, "\n");
     }

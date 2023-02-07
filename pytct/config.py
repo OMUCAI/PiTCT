@@ -5,6 +5,7 @@ DES_FILE_EXTENSION = ".DES"
 EDES_FILE_EXTENSION = ".EDES"
 DAT_FILE_EXTENSION = ".DAT"
 RST_FILE_EXTENSION = ".RST"
+TXT_FILE_EXTENSION = ".TXT"
 class Singleton(object):
     @classmethod
     def get_instance(cls):
