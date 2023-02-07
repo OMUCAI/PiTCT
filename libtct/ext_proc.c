@@ -162,6 +162,13 @@ void ehsync1(INT_S num_of_des, filename1 out_name, filename1 names[MAX_DESS],
 
             filedes(out_name, s4, init, t4);
 
+            // result = sync2_runProgram(name3, name1, names[i + 1], 0,
+            // s_tranlist, tranlist, &s_macro_c, &macro_c);
+            for (j = 0; j < s_macro_c; j++) {
+                insertelem_part(j, 0, (INT_T)(macro_c[j] % s1), s_pn, pn);
+                insertelem_part(j, 1, (INT_T)(macro_c[j] / s1), s_pn, pn);
+            }
+
             freedes(s1, &t1);
             s1 = 0;
             t1 = NULL;
@@ -171,13 +178,6 @@ void ehsync1(INT_S num_of_des, filename1 out_name, filename1 names[MAX_DESS],
             freedes(s4, &t4);
             s4 = 0;
             t4 = NULL;
-
-            // result = sync2_runProgram(name3, name1, names[i + 1], 0,
-            // s_tranlist, tranlist, &s_macro_c, &macro_c);
-            for (j = 0; j < s_macro_c; j++) {
-                insertelem_part(j, 0, (INT_T)(macro_c[j] % s1), s_pn, pn);
-                insertelem_part(j, 1, (INT_T)(macro_c[j] / s1), s_pn, pn);
-            }
             if (mem_result == 1) {
                 goto FREE_DES;
             }
@@ -192,16 +192,6 @@ void ehsync1(INT_S num_of_des, filename1 out_name, filename1 names[MAX_DESS],
             s_macro_c = s4;
 
             filedes(out_name, s4, init, t4);
-
-            freedes(s1, &t1);
-            s1 = 0;
-            t1 = NULL;
-            freedes(s2, &t2);
-            s2 = 0;
-            t2 = NULL;
-            freedes(s4, &t4);
-            s4 = 0;
-            t4 = NULL;
             // result = sync2_runProgram(out_name, out_name, names[i + 1], 1,
             // s_tranlist, tranlist,&s_macro_c, &macro_c);
 
@@ -218,6 +208,17 @@ void ehsync1(INT_S num_of_des, filename1 out_name, filename1 names[MAX_DESS],
                 }
                 insertelem_part(j, i + 1, (INT_T)state2, s_pn, pn);
             }
+
+            freedes(s1, &t1);
+            s1 = 0;
+            t1 = NULL;
+            freedes(s2, &t2);
+            s2 = 0;
+            t2 = NULL;
+            freedes(s4, &t4);
+            s4 = 0;
+            t4 = NULL;
+
             if (mem_result == 1) {
                 goto FREE_DES;
             }
