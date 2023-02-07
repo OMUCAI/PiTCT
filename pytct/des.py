@@ -885,3 +885,24 @@ def events(name: str, convert: bool = True) -> list[Event]:
 
 def display_automaton(name: str, convert: bool = True, color: bool = False, **kwargs) -> AutomatonDisplay:
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
+
+
+def eh_sync(name: str, *plant_names: str):
+    for plant_name in plant_names:
+        check_exist(plant_name + DES_FILE_EXTENSION)
+
+    prm_filename = "eh_sync_%s.prm" % name
+    plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
+
+    NameConverter.register(name, *plant_names)
+    prm_string = "{name1}\n{out_name}\n{num}\n{names}\n".format(
+        name1=get_path(name),
+        out_name=get_path(name),
+        num=len(plant_names),
+        names="\n".join(plant_names_with_path)
+    )
+    prm_path = gen_prm(prm_filename, prm_string)
+
+    ret_code = __call(31, prm_path)
+    check_ret_code(ret_code)
+    del_prm(prm_filename)
