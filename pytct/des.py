@@ -85,7 +85,6 @@ def selfloop(new_name: str, plant_name: str, lst: list):
 
     selfloop_list = ["%d" % state for state in lst]
 
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{ls}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -104,7 +103,6 @@ def trim(new_name: str, plant_name: str):
 
     prm_filename = "trim_%s.prm" % plant_name
 
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name)
@@ -139,7 +137,6 @@ def sync(new_plant: str, *plant_names: str):
     prm_filename = "sync_%s.prm" % new_plant
     plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
-    NameConverter.register(new_plant, *plant_names)
     prm_string = "{name1}\n{num}\n{names}\n".format(
         name1=get_path(new_plant),
         num=len(plant_names),
@@ -159,7 +156,6 @@ def meet(new_plant: str, *plant_names: str):
     prm_filename = "meet_%s.prm" % new_plant
     plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
-    NameConverter.register(new_plant, *plant_names)
     prm_string = "{name1}\n{num}\n{names}\n".format(
         name1=get_path(new_plant),
         num=len(plant_names),
@@ -178,7 +174,6 @@ def supcon(sup: str, plant: str, spec: str):
 
     prm_filename = "supcon_%s.prm" % sup
 
-    NameConverter.register(sup, plant, spec)
     prm_string = "{name1}\n{name2}\n{supervisor}\n".format(
         name1=get_path(plant),
         name2=get_path(spec),
@@ -196,7 +191,6 @@ def allevents(new_name: str, plant_name: str):
 
     prm_filename = "trim_%s.prm" % plant_name
 
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{entry}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -216,7 +210,6 @@ def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     prm_filename = "mutex_%s.prm" % plant_name
     state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
     
-    NameConverter.register(new_name, plant_name, name_2)
     prm_string = "{name1}\n{name2}\n{name3}\n{statepair}".format(
         name1=get_path(plant_name),
         name2=get_path(name_2),
@@ -236,7 +229,6 @@ def complement(new_name: str, plant_name: str, auxiliary_events: list):
     prm_filename = "complement_%s.prm" % plant_name
     auxiliary_events_list = [f"{event}" for event in auxiliary_events] 
 
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{eventpair}".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -255,7 +247,6 @@ def nonconflict(des1: str, des2: str) -> bool:
 
     prm_filename = "nonconflict_%s.prm" % des1
 
-    NameConverter.register(des1, des2)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(des1),
         name2=get_path(des2),
@@ -279,7 +270,6 @@ def condat(new_name: str, plant_name: str, sup_name: str):
     
     prm_filename = "condat_%s.prm" % new_name
 
-    NameConverter.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -300,7 +290,6 @@ def supreduce(new_name: str, plant_name: str, sup_name: str, dat_name: str, mode
     
     prm_filename = "supreduce_%s.prm" % new_name
 
-    NameConverter.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{mode}\n{slb_flg}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -322,7 +311,6 @@ def isomorph(des1_name: str, des2_name: str):
     
     prm_filename = "isomorph_%s.prm" % des1_name
 
-    NameConverter.register(des1_name, des2_name)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(des1_name),
         name2=get_path(des2_name)
@@ -414,7 +402,6 @@ def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: list):
     prm_filename = "supconrobs_%s.prm" % new_name
     obs_list = [f"{num}" for num in obs] 
 
-    NameConverter.register(new_name, plant_name, spec_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{obs}".format(
         name1=get_path(plant_name),
         name2=get_path(spec_name),
@@ -434,7 +421,6 @@ def project(new_name: str, plant_name: str, obs: list):
     prm_filename = "project_%s.prm" % new_name
     obs_list = [f"{num}" for num in obs] 
 
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{obs}".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -457,8 +443,6 @@ def localize(loc_names: list, plant_name: str, sup_name: str, components: list):
     loc_list = [f"{get_path(loc)}" for loc in loc_names]  # str変換
     components_list = [f"{get_path(com)}" for com in components]
 
-    for loc in loc_names:
-        NameConverter.register(loc, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{num_component}\n{component}\n{num_loc}\n{loc}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -493,8 +477,6 @@ def force(new_name: str, plant_name: str, forcible_list: list, preemptible_list:
     check_exist(plant_name + DES_FILE_EXTENSION)
     prm_filename = "force_%s.prm" % new_name
 
-    NameConverter.register(new_name, plant_name)
-
     # TODO: consider string event
     forcible = [f"{fl}" for fl in forcible_list]
     preemptible = [f"{pl}" for pl in preemptible_list]
@@ -521,7 +503,6 @@ def convert(new_name: str, plant_name: str, state_pair: list):
     # TODO: consider string event
     state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
     
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n{statepair}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
@@ -546,7 +527,6 @@ def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: list):
     # TODO: consider string event
     null = [f"{num}" for num in null_list] 
 
-    NameConverter.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{null}\n".format(
         name1=get_path(sup_name),
         name2=get_path(plant_name),
@@ -568,7 +548,6 @@ def supscop(new_name: str, plant_name: str, sup_name: str, null_list: list):
     # TODO: consider string event
     null = [f"{num}" for num in null_list] 
 
-    NameConverter.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{null}\n".format(
         name1=get_path(sup_name),
         name2=get_path(plant_name),
@@ -595,7 +574,6 @@ def supqc(new_name: str, plant_name: str, mode: str, null_list: list):
     else:
         raise ValueError("Unknown mode. You can select 'qc' or 'sqc'.")
     
-    NameConverter.register(new_name, plant_name)
     prm_string = "{mode_flg}\n{name1}\n{name2}\n{name3}\n{null}\n".format(
         mode_flg=mode_flg,
         name1=get_path(plant_name),
@@ -659,9 +637,6 @@ def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: list):
     # TODO: consider string event
     image = [f"{num}" for num in image_list] 
 
-    NameConverter.register(new_name1, plant_name)
-    NameConverter.register(new_name2, plant_name)
-
     prm_string = "{name1}\n{name2}\n{name3}\n{image}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name1),
@@ -686,7 +661,6 @@ def suprobs(new_name: str, plant_name: str, sup_name: str, null_list: list, mode
     # TODO: consider string event
     null = [f"{num}" for num in null_list] 
 
-    NameConverter.register(new_name, plant_name, sup_name)
     prm_string = "{name1}\n{name2}\n{name3}\n{mode}\n{null}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -706,7 +680,6 @@ def recode(new_name: str, plant_name: str):
 
     prm_filename = "record_%s.prm" % new_name
 
-    NameConverter.register(new_name, plant_name)
     prm_string = "{name1}\n{name2}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name)
@@ -723,8 +696,6 @@ def ext_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_la
     for name in [plant_name, legal_lang_name, ambient_lang_name]:
         check_exist(name + DES_FILE_EXTENSION)
     prm_filename = "ext_suprobs_%s.prm" % new_name
-
-    NameConverter.register(new_name, plant_name, legal_lang_name, ambient_lang_name)
 
     # TODO: consider string event
     controllable = [f"{c}" for c in controllable_list]
@@ -887,14 +858,13 @@ def display_automaton(name: str, convert: bool = True, color: bool = False, **kw
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
 
 
-def eh_sync(name: str, *plant_names: str):
+def eh_sync(name: str, *plant_names: str, convert: bool = True):
     for plant_name in plant_names:
         check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "eh_sync_%s.prm" % name
     plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
 
-    NameConverter.register(name, *plant_names)
     prm_string = "{name1}\n{out_name}\n{num}\n{names}\n".format(
         name1=get_path(name),
         out_name=get_path(name),
