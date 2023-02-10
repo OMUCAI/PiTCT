@@ -885,4 +885,4 @@ def eh_sync(name: str, *plant_names: str, convert: bool = True):
         state_num, states_str = line.split(": ")
         conv_states = [NameConverter.state_decode(name=plant_names[idx], state=int(state), convert=convert)
                        for idx, state in enumerate(states_str.split(","))]
-        NameConverter.state_encode(name, ",".join(conv_states))
+        NameConverter.state_encode(name, ",".join(map(str, conv_states)))
