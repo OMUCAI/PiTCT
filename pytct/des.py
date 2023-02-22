@@ -130,23 +130,53 @@ def printdes(new_name: str, plant_name: str):
     del_prm(prm_filename)
 
 
-def sync(new_plant: str, *plant_names: str):
+def sync(name: str, *plant_names: str, table: bool = False, convert: bool = False) -> Optional[str]:
     for plant_name in plant_names:
         check_exist(plant_name + DES_FILE_EXTENSION)
 
-    prm_filename = "sync_%s.prm" % new_plant
+    is_enhanced_mode = table or convert
+
+    prm_filename = "sync_%s.prm" % name
     plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
+    if is_enhanced_mode:
+        # enhanced sync
+        prm_string = "{name1}\n{out_name}\n{num}\n{names}\n".format(
+            name1=get_path(name),
+            out_name=get_path(name),
+            num=len(plant_names),
+            names="\n".join(plant_names_with_path)
+        )
+        prm_path = gen_prm(prm_filename, prm_string)
 
-    prm_string = "{name1}\n{num}\n{names}\n".format(
-        name1=get_path(new_plant),
-        num=len(plant_names),
-        names="\n".join(plant_names_with_path)
-    )
-    prm_path = gen_prm(prm_filename, prm_string)
+        ret_code = __call(31, prm_path)
+        check_ret_code(ret_code)
+        del_prm(prm_filename)
 
-    ret_code = __call(4, prm_path)
-    check_ret_code(ret_code)
-    del_prm(prm_filename)
+        # read output textfile
+        with open(conf.SAVE_FOLDER / (name + TXT_FILE_EXTENSION)) as f:
+            text = f.read()
+        # convert string state
+        if convert:
+            for line in text.splitlines():
+                # register state label
+                state_num, states_str = line.split(": ")
+                conv_states = [NameConverter.state_decode(name=plant_names[idx], state=int(state), convert=convert)
+                            for idx, state in enumerate(states_str.split(","))]
+                NameConverter.state_encode(name, ",".join(map(str, conv_states)))
+        if table:
+            return text
+    else:
+        # original sync
+        prm_string = "{name1}\n{num}\n{names}\n".format(
+            name1=get_path(name),
+            num=len(plant_names),
+            names="\n".join(plant_names_with_path)
+        )
+        prm_path = gen_prm(prm_filename, prm_string)
+
+        ret_code = __call(4, prm_path)
+        check_ret_code(ret_code)
+        del_prm(prm_filename)
 
 
 def meet(new_plant: str, *plant_names: str):
@@ -856,33 +886,3 @@ def events(name: str, convert: bool = True) -> list[Event]:
 
 def display_automaton(name: str, convert: bool = True, color: bool = False, **kwargs) -> AutomatonDisplay:
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
-
-
-def eh_sync(name: str, *plant_names: str, convert: bool = True):
-    for plant_name in plant_names:
-        check_exist(plant_name + DES_FILE_EXTENSION)
-
-    prm_filename = "eh_sync_%s.prm" % name
-    plant_names_with_path = list(map(lambda x: get_path(x), plant_names))
-
-    prm_string = "{name1}\n{out_name}\n{num}\n{names}\n".format(
-        name1=get_path(name),
-        out_name=get_path(name),
-        num=len(plant_names),
-        names="\n".join(plant_names_with_path)
-    )
-    prm_path = gen_prm(prm_filename, prm_string)
-
-    ret_code = __call(31, prm_path)
-    check_ret_code(ret_code)
-    del_prm(prm_filename)
-
-    with open(conf.SAVE_FOLDER / (name + TXT_FILE_EXTENSION)) as f:
-        text = f.read()
-    
-    for line in text.splitlines():
-        # register state label
-        state_num, states_str = line.split(": ")
-        conv_states = [NameConverter.state_decode(name=plant_names[idx], state=int(state), convert=convert)
-                       for idx, state in enumerate(states_str.split(","))]
-        NameConverter.state_encode(name, ",".join(map(str, conv_states)))
