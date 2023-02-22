@@ -67,7 +67,7 @@ class NameConverter:
                 # meaningless settings
                 is_uncontrollable = False
             elif len(uc) == 0:
-                warnings.warn("controllable and uncontrollable status is not specified. All states are set to controllable.")
+                warnings.warn("controllable and uncontrollable status of event is not specified. All events are set to be controllable.")
                 is_uncontrollable = False
                 # raise RuntimeError("Please set 'u' or 'c'. example: (0, 'event', 1, 'c')")
             elif len(uc) == 1:
