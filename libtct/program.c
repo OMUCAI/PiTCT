@@ -451,7 +451,7 @@ int supcon_program(const char *filename) {
   getdes(local_name1, &s1, &init, &t1);
   getdes(local_name2, &s2, &init, &t2);
 
-  sync2(s1, t1, s2, t2, &s3, &t3, &macro_ab, &macro_c);// to sync, allevent 不要
+  meet2(s1, t1, s2, t2, &s3, &t3, &macro_ab, &macro_c);
   freedes(s2, &t2);
   t2 = NULL;
   trim2(&s3, &t3, macro_c);
