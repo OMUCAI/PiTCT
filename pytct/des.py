@@ -6,10 +6,10 @@ from pytct.dat_info import DatInfo
 from pytct.des_info import DesInfo
 from pytct.ext_des_info import ExtDesInfo
 from pytct.distance import path_event_list
-from typing import List, Optional
+from typing import Optional
 
 from pytct.name_converter import NameConverter
-from pytct.tct_typing import State, Event, TransList, StateList
+from pytct.tct_typing import State, Event, TransList, StateList, EventList
 
 from .libtct import call_program as __call
 
@@ -78,12 +78,11 @@ def create(name: str, size: int, trans: TransList, marker: StateList):
     del_prm(prm_filename)
 
 
-def selfloop(new_name: str, plant_name: str, lst: list):
+def selfloop(new_name: str, plant_name: str, event_list: EventList):
     check_exist(plant_name + DES_FILE_EXTENSION)
-
     prm_filename = "selfloop_%s.prm" % plant_name
 
-    selfloop_list = ["%d" % state for state in lst]
+    selfloop_list = [f"{NameConverter.event_encode(event, create=False)}" for event in event_list]
 
     prm_string = "{name1}\n{name2}\n{ls}\n".format(
         name1=get_path(plant_name),
@@ -233,15 +232,16 @@ def allevents(new_name: str, plant_name: str):
     del_prm(prm_filename)
 
 
-def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
-    for name in [plant_name, name_2]:
+def mutex(new_name: str, name_1: str, name_2: str, state_pair: list[tuple[State, State]]):
+    for name in [name_1, name_2]:
         check_exist(name + DES_FILE_EXTENSION)
 
-    prm_filename = "mutex_%s.prm" % plant_name
-    state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
+    prm_filename = "mutex_%s.prm" % name_1
+    state_pair_list = [f"{NameConverter.state_encode(name_1, st1, False)} {NameConverter.state_encode(name_2, st2, False)}" \
+                        for st1, st2 in state_pair]
     
     prm_string = "{name1}\n{name2}\n{name3}\n{statepair}".format(
-        name1=get_path(plant_name),
+        name1=get_path(name_1),
         name2=get_path(name_2),
         name3=get_path(new_name),
         statepair=f"\n".join(state_pair_list) 
@@ -253,11 +253,11 @@ def mutex(new_name: str, plant_name: str, name_2: str, state_pair: List[tuple]):
     del_prm(prm_filename)
 
 
-def complement(new_name: str, plant_name: str, auxiliary_events: list):
+def complement(new_name: str, plant_name: str, auxiliary_events: EventList = []):
     check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "complement_%s.prm" % plant_name
-    auxiliary_events_list = [f"{event}" for event in auxiliary_events] 
+    auxiliary_events_list = [f"{NameConverter.event_encode(event, create=False)}" for event in auxiliary_events] 
 
     prm_string = "{name1}\n{name2}\n{eventpair}".format(
         name1=get_path(plant_name),
@@ -425,12 +425,12 @@ def transnum(name: str) -> int:
     return des_info['tran_size']
 
 
-def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: list):
+def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: EventList):
     for name in [plant_name, spec_name]:
         check_exist(name + DES_FILE_EXTENSION)
     
     prm_filename = "supconrobs_%s.prm" % new_name
-    obs_list = [f"{num}" for num in obs] 
+    obs_list = [f"{NameConverter.event_encode(num, create=False)}" for num in obs]
 
     prm_string = "{name1}\n{name2}\n{name3}\n{obs}".format(
         name1=get_path(plant_name),
@@ -445,11 +445,11 @@ def supconrobs(new_name: str, plant_name: str, spec_name: str, obs: list):
     del_prm(prm_filename)
 
 
-def project(new_name: str, plant_name: str, obs: list):
+def project(new_name: str, plant_name: str, obs: EventList):
     check_exist(plant_name + DES_FILE_EXTENSION)
     
     prm_filename = "project_%s.prm" % new_name
-    obs_list = [f"{num}" for num in obs] 
+    obs_list = [f"{NameConverter.event_encode(num, create=False)}" for num in obs]
 
     prm_string = "{name1}\n{name2}\n{obs}".format(
         name1=get_path(plant_name),
@@ -463,7 +463,7 @@ def project(new_name: str, plant_name: str, obs: list):
     del_prm(prm_filename)
 
 
-def localize(loc_names: list, plant_name: str, sup_name: str, components: list):
+def localize(loc_names: list, plant_name: str, sup_name: str, components: list[str]):
     check_exist(plant_name + DES_FILE_EXTENSION)
     check_exist(sup_name + DES_FILE_EXTENSION)
     for agent in components:
@@ -503,18 +503,17 @@ def minstate(new_name: str, plant_name: str):
     del_prm(prm_filename)
 
 
-def force(new_name: str, plant_name: str, forcible_list: list, preemptible_list: list, timeout_event: int):
+def force(new_name: str, plant_name: str, forcible_list: EventList, preemptible_list: EventList, timeout_event: Event):
     check_exist(plant_name + DES_FILE_EXTENSION)
     prm_filename = "force_%s.prm" % new_name
 
-    # TODO: consider string event
-    forcible = [f"{fl}" for fl in forcible_list]
-    preemptible = [f"{pl}" for pl in preemptible_list]
+    forcible = [f"{NameConverter.event_encode(fl, create=False)}" for fl in forcible_list]
+    preemptible = [f"{NameConverter.event_encode(pl, create=False)}" for pl in preemptible_list]
 
     prm_string = "{name1}\n{name2}\n{timeout}\n{forcible}\n{preemptible}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
-        timeout=timeout_event,
+        timeout=NameConverter.event_encode(timeout_event, create=False),
         forcible="\n".join(forcible),
         preemptible="\n".join(preemptible)
     )
@@ -526,17 +525,17 @@ def force(new_name: str, plant_name: str, forcible_list: list, preemptible_list:
     del_prm(prm_filename)
 
 
-def convert(new_name: str, plant_name: str, state_pair: list):
+def convert(new_name: str, plant_name: str, event_pair: list):
     check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "convert_%s.prm" % plant_name
     # TODO: consider string event
-    state_pair_list = [f"{st[0]} {st[1]}" for st in state_pair]
+    event_pair_list = [f"{old} {new}" for old, new in event_pair]
     
     prm_string = "{name1}\n{name2}\n{statepair}\n".format(
         name1=get_path(plant_name),
         name2=get_path(new_name),
-        statepair="\n".join(state_pair_list) 
+        statepair="\n".join(event_pair_list) 
     )
     prm_path = gen_prm(prm_filename, prm_string)
 
