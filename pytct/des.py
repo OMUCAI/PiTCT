@@ -661,8 +661,7 @@ def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: EventLis
     check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "natobs_%s.prm" % new_name1
-    # TODO: consider string event
-    image = [f"{num}" for num in image_list] 
+    image = [f"{NameConverter.event_encode(num, create=False)}" for num in image_list]
 
     prm_string = "{name1}\n{name2}\n{name3}\n{image}\n".format(
         name1=get_path(plant_name),
@@ -677,7 +676,7 @@ def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: EventLis
     del_prm(prm_filename)
 
 
-def suprobs(new_name: str, plant_name: str, sup_name: str, null_list: list, mode: int = 1):
+def suprobs(new_name: str, plant_name: str, sup_name: str, null_list: EventList, mode: int = 1):
     for name in [plant_name, sup_name]:
         check_exist(name + DES_FILE_EXTENSION)
 
