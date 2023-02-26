@@ -548,13 +548,12 @@ def relabel(new_name: str, plant_name: str, state_pair: list):
     convert(new_name, plant_name, state_pair)
 
 
-def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: list):
+def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: EventList):
     for name in [plant_name, sup_name]:
         check_exist(name + DES_FILE_EXTENSION)
 
     prm_filename = "supnorm_%s.prm" % new_name
-    # TODO: consider string event
-    null = [f"{num}" for num in null_list] 
+    null = [f"{NameConverter.event_encode(num, create=False)}" for num in null_list]
 
     prm_string = "{name1}\n{name2}\n{name3}\n{null}\n".format(
         name1=get_path(sup_name),
@@ -569,13 +568,12 @@ def supnorm(new_name: str, plant_name: str, sup_name: str, null_list: list):
     del_prm(prm_filename)
 
 
-def supscop(new_name: str, plant_name: str, sup_name: str, null_list: list):
+def supscop(new_name: str, plant_name: str, sup_name: str, null_list: EventList):
     for name in [plant_name, sup_name]:
         check_exist(name + DES_FILE_EXTENSION)
 
     prm_filename = "supscop_%s.prm" % new_name
-    # TODO: consider string event
-    null = [f"{num}" for num in null_list] 
+    null = [f"{NameConverter.event_encode(num, create=False)}" for num in null_list]
 
     prm_string = "{name1}\n{name2}\n{name3}\n{null}\n".format(
         name1=get_path(sup_name),
@@ -590,12 +588,12 @@ def supscop(new_name: str, plant_name: str, sup_name: str, null_list: list):
     del_prm(prm_filename)
 
 
-def supqc(new_name: str, plant_name: str, mode: str, null_list: list):
+def supqc(new_name: str, plant_name: str, mode: str, null_list: EventList):
     check_exist(plant_name + DES_FILE_EXTENSION)
     prm_filename = "supqc_%s.prm" % new_name
     result_filename = "supqc_result"
-    # TODO: consider string event
-    null = [f"{num}" for num in null_list]
+
+    null = [f"{NameConverter.event_encode(num, create=False)}" for num in null_list]
     if mode == "qc":
         mode_flg = 1
     elif mode == "sqc":
@@ -617,13 +615,13 @@ def supqc(new_name: str, plant_name: str, mode: str, null_list: list):
     # TODO: load rst file
 
 
-def observable(plant_1: str, plant_2: str, mode: str, null_list: list) -> bool:
+def observable(plant_1: str, plant_2: str, mode: str, null_list: EventList) -> bool:
     for name in [plant_1, plant_2]:
         check_exist(name + DES_FILE_EXTENSION)
     prm_filename = "observable_%s.prm" % plant_1
     result_filename = "observable_result"
-    # TODO: consider string event
-    null = [f"{num}" for num in null_list]
+
+    null = [f"{NameConverter.event_encode(num, create=False)}" for num in null_list]
     if mode == "o":
         mode_flg = 1
     elif mode == "so":
@@ -659,7 +657,7 @@ def observable(plant_1: str, plant_2: str, mode: str, null_list: list) -> bool:
     return is_observable
 
 
-def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: list):
+def natobs(new_name1: str, new_name2: str, plant_name: str, image_list: EventList):
     check_exist(plant_name + DES_FILE_EXTENSION)
 
     prm_filename = "natobs_%s.prm" % new_name1
@@ -687,9 +685,8 @@ def suprobs(new_name: str, plant_name: str, sup_name: str, null_list: list, mode
         raise ValueError("Unknown Mode. You can select 1.")
 
     prm_filename = "suprobs_%s.prm" % new_name
-    # TODO: consider string event
-    null = [f"{num}" for num in null_list] 
 
+    null = [f"{NameConverter.event_encode(num, create=False)}" for num in null_list]
     prm_string = "{name1}\n{name2}\n{name3}\n{mode}\n{null}\n".format(
         name1=get_path(plant_name),
         name2=get_path(sup_name),
@@ -721,15 +718,14 @@ def recode(new_name: str, plant_name: str):
 
 
 def ext_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lang_name: str,
-               controllable_list: list, null_list: list, algorithm: int):
+               controllable_list: EventList, null_list: EventList, algorithm: int):
     for name in [plant_name, legal_lang_name, ambient_lang_name]:
         check_exist(name + DES_FILE_EXTENSION)
     prm_filename = "ext_suprobs_%s.prm" % new_name
 
-    # TODO: consider string event
-    controllable = [f"{c}" for c in controllable_list]
+    controllable = [f"{NameConverter.event_encode(c, create=False)}" for c in controllable_list]
     controllable.append("-1")
-    null = [f"{n}" for n in null_list]
+    null = [f"{NameConverter.event_encode(num, create=False)}" for num in null_list]
 
     prm_string = "{name1}\n{name2}\n{name3}\n{name4}\n{algorithm}\n{controllable}\n{null}\n".format(
         name1=get_path(plant_name),
@@ -749,13 +745,13 @@ def ext_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_la
 
 
 def lb_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lang_name: str,
-               controllable_list: list, null_list: list):
+               controllable_list: EventList, null_list: EventList):
     alg_flag = 2  # language based
     ext_suprobs(new_name, plant_name, legal_lang_name, ambient_lang_name, controllable_list, null_list, alg_flag)
 
 
 def tb_suprobs(new_name: str, plant_name: str, legal_lang_name: str, ambient_lang_name: str,
-               controllable_list: list, null_list: list):
+               controllable_list: EventList, null_list: EventList):
     alg_flag = 1  # transition based
     ext_suprobs(new_name, plant_name, legal_lang_name, ambient_lang_name, controllable_list, null_list, alg_flag)
 
