@@ -67,7 +67,7 @@ class NameConverter:
                 # meaningless settings
                 is_uncontrollable = False
             elif len(uc) == 0:
-                warnings.warn("controllable and uncontrollable status is not specified. All states are set to controllable.")
+                warnings.warn("controllable and uncontrollable status of event is not specified. All events are set to be controllable.")
                 is_uncontrollable = False
                 # raise RuntimeError("Please set 'u' or 'c'. example: (0, 'event', 1, 'c')")
             elif len(uc) == 1:
@@ -156,13 +156,3 @@ class NameConverter:
             return conv[state]
         except KeyError:
             return state
-
-    @classmethod
-    def register(cls, name: str, *args):
-        cls.event_encode_dict[name] = {}
-
-        for mixed in args:
-            if not mixed in cls.event_encode_dict.keys():
-                continue
-            tmp_dict = cls.event_encode_dict[mixed]
-            cls.event_encode_dict[name].update(tmp_dict)
