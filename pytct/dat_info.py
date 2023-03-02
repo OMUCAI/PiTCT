@@ -1,8 +1,12 @@
 import re
 
+from pytct.name_converter import NameConverter
+
 class DatInfo:
-    def __init__(self, text: str) -> None:
-        self._text = text
+    def __init__(self, text: str, convert: bool = True) -> None:
+        self._text = text  # original text 
+        self._convert = convert
+        self._convertd_text = self._convert_text(text)  # converted text
         
     def _extract_is_controllable(self):
         splited = self._text.split('\n')
@@ -27,17 +31,29 @@ class DatInfo:
                 prohibit = re.sub('(^\s*|\s*$)', '', prohibit_raw)  # remove start and end space e.g. ('15   13')
                 prohibit = re.sub('\s+', ',', prohibit)  # replace space to , e.g. ('15,13')
                 prohibit = prohibit.split(',')  # split by ',' (e.g. '15,13' -> ['15','13'])
-                prohibit = [int(i) for i in prohibit]  # change int e.g. ([15, 13])
-
+                prohibit = [NameConverter.event_decode(int(e), convert=self._convert) for e in prohibit]  # change int e.g. ([15, 13]) and change string event
                 control_data[state] = prohibit
         return control_data
+    
+    def _convert_text(self, text: str) -> str:
+        if self._convert:
+            txt = text.split("control data:")
+            result = txt[0]
+            result += "control data:\n\n"
+            for state, prohibit in self.control_data.items():
+                result += f"{state}:   {'    '.join(prohibit)}\n"
+            result += "\n"
+            return result
+        else:
+            return text
 
     def __str__(self) -> str:
-        return self._text
+        return self.text
 
     def __repr__(self) -> str:
-        return f'DatInfo(\n  text="{self._text}",\n  is_controllable={self.is_controllable},\n  ' \
+        return f'DatInfo(\n  text="{self.text}",\n  is_controllable={self.is_controllable},\n  ' \
                f'control_data={self.control_data}\n)'
+
 
     @property
     def control_data(self) -> dict:
@@ -49,4 +65,4 @@ class DatInfo:
     
     @property
     def text(self) -> str:
-        return self._text
+        return self._convertd_text

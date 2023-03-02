@@ -339,7 +339,7 @@ def isomorph(des1_name: str, des2_name: str):
     else:
         raise RuntimeError("Unknown Error")
 
-def printdat(new_name: str, dat_name: str) -> DatInfo:
+def printdat(new_name: str, dat_name: str, convert: bool = True) -> DatInfo:
     check_exist(dat_name + DAT_FILE_EXTENSION)
     
     prm_filename = "printdat_%s.prm" % dat_name
@@ -356,7 +356,7 @@ def printdat(new_name: str, dat_name: str) -> DatInfo:
     with open(conf.SAVE_FOLDER / (new_name + ".TXT")) as f:
         text = f.read()
     
-    return DatInfo(text=text)
+    return DatInfo(text=text, convert=convert)
 
 
 def getdes_parameter(name: str, format: int = 0) -> list:
