@@ -69,6 +69,7 @@ jobs:
           overwrite: true
           file_glob: true
           repo_name: OMUCAI/PyTCT-docs
+          body: ${{ github.event.release.body }}
           
   build-sdist:
     # The type of runner that the job will run on
