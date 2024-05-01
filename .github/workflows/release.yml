@@ -22,22 +22,22 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up QEMU
         if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: all
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         if: runner.os == 'macOS'
         with:
           python-version: '3.x'
       
       - name: Build
-        uses: pypa/cibuildwheel@v2.12.0
+        uses: pypa/cibuildwheel@v2.17.0
         env:
           CIBW_ARCHS_LINUX: "auto64 aarch64"
           CIBW_ARCHS_MACOS: "universal2"
@@ -45,7 +45,7 @@ jobs:
           CIBW_SKIP: "pp*-manylinux_aarch64 cp*-musllinux*"
           
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: PyTCT
           path: ./wheelhouse/*.whl
@@ -77,10 +77,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           # Version range or exact version of a Python version to use, using SemVer's version range syntax.
           python-version: '3.x'
@@ -91,7 +91,7 @@ jobs:
         run: pipx run build --sdist
           
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: PyTCT
           path: dist
