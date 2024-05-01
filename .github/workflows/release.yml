@@ -47,7 +47,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PyTCT
+          name: PyTCT-${{ runner.os }}
           path: ./wheelhouse/*.whl
           retention-days: 7
       
@@ -93,7 +93,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PyTCT
+          name: PyTCT-sdist
           path: dist
           retention-days: 7
           
