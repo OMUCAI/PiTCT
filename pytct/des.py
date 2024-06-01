@@ -912,3 +912,4 @@ def remove(new_automaton_name='new_DES1', automaton_name='DES1', del_states=[], 
 
     marker_states = marker(automaton_name)
     create(new_automaton_name, state_num, new_trans, marker_states)
+    return del_trans_list
