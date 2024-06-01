@@ -882,7 +882,7 @@ def display_automaton(name: str, convert: bool = True, color: bool = False, **kw
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
 
 # Create a new automaton with some states and transitions removed
-def remove(new_automaton_name='new_DES1', automaton_name='DES1', del_states=[], del_trans=[()]):
+def remove(new_automaton_name: str, automaton_name: str, del_states: StateList = [], del_trans: TransList = []) -> TransList:
     new_trans = trans(automaton_name) # get the set of transitions
     del_trans_list = [] # the list of transitions you delete
     for tran in new_trans:
