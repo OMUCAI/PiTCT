@@ -1,4 +1,4 @@
-from pytct.tct_typing import TransList, State, Event
+from pytct.tct_typing import TransList, State, Event, CorUC
 import warnings
 
 def get_key_from_value(d, val):
@@ -156,3 +156,20 @@ class NameConverter:
             return conv[state]
         except KeyError:
             return state
+
+    @classmethod
+    def get_controllable_or_uncontrollable(cls, event: Event) -> CorUC:
+        if type(event) == int:
+            if event % 2 == 0:
+                return "uc"
+            else:
+                return "c"
+        if event in cls.event_encode_dict.values():
+            # alredy register
+            event_num = get_key_from_value(cls.event_encode_dict, event)
+            if event_num % 2 == 0:
+                return "uc"
+            else:
+                return "c"
+        else:
+            raise RuntimeError("unknown event. cannot detect c or uc")
