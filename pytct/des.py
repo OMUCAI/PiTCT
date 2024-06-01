@@ -880,3 +880,21 @@ def events(name: str, convert: bool = True) -> list[Event]:
 
 def display_automaton(name: str, convert: bool = True, color: bool = False, **kwargs) -> AutomatonDisplay:
     return AutomatonDisplay(name, convert=convert, color=color, **kwargs)
+
+# Create a new automaton with some states and transitions removed
+def remove(new_automaton_name='new_DES1', automaton_name='DES1', del_states=[], del_trans=[()]):
+    new_trans = trans(automaton_name) # get the set of transitions
+    del_trans_list = [] # the list of transitions you delete
+    for tran in new_trans:
+        # record transitions you delete
+        if tran[0] in del_states or tran[2] in del_states or tran in del_trans:
+            del_trans_list.append(tran)
+
+    for del_tran in del_trans_list:
+        # delete transitions
+        new_trans.remove(del_tran)
+    
+    # create a new automaton
+    state_num = statenum(automaton_name)
+    marker_states = marker(automaton_name)
+    create(new_automaton_name, state_num, new_trans, marker_states)
