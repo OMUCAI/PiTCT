@@ -10,9 +10,15 @@ Python >= 3.8
 python -m venv venv
 ```
 
+1-1. (when use virtual environment) Activate virtual environment
+```
+source venv/bin/activate
+```
+
 2. install dependency
 ```bash
-pip install -e "." ".[dev]" 
+pip install -e "."
+pip install -e ".[dev]" 
 ```
 
 3. build PyTCT
