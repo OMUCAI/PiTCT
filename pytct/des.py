@@ -895,6 +895,20 @@ def remove(new_automaton_name='new_DES1', automaton_name='DES1', del_states=[], 
         new_trans.remove(del_tran)
     
     # create a new automaton
-    state_num = statenum(automaton_name)
+    # calculate state size(Q)
+    state_num = 0
+    if len(new_trans) > 0:
+        init_state = new_trans[0][0]
+        if type(init_state) == str:
+            # string state
+            state_set = set()
+            for s, a, ns, *uc in new_trans:
+                state_set.add(s)
+                state_set.add(ns)
+            state_num = len(state_set)
+        else:
+            # int state
+            state_num = statenum(automaton_name)
+
     marker_states = marker(automaton_name)
     create(new_automaton_name, state_num, new_trans, marker_states)
