@@ -68,8 +68,13 @@ class DesInfo:
                 s = NameConverter.state_decode(self.name, state_num, convert=convert)
                 e = NameConverter.event_decode(event_num, convert=convert)
                 ns = NameConverter.state_decode(self.name, next_state_num, convert=convert)
-                d = (s, e, ns)
-                delta.append(d)
+                if type(e) == str:
+                    c_or_uc = NameConverter.get_controllable_or_uncontrollable(e)
+                    d = (s, e, ns, c_or_uc)
+                    delta.append(d)
+                else:
+                    d = (s, e, ns)
+                    delta.append(d)
         return delta
 
     def events(self, convert: bool = True) -> list[Event]:
