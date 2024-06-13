@@ -69,8 +69,8 @@ class DesInfo:
                 e = NameConverter.event_decode(event_num, convert=convert)
                 ns = NameConverter.state_decode(self.name, next_state_num, convert=convert)
                 if type(e) == str:
-                    c_or_uc = NameConverter.get_controllable_or_uncontrollable(e)
-                    d = (s, e, ns, c_or_uc)
+                    c_or_u = NameConverter.get_controllable_or_uncontrollable(e)
+                    d = (s, e, ns, c_or_u)
                     delta.append(d)
                 else:
                     d = (s, e, ns)
