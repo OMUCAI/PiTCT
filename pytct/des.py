@@ -57,9 +57,12 @@ def create(name: str, size: int, trans: TransList, marker: StateList):
     """
     prm_filename = "create_%s.prm" % name
 
-    conv_trans = NameConverter.encode_all(name, trans)
-    check_state_num(conv_trans, size)
-    trans_list = ["%d %d %d" % ent for ent in conv_trans]
+    if not trans == []:
+        conv_trans = NameConverter.encode_all(name, trans)
+        check_state_num(conv_trans, size)
+        trans_list = ["%d %d %d" % ent for ent in conv_trans]
+    else:  # even if 'trans' is empty, want 'display_automaton' to work well
+        trans_list = []
 
     marker_list = [f"{NameConverter.state_encode(name, mark, create=False)}" for mark in marker]
     marker_list.append("-1")
@@ -916,3 +919,59 @@ def subautomaton(new_automaton_name: str, automaton_name: str, del_states: State
     marker_states = marker(automaton_name)
     create(new_automaton_name, state_num, new_trans, marker_states)
     return del_trans_list
+
+def is_controllable(automaton_name: str, spec_name: str) -> bool:
+  dat_name = spec_name + 'DAT'
+  condat(dat_name, automaton_name, spec_name)
+  txt_name = dat_name + '_txt'
+  return printdat(txt_name, dat_name)._extract_is_controllable()
+
+def uncontrollable_states(plant_name: str, spec_name: str):
+    # collect uncontrollable events of plant
+    u_events = []
+    p_trans = trans(plant_name)
+    s_trans = trans(spec_name)
+    if len(p_trans) == 0: # if 'p_trans' is empty
+        return
+    else:
+        if type(p_trans[0][1]) == int: # if the type of events is not string
+            return
+    for tran in p_trans:
+        if tran[3] == 'u': # if p_tran[1] is uncontrollable
+            u_events.append(tran[1])
+
+    sync('K', plant_name, spec_name, convert=True)
+    state_pairs = [] # 'plant's state, spec's state'
+    k_trans = trans('K')
+    for k_tran in k_trans:
+        if not k_tran[0] in state_pairs:
+            state_pairs.append(k_tran[0])
+        if not k_tran[2] in state_pairs:
+            state_pairs.append(k_tran[2])
+
+    x_events = [] # events defined at state 'x' of plant e.g.) x_events[0] mean all events at state '0' of plant
+    for i in range(statenum(plant_name)):
+        x_events.append([])
+    for p_tran in p_trans:
+        x_events[p_tran[0]].append(p_tran[1])
+
+    y_events = [] # events defined at state 'y' of spec e.g.) y_events[1] mean all events at state '1' of spec
+    for i in range(statenum(spec_name)):
+        y_events.append([])
+    for s_tran in s_trans:
+        y_events[s_tran[0]].append(s_tran[1])
+
+    uncontrollable_states = []
+    for state_pair in state_pairs:
+        state_pair = state_pair.split(',') # split 'state_pair' by ','
+
+        x = int(state_pair[0])
+        y = int(state_pair[1])
+
+        for u_event in u_events:
+            if not u_event in x_events[x]:
+                continue
+            if not u_event in y_events[y]:
+                uncontrollable_states.append(y)
+
+    return uncontrollable_states
