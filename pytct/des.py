@@ -940,9 +940,10 @@ def uncontrollable_states(plant_name: str, spec_name: str):
         if tran[3] == 'u': # if p_tran[1] is uncontrollable
             u_events.append(tran[1])
 
-    sync('K', plant_name, spec_name, convert=True)
+    sync_name = plant_name+'_'+spec_name+'_SYNC'
+    sync(sync_name, plant_name, spec_name, convert=True)
     state_pairs = [] # 'plant's state, spec's state'
-    k_trans = trans('K')
+    k_trans = trans(sync_name)
     for k_tran in k_trans:
         if not k_tran[0] in state_pairs:
             state_pairs.append(k_tran[0])
