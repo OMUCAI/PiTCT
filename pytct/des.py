@@ -979,6 +979,6 @@ def uncontrollable_states(plant_name: str, spec_name: str):
 
 def conact(plant_name:str, spec_name:str):
     dat_name = spec_name + 'DAT'
-    pytct.condat(dat_name, plant_name, spec_name)
+    condat(dat_name, plant_name, spec_name)
     txt_name = dat_name + '_txt'
-    return pytct.printdat(txt_name, dat_name).control_data
+    return printdat(txt_name, dat_name).control_data
