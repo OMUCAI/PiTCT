@@ -977,8 +977,19 @@ def uncontrollable_states(plant_name: str, spec_name: str):
 
     return uncontrollable_states
 
-def conact(plant_name:str, spec_name:str):
+def conact(plant_name:str, spec_name:str) -> str:
     dat_name = spec_name + 'DAT'
     condat(dat_name, plant_name, spec_name)
     txt_name = dat_name + '_txt'
-    return printdat(txt_name, dat_name).control_data
+
+    data = printdat(txt_name, dat_name).control_data
+    
+    string = ''
+    for key, item in data.items():
+        string += str(key) + ': '
+        for i in range(len(item)):
+            string += str(item[i]) + ', '
+        string = string[:-2] # delete the last ', '
+        string += '\n'
+    string = string[:-1] # delete the last '\n'
+    return string
