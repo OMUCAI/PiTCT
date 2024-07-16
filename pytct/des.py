@@ -973,7 +973,8 @@ def uncontrollable_states(plant_name: str, spec_name: str):
             if not u_event in x_events[x]:
                 continue
             if not u_event in y_events[y]:
-                uncontrollable_states.append(y)
+                if not y in uncontrollable_states:
+                    uncontrollable_states.append(y)
 
     return uncontrollable_states
 
