@@ -138,7 +138,8 @@ int selfloop_program(const char *filename) {
   } else {
     return ERR_MEM;
   }
-
+  freedes(s1, &t1);
+  free(list);
   return RESULT_OK;
 }
 
@@ -178,6 +179,7 @@ int trim_program(const char *filename) {
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
 
   return RESULT_OK;
 }
@@ -401,6 +403,7 @@ int meet_program(const char *filename) {
   if (mem_result != 1) {
     init = 0L;
     filedes(name3, s1, init, t1);
+    freedes(s1, &t1);
     free(macro_c);
   } else {
     free(macro_c);
@@ -462,6 +465,11 @@ int supcon_program(const char *filename) {
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  freedes(s3, &t3);
+  free(macro_ab);
+  free(macro_c);
+
   return RESULT_OK;
 }
 
@@ -534,6 +542,8 @@ int allevents_program(const char *filename) {
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
 
   return RESULT_OK;
 }
@@ -600,6 +610,11 @@ int mutex_program(const char *filename) {
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  freedes(s3, &t3);
+  free(macro_ab);
+  free(sp);
   return RESULT_OK;
 }
 
@@ -657,6 +672,8 @@ int complement_program(const char *filename) {
     // exit(0);
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  free(list);
   return RESULT_OK;
 }
 
@@ -783,12 +800,17 @@ int condat_program(const char *filename) {
 
   if (mem_result != 1) {
     filedes(name3, s4, -1L, t4);
-    return RESULT_OK;
   } else {
     return ERR_MEM;
     // ctct_result(CR_OUT_OF_MEMORY);
     // exit(0);
   }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  freedes(s3, &t3);
+  freedes(s4, &t4);
+  free(macro_c);
+  return RESULT_OK;
 }
 
 int supreduce_program(const char *filename) {
@@ -890,6 +912,7 @@ int supreduce_program(const char *filename) {
       init = 0;
       getdes(name2, &s4, &init, &t4);
       filedes(name4, s4, init, t4);
+      freedes(s4, &t4);
       cr = 1;
       lb = s4;
       break;
@@ -904,6 +927,7 @@ int supreduce_program(const char *filename) {
 
       // ctct_result_supreduce(CR_OK, (INT_OS)lb, cr);
       // exit(0);
+      
       return RESULT_OK;
     }
   } else {
@@ -1112,6 +1136,7 @@ int getdes_parameter_program(const char *filename)
 	fprintf(out, "%d\n", is_controllable);
 	fprintf(out, "\n");
 	fclose(out);
+  freedes(s1, &t1);
 	// ctct_result_des_parameter(RESULT_OK, s1, tran_size, is_determin, is_controllable);
 	return RESULT_OK;
 }
@@ -1174,6 +1199,8 @@ int supconrobs_program(const char *filename)
 
 	result = supconrobs_proc(name3, name1, name2, slist, list, s_imagelist, imagelist);
 
+  free(list);
+  free(imagelist);
 	if(result == 0){
 		return RESULT_OK;
 	}else{
@@ -1229,14 +1256,13 @@ int project_program(const char *filename)
 
   project0(&s1,&t1,slist,list);
 
-  if (mem_result != 1)
-  {
+  if (mem_result != 1) {
     init = 0L;
     filedes(name2, s1, init, t1);
+    freedes(s1, &t1);
+    free(list);
     return RESULT_OK;
-  }
-  else
-  {
+  } else {
     return ERR_MEM;
   }
 }
@@ -1333,14 +1359,13 @@ int minstate_program(const char *filename)
   reach(&s1, &t1);
   minimize(&s1, &t1);
     
-  if (mem_result != 1)
-  {
-    filedes(name2, s1, init, t1); 
-  }
-  else
-  {
+  if (mem_result != 1) {
+    filedes(name2, s1, init, t1);
+    freedes(s1, &t1);
+  } else {
     return ERR_MEM;
   }
+
   return RESULT_OK;
 }
 
@@ -1404,6 +1429,9 @@ int force_program(const char *filename)
 	{
 		return ERR_MEM;
 	}
+
+  free(force_event_list);
+  free(preempt_event_list);
   return RESULT_OK;
 }
 
@@ -1465,6 +1493,10 @@ int convert_program(const char *filename)
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  free(list);
+  free(sp);
   return RESULT_OK;
 }
 
@@ -1527,6 +1559,10 @@ int supnorm_program(const char *filename)
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  freedes(s3, &t3);
+  free(list);
   return RESULT_OK;
 }
 
@@ -1590,6 +1626,11 @@ int supscop_program(const char *filename)
   } else {
     return ERR_MEM;
   }
+  freedes(s1, &t1);
+  freedes(s2, &t2);
+  freedes(s3, &t3);
+  free(list);
+
   return RESULT_OK;
 }
 
@@ -1668,7 +1709,9 @@ int canQC_program(const char *filename)
     for (int i=0; i < s_statemap; i++)
       fprintf(out, "%lld\n ", statemap[i]);
 	  fclose(out);
-
+    free(list);
+    free(imagelist);
+    free(statemap);
 		return RESULT_OK;
 	} else if (mem_result == 1) {
 		return ERR_MEM;
@@ -1756,6 +1799,9 @@ int obs_program(const char *filename)
     // fprintf(out,OBS_TEMP_NAME); 
     // fprintf(out, "\n");
     fclose(out);
+    free(list);
+    free(imagelist);
+    free(statemap);
 
     return RESULT_OK;
 	} else if (mem_result == 1) {
@@ -1841,6 +1887,7 @@ int natobs_program(const char *filename)
 			init = 0L;
 			filedes(name3, s1, init, t1); 
 		}
+    freedes(s1, &t1);
 		free(ext_imagelist);
 		return RESULT_OK;
 	} else {
@@ -1911,7 +1958,8 @@ int supobs_program(const char *filename)
 
 	if(mode == 1)
 		result = supobs_proc1(name3, name1, name2, slist, list, s_imagelist, imagelist);
-
+    free(list);
+    free(imagelist);
 	if(result != 0) {
 		if(mem_result == 1)	{			
 			return ERR_MEM;
@@ -1961,6 +2009,7 @@ int bfs_recode_program(const char *filename)
 
 	if (mem_result != 1) {
 		filedes(name2, s2, init, t1);
+    freedes(s2, &t1);
     return RESULT_OK;
 	} else {
 		return ERR_MEM;
@@ -2114,6 +2163,7 @@ int export_ext_des_program(const char *filename)
 
 	if (mem_result != 1) {
 		file_extdes(name1, s1, init, t1);
+    freedes(s1, &t1);
     return RESULT_OK;
 	} else {
 		return ERR_MEM;
@@ -2172,6 +2222,7 @@ int eh_sync_program(const char *filename)
 	fclose(f1);
 
 	ehsync1(num_of_sync, name1, names1, &t3, &s3, &blockevents, &s_blockevents, &s_pn, &pn);
+  freedes(s3, &t3); s3 = 0; t3 = NULL;
 
 	if (mem_result != 1) {
     out = fopen(long_name2, "w");
@@ -2184,6 +2235,7 @@ int eh_sync_program(const char *filename)
       fprintf(out, "\n");
     }
     fclose(out);
+    free_part(s_pn, &pn);
     return RESULT_OK;
 	} else {
 		return ERR_MEM;
