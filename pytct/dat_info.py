@@ -40,8 +40,9 @@ class DatInfo:
             txt = text.split("control data:")
             result = txt[0]
             result += "control data:\n\n"
-            for state, prohibit in self.control_data.items():
-                result += f"{state}:   {'    '.join(prohibit)}\n"
+            for state, prohibit in self.control_data.items():  # state: State(int|str), prohibit: Event(int|str)
+                prohibit_str = [str(p) for p in prohibit]
+                result += f"{state}:   {'    '.join(prohibit_str)}\n"
             result += "\n"
             return result
         else:
