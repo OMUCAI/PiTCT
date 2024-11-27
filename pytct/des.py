@@ -994,3 +994,198 @@ def conact(plant_name:str, spec_name:str) -> str:
         string += '\n'
     string = string[:-1] # delete the last '\n'
     return string
+
+def Plantification(spec, plantified_spec_name): # plantification : to convert the specification into a plant
+    #creation of the parameters for the plantified specification
+    statenum = pytct.statenum(spec) #same number of state as the specification
+
+    trans = pytct.trans(spec) #same transition as the specification
+
+    modified_trans = []
+
+    #loop in order to convert all the uncontrollable event written 'uc' by uncontrollable event written 'u'.
+    for i in trans :
+        if i[3] ==  'uc':
+            trans_list = list(i) #convert tuple into list in order to modify it
+            trans_list[3] = 'u'
+            i = tuple(trans_list) #convert list into tuple
+        modified_trans.append(i)
+    trans = modified_trans
+
+    marker = pytct.marker(spec) #same marked state as the specification
+
+    #loop to check if there is at least one uncontrollable event that is not authorized from a state of the specification
+    check = False
+    enabled_states = []
+    for j in pytct.trans(spec) : 
+        if check == False and j[3] != 'c':
+            for k in pytct.trans(spec) :
+                if k[1] == j[1] and k[0] in list(range(pytct.statenum(spec))) :
+                    enabled_states.append(k[0])
+                    # print(enabled_states)
+            for check in pytct.trans(spec) :
+                if check[0] not in enabled_states or set(list(range(pytct.statenum(spec)))).issubset(set(enabled_states)) == False :
+                    statenum = statenum + 1 #add the blocking state to the plantified specification automaton
+                    check = True #boolean variable to check if new transitions would be added or not
+                    # print(statenum)
+                break
+
+    #loop to add new transitions from specific states to the new blocking state
+    if check == True :
+        Done_events = []
+        for m in pytct.trans(spec) : 
+            if m[3] != 'c' :
+                check_list = []
+                for n in pytct.trans(spec) :
+                    if m[1] == n[1] and n[0] not in check_list :
+                        check_list.append(n[0])
+                        # print(check_list)
+                if set(list(range(pytct.statenum(spec)))).issubset(set(check_list)) == False and m[1] not in Done_events :
+                    need_list = set(list(range(pytct.statenum(spec)))) - (set(check_list))
+                    # print(need_list)
+                    for need in need_list :
+                        new_transition = (need, m[1], statenum-1, 'u')
+                        # print(new_transition)
+                        trans.append(new_transition)
+                Done_events.append(m[1])
+
+    pytct.create(str(plantified_spec_name), statenum, trans, marker) #creation of the plantified_spec automaton 
+
+def Supervisory_Controller_Synthesis(Plantified_Specification, trimed_supervisor_name,  Sigma_f) :
+
+    #Initialization of the variables 
+    
+    Q_k = list(range(pytct.statenum(Plantified_Specification)))
+    
+    Q_m = pytct.marker(Plantified_Specification)
+    
+    Sigma = [] #Alphabet list initialization
+    for event in pytct.trans(Plantified_Specification) :
+        if event[1] not in Sigma :
+            Sigma.append(event[1])
+
+    Sigma_u = []
+    for event in pytct.trans(Plantified_Specification) :
+        if event[1] not in Sigma_u and event[3] != 'c':
+            Sigma_u.append(event[1])
+            
+    trans = {(t[0], t[1]): t[2] for t in pytct.trans(Plantified_Specification)}
+
+    saved_trans = pytct.trans(Plantified_Specification)
+    
+    # print('Initial transitions : ',  trans)
+
+    #Main Loop
+
+    old_Q_k = []
+    old_trans = []
+    
+    while Q_k != old_Q_k or trans != old_trans :
+
+        #STEP 1 : find non-blocking states
+        
+        NB = set(Q_m) & set(Q_k)
+        NB_condition = True
+    
+        while NB_condition :
+            NB_condition = False
+            New_NB = NB
+            for state in Q_k :
+                if state not in NB :
+                    for event in Sigma :
+                        if (state, event) in trans and trans[(state, event)] in NB :
+                            New_NB.add(state)
+                            NB_condition = True
+    
+            NB = New_NB
+        # print('Non-blocking states : ', NB)
+        
+        
+        #STEP 2 : find bad states
+        
+        B = set(Q_k) - NB
+        Forced_states = set()
+        B_condition = True
+    
+        while B_condition :
+            B_condition = False
+            New_B = B
+            New_Forced_states = Forced_states
+            for state in Q_k :
+                if state not in B :
+                    for u_event in Sigma_u :
+                        if (state, u_event) in trans and trans[(state, u_event)] in B :
+                            if any((state, f_event) in trans for f_event in Sigma_f) :
+                                if all((state, f_event) not in trans or trans[(state, f_event)] in B for f_event in Sigma_f) :
+                                    New_B.add(state)
+                                    B_condition = True
+                                else :
+                                    New_Forced_states.add(state)
+                            else :
+                                New_B.add(state)
+                                B_condition = True
+                                    
+            B = New_B
+            Forced_states = New_Forced_states
+    
+        # print('Bad states : ', B)
+        # print('Forced states : ', Forced_states)
+        
+    
+        #STEP 3 : Update of states en transitions
+        
+        New_Q_k = set(Q_k) - B
+        New_trans = {      #New dictionary 
+                (state, event): Next_state
+                for (state, event), Next_state in trans.items()
+                if state in New_Q_k and Next_state in New_Q_k}
+    
+        for state in Forced_states: #remove uncontrollable events that start from a forcible state
+                for event in Sigma:
+                    if event not in Sigma_f and (state, event) in trans:
+                        del trans[(state, event)]
+
+        old_Q_k = Q_k
+        old_trans = trans
+        Q_k = New_Q_k
+        trans = New_trans
+    
+        # print('New current states : ', New_Q_k)
+        # print('New current transitions :', New_trans)
+        
+        
+    
+    #STEP 4 : CREATE & TRIM
+    
+    #State number of the supervisor
+    statenum = len(Q_k)
+    # print('Current state number of the supervisor :', statenum)
+    
+    #Conversion of the transition dictionary into a list
+    transition = [(key[0], key[1], value) for key, value in trans.items()] 
+    # print(transition)
+    #Loop in order to add the information about controllability of the event for each transition
+    compteur = 0
+    for transi in transition :
+        for trans_s in saved_trans :
+            if transi[1] == trans_s[1] :
+                transition[compteur] = transition[compteur] + (trans_s[3],)
+                compteur = compteur + 1
+                break
+    #Conversion of each int in transition tuple into a string
+    transition = [
+    tuple(str(element) if isinstance(element, int) else element for element in t)
+    for t in transition]
+            
+    # print('Current transitions of the supervisor :',transition)
+    # print(Q_m)    
+    supervisor_name = "before_trimming_" + trimed_supervisor_name
+    pytct.create(supervisor_name, statenum, transition, [str(Marked_States) for Marked_States in Q_m])
+    pytct.trim(trimed_supervisor_name, supervisor_name)
+
+def SUPERVISORY_SYNTHESIZE(plant, spec, plantified_spec_name, trimed_supervisor_name, Sigma_f) :
+    
+    Plantified_Specification = Plantification(spec, plantified_spec_name)
+    sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
+    pytct.sync(sync_automaton_name, plantified_spec_name, plant)
+    Supervisory_Controller_Synthesis(sync_automaton_name, trimed_supervisor_name, Sigma_f)
