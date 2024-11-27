@@ -995,7 +995,7 @@ def conact(plant_name:str, spec_name:str) -> str:
     string = string[:-1] # delete the last '\n'
     return string
 
-def Plantification(spec, plantified_spec_name): # plantification : to convert the specification into a plant
+def plantification(spec, plantified_spec_name): # plantification : to convert the specification into a plant
     #creation of the parameters for the plantified specification
     statenum = pytct.statenum(spec) #same number of state as the specification
 
@@ -1051,10 +1051,8 @@ def Plantification(spec, plantified_spec_name): # plantification : to convert th
 
     pytct.create(str(plantified_spec_name), statenum, trans, marker) #creation of the plantified_spec automaton 
 
-def Supervisory_Controller_Synthesis(Plantified_Specification, trimed_supervisor_name,  Sigma_f) :
-
+def supervisory_controller_synthesis(Plantified_Specification, trimed_supervisor_name,  Sigma_f) :
     #Initialization of the variables 
-    
     Q_k = list(range(pytct.statenum(Plantified_Specification)))
     
     Q_m = pytct.marker(Plantified_Specification)
@@ -1183,9 +1181,8 @@ def Supervisory_Controller_Synthesis(Plantified_Specification, trimed_supervisor
     pytct.create(supervisor_name, statenum, transition, [str(Marked_States) for Marked_States in Q_m])
     pytct.trim(trimed_supervisor_name, supervisor_name)
 
-def SUPERVISORY_SYNTHESIZE(plant, spec, plantified_spec_name, trimed_supervisor_name, Sigma_f) :
-    
-    Plantified_Specification = Plantification(spec, plantified_spec_name)
+def supervisory_synthesize(plant, spec, plantified_spec_name, trimed_supervisor_name, Sigma_f) :
+    Plantified_Specification = plantification(spec, plantified_spec_name)
     sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
     pytct.sync(sync_automaton_name, plantified_spec_name, plant)
-    Supervisory_Controller_Synthesis(sync_automaton_name, trimed_supervisor_name, Sigma_f)
+    supervisory_controller_synthesis(sync_automaton_name, trimed_supervisor_name, Sigma_f)
