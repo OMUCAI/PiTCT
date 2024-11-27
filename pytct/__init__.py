@@ -8,7 +8,8 @@ from .des import (
     des_info, ext_des_info, is_reachable, is_coreachable, shortest_string, 
     is_trim, is_nonblocking, blocking_states, reachable_string, coreachable_string, 
     marker, trans, events, display_automaton, subautomaton, is_controllable, 
-    uncontrollable_states, conact
+    uncontrollable_states, conact,
+    Plantification, Supervisory_Controller_Synthesis, SUPERVISORY_SYNTHESIZE
 )
 from .distance import min_distance
 from .simulation import simulate_automaton, sample_automaton
