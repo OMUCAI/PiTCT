@@ -994,7 +994,3 @@ def conact(plant_name:str, spec_name:str) -> str:
         string += '\n'
     string = string[:-1] # delete the last '\n'
     return string
-
-    sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
-    pytct.sync(sync_automaton_name, plantified_spec_name, plant)
-    supervisory_controller_synthesis(sync_automaton_name, trimed_supervisor_name, sigma_f)
