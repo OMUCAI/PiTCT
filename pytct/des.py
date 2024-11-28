@@ -1032,7 +1032,7 @@ def plantification(spec, plantified_spec_name): # plantification : to convert th
 
     #loop to add new transitions from specific states to the new blocking state
     if check == True :
-        Done_events = []
+        done_events = []
         for m in pytct.trans(spec) : 
             if m[3] != 'c' :
                 check_list = []
@@ -1040,123 +1040,123 @@ def plantification(spec, plantified_spec_name): # plantification : to convert th
                     if m[1] == n[1] and n[0] not in check_list :
                         check_list.append(n[0])
                         # print(check_list)
-                if set(list(range(pytct.statenum(spec)))).issubset(set(check_list)) == False and m[1] not in Done_events :
+                if set(list(range(pytct.statenum(spec)))).issubset(set(check_list)) == False and m[1] not in done_events :
                     need_list = set(list(range(pytct.statenum(spec)))) - (set(check_list))
                     # print(need_list)
                     for need in need_list :
                         new_transition = (need, m[1], statenum-1, 'u')
                         # print(new_transition)
                         trans.append(new_transition)
-                Done_events.append(m[1])
+                done_events.append(m[1])
 
     pytct.create(str(plantified_spec_name), statenum, trans, marker) #creation of the plantified_spec automaton 
 
-def supervisory_controller_synthesis(Plantified_Specification, trimed_supervisor_name,  Sigma_f) :
-    #Initialization of the variables 
-    Q_k = list(range(pytct.statenum(Plantified_Specification)))
+def supervisory_controller_synthesis(plantified_specification, trimed_supervisor_name,  sigma_f) :
+    #Initialization of the variables     
+    q_k = list(range(pytct.statenum(plantified_specification)))
     
-    Q_m = pytct.marker(Plantified_Specification)
+    q_m = pytct.marker(plantified_specification)
     
-    Sigma = [] #Alphabet list initialization
-    for event in pytct.trans(Plantified_Specification) :
-        if event[1] not in Sigma :
-            Sigma.append(event[1])
+    sigma = [] #Alphabet list initialization
+    for event in pytct.trans(plantified_specification) :
+        if event[1] not in sigma :
+            sigma.append(event[1])
 
-    Sigma_u = []
-    for event in pytct.trans(Plantified_Specification) :
-        if event[1] not in Sigma_u and event[3] != 'c':
-            Sigma_u.append(event[1])
+    sigma_u = []
+    for event in pytct.trans(plantified_specification) :
+        if event[1] not in sigma_u and event[3] != 'c':
+            sigma_u.append(event[1])
             
-    trans = {(t[0], t[1]): t[2] for t in pytct.trans(Plantified_Specification)}
+    trans = {(t[0], t[1]): t[2] for t in pytct.trans(plantified_specification)}
 
-    saved_trans = pytct.trans(Plantified_Specification)
+    saved_trans = pytct.trans(plantified_specification)
     
     # print('Initial transitions : ',  trans)
 
     #Main Loop
 
-    old_Q_k = []
+    old_q_k = []
     old_trans = []
     
-    while Q_k != old_Q_k or trans != old_trans :
+    while q_k != old_q_k or trans != old_trans :
 
         #STEP 1 : find non-blocking states
         
-        NB = set(Q_m) & set(Q_k)
-        NB_condition = True
+        nb = set(q_m) & set(q_k)
+        nb_condition = True
     
-        while NB_condition :
-            NB_condition = False
-            New_NB = NB
-            for state in Q_k :
-                if state not in NB :
-                    for event in Sigma :
-                        if (state, event) in trans and trans[(state, event)] in NB :
-                            New_NB.add(state)
-                            NB_condition = True
+        while nb_condition :
+            nb_condition = False
+            new_nb = nb
+            for state in q_k :
+                if state not in nb :
+                    for event in sigma :
+                        if (state, event) in trans and trans[(state, event)] in nb :
+                            new_nb.add(state)
+                            nb_condition = True
     
-            NB = New_NB
-        # print('Non-blocking states : ', NB)
+            nb = new_nb
+        # print('Non-blocking states : ', nb)
         
         
         #STEP 2 : find bad states
         
-        B = set(Q_k) - NB
-        Forced_states = set()
-        B_condition = True
+        b = set(q_k) - nb
+        forced_states = set()
+        b_condition = True
     
-        while B_condition :
-            B_condition = False
-            New_B = B
-            New_Forced_states = Forced_states
-            for state in Q_k :
-                if state not in B :
-                    for u_event in Sigma_u :
-                        if (state, u_event) in trans and trans[(state, u_event)] in B :
-                            if any((state, f_event) in trans for f_event in Sigma_f) :
-                                if all((state, f_event) not in trans or trans[(state, f_event)] in B for f_event in Sigma_f) :
-                                    New_B.add(state)
-                                    B_condition = True
+        while b_condition :
+            b_condition = False
+            new_b = b
+            new_forced_states = forced_states
+            for state in q_k :
+                if state not in b :
+                    for u_event in sigma_u :
+                        if (state, u_event) in trans and trans[(state, u_event)] in b :
+                            if any((state, f_event) in trans for f_event in sigma_f) :
+                                if all((state, f_event) not in trans or trans[(state, f_event)] in b for f_event in sigma_f) :
+                                    new_b.add(state)
+                                    b_condition = True
                                 else :
-                                    New_Forced_states.add(state)
+                                    new_forced_states.add(state)
                             else :
-                                New_B.add(state)
-                                B_condition = True
+                                new_b.add(state)
+                                b_condition = True
                                     
-            B = New_B
-            Forced_states = New_Forced_states
+            b = new_b
+            forced_states = new_forced_states
     
-        # print('Bad states : ', B)
-        # print('Forced states : ', Forced_states)
+        # print('bad states : ', b)
+        # print('forced states : ', forced_states)
         
     
         #STEP 3 : Update of states en transitions
         
-        New_Q_k = set(Q_k) - B
-        New_trans = {      #New dictionary 
-                (state, event): Next_state
-                for (state, event), Next_state in trans.items()
-                if state in New_Q_k and Next_state in New_Q_k}
+        new_q_k = set(q_k) - b
+        new_trans = {      #new dictionary 
+                (state, event): next_state
+                for (state, event), next_state in trans.items()
+                if state in new_q_k and next_state in new_q_k}
     
-        for state in Forced_states: #remove uncontrollable events that start from a forcible state
-                for event in Sigma:
-                    if event not in Sigma_f and (state, event) in trans:
+        for state in forced_states: #remove uncontrollable events that start from a forcible state
+                for event in sigma:
+                    if event not in sigma_f and (state, event) in trans:
                         del trans[(state, event)]
 
-        old_Q_k = Q_k
+        old_q_k = q_k
         old_trans = trans
-        Q_k = New_Q_k
-        trans = New_trans
+        q_k = new_q_k
+        trans = new_trans
     
-        # print('New current states : ', New_Q_k)
-        # print('New current transitions :', New_trans)
+        # print('new current states : ', new_q_k)
+        # print('new current transitions :', new_trans)
         
         
     
     #STEP 4 : CREATE & TRIM
     
     #State number of the supervisor
-    statenum = len(Q_k)
+    statenum = len(q_k)
     # print('Current state number of the supervisor :', statenum)
     
     #Conversion of the transition dictionary into a list
@@ -1176,13 +1176,13 @@ def supervisory_controller_synthesis(Plantified_Specification, trimed_supervisor
     for t in transition]
             
     # print('Current transitions of the supervisor :',transition)
-    # print(Q_m)    
+    # print(q_m)    
     supervisor_name = "before_trimming_" + trimed_supervisor_name
-    pytct.create(supervisor_name, statenum, transition, [str(Marked_States) for Marked_States in Q_m])
+    pytct.create(supervisor_name, statenum, transition, [str(marked_states) for marked_states in q_m])
     pytct.trim(trimed_supervisor_name, supervisor_name)
 
-def supervisory_synthesize(plant, spec, plantified_spec_name, trimed_supervisor_name, Sigma_f) :
-    Plantified_Specification = plantification(spec, plantified_spec_name)
+def supervisory_synthesize(plant, spec, plantified_spec_name, trimed_supervisor_name, sigma_f) :
+    plantified_specification = plantification(spec, plantified_spec_name)
     sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
     pytct.sync(sync_automaton_name, plantified_spec_name, plant)
-    supervisory_controller_synthesis(sync_automaton_name, trimed_supervisor_name, Sigma_f)
+    supervisory_controller_synthesis(sync_automaton_name, trimed_supervisor_name, sigma_f)
