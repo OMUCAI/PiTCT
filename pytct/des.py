@@ -995,7 +995,7 @@ def conact(plant_name:str, spec_name:str) -> str:
     string = string[:-1] # delete the last '\n'
     return string
 
-def plantification(spec, plantified_spec_name): # plantification : to convert the specification into a plant
+def plantification(spec: str, plantified_spec_name: str): # plantification : to convert the specification into a plant
     #creation of the parameters for the plantified specification
     statenum = pytct.statenum(spec) #same number of state as the specification
 
@@ -1051,7 +1051,7 @@ def plantification(spec, plantified_spec_name): # plantification : to convert th
 
     pytct.create(str(plantified_spec_name), statenum, trans, marker) #creation of the plantified_spec automaton 
 
-def supervisory_controller_synthesis(plantified_specification, trimed_supervisor_name,  sigma_f) :
+def supervisory_controller_synthesis(plantified_specification: str, trimed_supervisor_name: str,  sigma_f: list) :
     #Initialization of the variables     
     q_k = list(range(pytct.statenum(plantified_specification)))
     
@@ -1181,7 +1181,7 @@ def supervisory_controller_synthesis(plantified_specification, trimed_supervisor
     pytct.create(supervisor_name, statenum, transition, [str(marked_states) for marked_states in q_m])
     pytct.trim(trimed_supervisor_name, supervisor_name)
 
-def supervisory_synthesize(plant, spec, plantified_spec_name, trimed_supervisor_name, sigma_f) :
+def supervisory_synthesize(plant: str, spec: str, plantified_spec_name: str, trimed_supervisor_name: str, sigma_f: list) :
     plantified_specification = plantification(spec, plantified_spec_name)
     sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
     pytct.sync(sync_automaton_name, plantified_spec_name, plant)
