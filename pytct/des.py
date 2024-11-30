@@ -997,9 +997,9 @@ def conact(plant_name:str, spec_name:str) -> str:
 
 def plantification(spec: str, plantified_spec_name: str): # plantification : to convert the specification into a plant
     #creation of the parameters for the plantified specification
-    statenum_var = pytct.statenum(spec) #same number of state as the specification
+    statenum_var = statenum(spec) #same number of state as the specification
 
-    trans_var = pytct.trans(spec) #same trans_varition as the specification
+    trans_var = trans(spec) #same trans_varition as the specification
 
     modified_trans_var = []
 
@@ -1012,19 +1012,19 @@ def plantification(spec: str, plantified_spec_name: str): # plantification : to 
         modified_trans_var.append(i)
     trans_var = modified_trans_var
 
-    marker_var = pytct.marker(spec) #same marked state as the specification
+    marker_var = marker(spec) #same marked state as the specification
 
     #loop to check if there is at least one uncontrollable event that is not authorized from a state of the specification
     check = False
     enabled_states = []
-    for j in pytct.trans(spec) : 
+    for j in trans(spec) : 
         if check == False and j[3] != 'c':
-            for k in pytct.trans(spec) :
-                if k[1] == j[1] and k[0] in list(range(pytct.statenum(spec))) :
+            for k in trans(spec) :
+                if k[1] == j[1] and k[0] in list(range(statenum(spec))) :
                     enabled_states.append(k[0])
                     # print(enabled_states)
-            for check in pytct.trans(spec) :
-                if check[0] not in enabled_states or set(list(range(pytct.statenum(spec)))).issubset(set(enabled_states)) == False :
+            for check in trans(spec) :
+                if check[0] not in enabled_states or set(list(range(statenum(spec)))).issubset(set(enabled_states)) == False :
                     statenum_var = statenum_var + 1 #add the blocking state to the plantified specification automaton
                     check = True #boolean variable to check if new trans_varitions would be added or not
                     # print(statenum_var)
@@ -1033,15 +1033,15 @@ def plantification(spec: str, plantified_spec_name: str): # plantification : to 
     #loop to add new trans_varitions from specific states to the new blocking state
     if check == True :
         done_events = []
-        for m in pytct.trans(spec) : 
+        for m in trans(spec) : 
             if m[3] != 'c' :
                 check_list = []
-                for n in pytct.trans(spec) :
+                for n in trans(spec) :
                     if m[1] == n[1] and n[0] not in check_list :
                         check_list.append(n[0])
                         # print(check_list)
-                if set(list(range(pytct.statenum(spec)))).issubset(set(check_list)) == False and m[1] not in done_events :
-                    need_list = set(list(range(pytct.statenum(spec)))) - (set(check_list))
+                if set(list(range(statenum(spec)))).issubset(set(check_list)) == False and m[1] not in done_events :
+                    need_list = set(list(range(statenum(spec)))) - (set(check_list))
                     # print(need_list)
                     for need in need_list :
                         new_trans_varition = (need, m[1], statenum_var-1, 'u')
@@ -1049,27 +1049,27 @@ def plantification(spec: str, plantified_spec_name: str): # plantification : to 
                         trans_var.append(new_trans_varition)
                 done_events.append(m[1])
 
-    pytct.create(str(plantified_spec_name), statenum_var, trans_var, marker_var) #creation of the plantified_spec automaton 
+    create(str(plantified_spec_name), statenum_var, trans_var, marker_var) #creation of the plantified_spec automaton 
 
 def supervisory_controller_synthesis(plantified_specification: str, trimed_supervisor_name: str,  sigma_f: list) :
     #Initialization of the variables 
-    q_k = list(range(pytct.statenum(plantified_specification)))
+    q_k = list(range(statenum(plantified_specification)))
     
-    q_m = pytct.marker(plantified_specification)
+    q_m = marker(plantified_specification)
     
     sigma = [] #Alphabet list initialization
-    for event in pytct.trans(plantified_specification) :
+    for event in trans(plantified_specification) :
         if event[1] not in sigma :
             sigma.append(event[1])
 
     sigma_u = []
-    for event in pytct.trans(plantified_specification) :
+    for event in trans(plantified_specification) :
         if event[1] not in sigma_u and event[3] != 'c':
             sigma_u.append(event[1])
             
-    trans_var = {(t[0], t[1]): t[2] for t in pytct.trans(plantified_specification)}
+    trans_var = {(t[0], t[1]): t[2] for t in trans(plantified_specification)}
 
-    saved_trans_var = pytct.trans(plantified_specification)
+    saved_trans_var = trans(plantified_specification)
     
     # print('Initial trans_varitions : ',  trans_var)
 
@@ -1178,11 +1178,11 @@ def supervisory_controller_synthesis(plantified_specification: str, trimed_super
     # print('Current trans_varitions of the supervisor :',trans_varition)
     # print(q_m)    
     supervisor_name = "before_trimming_" + trimed_supervisor_name
-    pytct.create(supervisor_name, statenum_var, trans_varition, [str(marked_states) for marked_states in q_m])
-    pytct.trim(trimed_supervisor_name, supervisor_name)
+    create(supervisor_name, statenum_var, trans_varition, [str(marked_states) for marked_states in q_m])
+    trim(trimed_supervisor_name, supervisor_name)
 
 def supervisory_synthesize(plant: str, spec: str, plantified_spec_name: str, trimed_supervisor_name: str, sigma_f: list) :
     plantified_specification = plantification(spec, plantified_spec_name)
     sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
-    pytct.sync(sync_automaton_name, plantified_spec_name, plant)
+    sync(sync_automaton_name, plantified_spec_name, plant)
     supervisory_controller_synthesis(sync_automaton_name, trimed_supervisor_name, sigma_f)
