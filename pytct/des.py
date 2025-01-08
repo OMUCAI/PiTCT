@@ -1186,3 +1186,97 @@ def supervisory_synthesize(plant: str, spec: str, plantified_spec_name: str, tri
     sync_automaton_name = plant + "_and_" + plantified_spec_name + "_sync"
     sync(sync_automaton_name, plantified_spec_name, plant)
     supervisory_controller_synthesis(sync_automaton_name, trimed_supervisor_name, sigma_f)
+
+def supconbnd(supconbnd_name:str, plant_name:str, spec_name:str, N:int):
+    sync('K1',plant_name,spec_name)
+    display_automaton('K1', color=True)
+    
+    K1_XI = trans('K1')
+    K1_X_len =  statenum('K1')
+    K1_SIGMA = events('K1')
+    K1_x_0 = 0
+    K1_X_m = marker('K1')
+    
+    K2_X_pair = []
+    for i in range(K1_X_len):
+        for j in range(N):
+            K2_X_pair.append([i, j])
+    K2_SIGMA = []
+    K2_XI_pair = []
+    K2_x_0_pair = [K1_x_0, 0]
+    K2_X_m_pair = []
+    for i in range(len(K1_X_m)):
+        K2_X_m_pair.append([K1_X_m[i], 0])
+    
+    F = []
+    for i in range(len(K2_X_pair)):
+        F.append(False)
+
+    ST_pair = []
+    ST_pair.append(K2_x_0_pair)
+    F[K2_X_pair.index(K2_x_0_pair)] = True
+    
+    while(bool(ST_pair)):
+        x = ST_pair[0][0]
+        d = ST_pair[0][1]
+        del ST_pair[0]
+        
+        if((x in K1_X_m) == True):
+            for i in range(len(K1_XI)):
+                if(x == K1_XI[i][0]):
+                    sigma = K1_XI[i][1]
+                    x_nxt = K1_XI[i][2]
+                    
+                    K2_XI_pair.append([[x,0], sigma, [x_nxt, 0]])                    
+                    if(F[K2_X_pair.index([x_nxt, 0])] == False):
+                        ST_pair.append([x_nxt, 0])
+                        F[K2_X_pair.index([x_nxt, 0])] = True
+                        
+        elif((x in K1_X_m) == False):
+            for i in range(len(K1_XI)):
+                if(x == K1_XI[i][0]):                
+                    sigma = K1_XI[i][1]
+                    x_nxt = K1_XI[i][2]
+    
+                    if((x_nxt in K1_X_m) == True):
+                        d_nxt = 0
+                    elif((x_nxt in K1_X_m) == False):
+                        d_nxt = d + 1
+                    
+                    if(d_nxt == N):
+                        if(i == len(K1_XI)-1):
+                            break
+                        else:
+                            continue
+                        
+                    elif(d_nxt != N):
+                        K2_XI_pair.append([[x,d], sigma, [x_nxt, d_nxt]])                            
+                        if(F[K2_X_pair.index([x_nxt, d_nxt])] == False):
+                            ST_pair.append([x_nxt, d_nxt])
+                            F[K2_X_pair.index([x_nxt, d_nxt])] = True
+                            
+    K2_X_N_pair = [K2_x_0_pair]
+    for i in range(len(K2_XI_pair)):
+        if((K2_XI_pair[i][2] in K2_X_N_pair) == False):
+            K2_X_N_pair.append(K2_XI_pair[i][2])
+
+    K2_X_m_N_pair = []
+    for i in range(len(K2_X_N_pair)):
+        if((K2_X_N_pair[i] in K2_X_m_pair) == True):
+            K2_X_m_N_pair.append(K2_X_N_pair[i])
+
+    K2_X_m_N_indent = []
+    for i in range(len(K2_X_m_pair)):    
+        if((K2_X_m_pair[i] in K2_X_N_pair) == True):
+            K2_X_m_N_indent.append(K2_X_N_pair.index(K2_X_m_pair[i]))
+    
+    K2_XI_N_indent = []
+    for i in range(len(K2_XI_pair)):
+        if((K2_XI_pair[i][0] in K2_X_N_pair) and (K2_XI_pair[i][2] in K2_X_N_pair)):
+            K2_XI_N_indent.append([K2_X_N_pair.index(K2_XI_pair[i][0]), 
+                                      K2_XI_pair[i][1], 
+                                      K2_X_N_pair.index(K2_XI_pair[i][2])])
+
+    create('K2', len(K2_X_N_pair), K2_XI_N_indent, K2_X_m_N_indent)   
+    trim('K2_trm','K2')
+    supcon(supconbnd_name, plant_name, 'K2_trm')
