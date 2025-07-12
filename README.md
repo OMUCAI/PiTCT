@@ -61,3 +61,9 @@ https://graphviz.readthedocs.io/en/stable/index.html
 Graphviz Sourcecode  
 https://github.com/xflr6/graphviz
 
+## License
+
+This project uses multiple licenses due to the inclusion of third-party code. It is licensed under the Apache 2.0 License, with the exception of the content in the `libtct` directory.
+
+- The python source code (`/pitct` directory and other root files) is licensed under the **Apache 2.0 License**. See [LICENSE](LICENSE) for more details.
+- The tct source code (`/libtct` directory) is licensed under the **BSD 3-Clause License**. See [libtct/LICENSE](libtct/LICENSE) for more details.
