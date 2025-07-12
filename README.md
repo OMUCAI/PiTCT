@@ -1,6 +1,8 @@
 # PiTCT
 Python TCT binding Library
 
+TCT is based on [this repository](https://github.com/TCT-Wonham/TCT)
+
 ## Requirement
 Python >= 3.8
 
