@@ -1,0 +1,130 @@
+# This workflow tests the release build process without publishing
+name: Release Build Test for PiTCT
+
+# Controls when the workflow will run
+on:
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains jobs for testing the release build process
+  build-bdist:
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        if: runner.os == 'macOS'
+        with:
+          python-version: '3.x'
+      
+      - name: Build
+        uses: pypa/cibuildwheel@v2.22.0
+        env:
+          CIBW_ARCHS_LINUX: "auto64"
+          CIBW_ARCHS_MACOS: "universal2"
+          CIBW_ARCHS_WINDOWS: "auto64"
+          CIBW_SKIP: "pp*-manylinux_aarch64 cp*-musllinux*"
+          
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PiTCT-${{ runner.os }}
+          path: ./wheelhouse/*.whl
+          retention-days: 7
+      
+      # Test: Skip uploading to release for test runs
+      # - name: Upload binaries to release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     file: ./wheelhouse/*.whl
+      #     tag: ${{ github.ref }}
+      #     overwrite: true
+      #     file_glob: true
+
+      # - name: Upload binaries to pytct-docs release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
+      #     file: ./wheelhouse/*.whl
+      #     tag: ${{ github.ref }}
+      #     overwrite: true
+      #     file_glob: true
+      #     repo_name: OMUCAI/PyTCT-docs
+      #     body: ${{ github.event.release.body }}
+          
+  build-sdist:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          # Version range or exact version of a Python version to use, using SemVer's version range syntax.
+          python-version: '3.x'
+          # The target architecture (x86, x64) of the Python interpreter.
+          architecture: x64
+      
+      - name: Build
+        run: pipx run build --sdist
+          
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PiTCT-sdist
+          path: dist
+          retention-days: 7
+          
+      # Test: Skip uploading to release for test runs
+      # - name: Upload binaries to release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     file: dist/*.tar.gz
+      #     tag: ${{ github.ref }}
+      #     overwrite: true
+      #     file_glob: true
+          
+  test-publish-to-pypi:
+    name: Test PyPI Publishing Process
+    needs: [build-bdist, build-sdist]
+    runs-on: ubuntu-latest
+    # Test: Only run on manual trigger or specific conditions
+    if: github.event_name == 'workflow_dispatch'
+    
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: PiTCT-*
+          path: dist
+          merge-multiple: true
+
+      - name: Print out packages
+        run: ls dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          verbose: true
+
