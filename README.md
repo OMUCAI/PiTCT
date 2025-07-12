@@ -1,4 +1,4 @@
-# PyTCT
+# PiTCT
 Python TCT binding Library
 
 ## Requirement
@@ -21,18 +21,18 @@ pip install -e "."
 pip install -e ".[dev]" 
 ```
 
-3. build PyTCT
+3. build PiTCT
 ```bash
 python -m build --wheel --sdist
 ```
 
-PyTCT distributable file is generated in dist/ folder.
+PiTCT distributable file is generated in dist/ folder.
 
-## PyTCT Install
-1. copy pytct-***.whl
-2. Install PyTCT
+## PiTCT Install
+1. copy pitct-***.whl
+2. Install PiTCT
 ```bash
-pip install pytct-****.whl
+pip install pitct-****.whl
 ```
 3. Install graphviz(mac, linux)
 - Mac

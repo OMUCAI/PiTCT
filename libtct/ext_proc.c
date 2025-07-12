@@ -99,7 +99,7 @@ void ehsync_blockevents(state_node *t1, INT_S s1, state_node *t2, INT_S s2,
 
 /*Used to compute synchronous product of agents
 whose number are more than 2*/
-/* modification by pytct */
+/* modification by pitct */
 void ehsync1(INT_S num_of_des, filename1 out_name, filename1 names[MAX_DESS],
              state_node **t3, INT_S *s3, INT_T **be, INT_T *s_be, INT_S *s_pn,
              part_node **pn) {

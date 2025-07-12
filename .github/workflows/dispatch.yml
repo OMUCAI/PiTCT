@@ -1,5 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-name: Build PyTCT
+name: Build PiTCT
 
 # Controls when the workflow will run
 on:
@@ -45,6 +45,6 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PyTCT
+          name: PiTCT
           path: ./wheelhouse/*.whl
           retention-days: 7

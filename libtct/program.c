@@ -1674,7 +1674,7 @@ int canQC_program(const char *filename)
 	}
 	name2[strlen(name2)-1] = '\0';
 
-  /* warn: (pytct) Change API */
+  /* warn: (pitct) Change API */
   if (fgets(name3, MAX_FILENAME, f1) == NULL)
 	{
 		fclose(f1);
@@ -1762,7 +1762,7 @@ int obs_program(const char *filename)
 	}
 	name2[strlen(name2)-1] = '\0';
 
-  /* warn: (pytct) Change API */
+  /* warn: (pitct) Change API */
   if (fgets(name3, MAX_FILENAME, f1) == NULL)
 	{
 		fclose(f1);
