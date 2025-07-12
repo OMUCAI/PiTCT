@@ -1,6 +1,6 @@
-from pytct.des import des_info
-from pytct.name_converter import NameConverter
-from pytct.tct_typing import Event, State
+from pitct.des import des_info
+from pitct.name_converter import NameConverter
+from pitct.tct_typing import Event, State
 import random
 
 def sample_automaton(name: str, length: int, strict: bool = True, convert: bool = True) -> list[State]:

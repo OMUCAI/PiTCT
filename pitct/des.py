@@ -1,15 +1,15 @@
 from pathlib import Path
 import random
 import umsgpack
-from pytct.automaton_display import AutomatonDisplay
-from pytct.dat_info import DatInfo
-from pytct.des_info import DesInfo
-from pytct.ext_des_info import ExtDesInfo
-from pytct.distance import path_event_list
+from pitct.automaton_display import AutomatonDisplay
+from pitct.dat_info import DatInfo
+from pitct.des_info import DesInfo
+from pitct.ext_des_info import ExtDesInfo
+from pitct.distance import path_event_list
 from typing import Optional
 
-from pytct.name_converter import NameConverter
-from pytct.tct_typing import State, Event, TransList, StateList, EventList
+from pitct.name_converter import NameConverter
+from pitct.tct_typing import State, Event, TransList, StateList, EventList
 
 from .libtct import call_program as __call
 

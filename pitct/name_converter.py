@@ -1,4 +1,4 @@
-from pytct.tct_typing import TransList, State, Event, CorUC
+from pitct.tct_typing import TransList, State, Event, CorUC
 import warnings
 
 def get_key_from_value(d, val):

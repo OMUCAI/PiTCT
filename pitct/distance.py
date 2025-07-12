@@ -2,8 +2,8 @@ import umsgpack
 from pathlib import Path
 import heapq
 from .config import Config, DES_FILE_EXTENSION
-from pytct.tct_typing import State, Event
-from pytct.name_converter import NameConverter
+from pitct.tct_typing import State, Event
+from pitct.name_converter import NameConverter
 
 # https://qiita.com/Yuya-Shimizu/items/eefdc6f854534e90c988 を基に改造
 # !ATTENSTION! Cost 1 fixed
