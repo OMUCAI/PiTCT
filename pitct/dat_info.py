@@ -1,6 +1,6 @@
 import re
 
-from pytct.name_converter import NameConverter
+from pitct.name_converter import NameConverter
 
 class DatInfo:
     def __init__(self, text: str, convert: bool = True) -> None:

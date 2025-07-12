@@ -1,12 +1,12 @@
 [project]
-name = "PyTCT"
+name = "PiTCT"
 authors = [
     {name = "Shoma Matsui", email = "matsui@shoma.cc"},
     {name = "Masahiro Konishi", email = "konikoni428@gmail.com"},
 ]
 description = "Python TCT Library"
 dynamic = ["version"]
-keywords = ["pytct", "control", "discrete"]
+keywords = ["pitct", "control", "discrete"]
 license = {file = "LICENSE"}
 requires-python = ">=3.8"
 dependencies = [
@@ -16,7 +16,7 @@ dependencies = [
 
 [project.urls]
 documentation = "https://omucai.github.io/PyTCT-docs/"
-repository = "https://omucai.github.io/PyTCT/"
+repository = "https://omucai.github.io/PiTCT/"
 
 [project.optional-dependencies]
 dev = [
@@ -26,10 +26,10 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["pytct"]
+packages = ["pitct"]
 
 [tool.setuptools_scm]
-write_to = "pytct/_version.py"
+write_to = "pitct/_version.py"
 
 [tool.cibuildwheel]
 archs = ["auto64"]

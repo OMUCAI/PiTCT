@@ -1,6 +1,6 @@
 from .des_info import DesInfo
-from pytct.name_converter import NameConverter
-from pytct.tct_typing import State
+from pitct.name_converter import NameConverter
+from pitct.tct_typing import State
 
 # Extend DES Information
 class ExtDesInfo(DesInfo):

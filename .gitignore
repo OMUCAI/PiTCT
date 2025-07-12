@@ -200,4 +200,4 @@ dmypy.json
 !Makefile
 
 wheelhouse
-pytct/_version.py
+pitct/_version.py

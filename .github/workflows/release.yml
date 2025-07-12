@@ -1,9 +1,10 @@
 # This is a basic workflow to help you get started with Actions
-name: Release Build PyTCT
+name: Release Build PiTCT
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
+  workflow_dispatch:
   release:
     types: [ published ]
 
@@ -47,7 +48,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PyTCT-${{ runner.os }}
+          name: PiTCT-${{ runner.os }}
           path: ./wheelhouse/*.whl
           retention-days: 7
       
@@ -60,16 +61,16 @@ jobs:
           overwrite: true
           file_glob: true
 
-      - name: Upload binaries to pytct-docs release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
-          file: ./wheelhouse/*.whl
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
-          repo_name: OMUCAI/PyTCT-docs
-          body: ${{ github.event.release.body }}
+      # - name: Upload binaries to pytct-docs release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.PYTCT_DOCS_RELEASE_TOKEN }}
+      #     file: ./wheelhouse/*.whl
+      #     tag: ${{ github.ref }}
+      #     overwrite: true
+      #     file_glob: true
+      #     repo_name: OMUCAI/PyTCT-docs
+      #     body: ${{ github.event.release.body }}
           
   build-sdist:
     # The type of runner that the job will run on
@@ -94,7 +95,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PyTCT-sdist
+          name: PiTCT-sdist
           path: dist
           retention-days: 7
           
@@ -106,3 +107,32 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
+          
+  publish-to-pypi:
+    name: Publish to PyPI
+    needs: [build-bdist, build-sdist]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: PiTCT-*
+          path: dist
+          merge-multiple: true
+
+      - name: Print out packages
+        run: ls dist
+
+      - name: Publish to PyPI(test)
+        if: github.event_name == 'workflow_dispatch'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+      - name: Publish to PyPI
+        if: github.event_name == 'release'
+        uses: pypa/gh-action-pypi-publish@release/v1
+

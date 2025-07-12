@@ -1,6 +1,6 @@
 from typing import Optional
-from pytct.name_converter import NameConverter
-from pytct.tct_typing import State, Event, TransList
+from pitct.name_converter import NameConverter
+from pitct.tct_typing import State, Event, TransList
 class DesInfo:
     def __init__(self, name: str, des_states: dict) -> None:
         self.name = name

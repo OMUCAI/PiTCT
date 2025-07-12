@@ -1,4 +1,4 @@
-from pytct.tct_typing import TransList, State, Event, CorUC
+from pitct.tct_typing import TransList, State, Event, CorUC
 import warnings
 
 def get_key_from_value(d, val):
@@ -93,7 +93,7 @@ class NameConverter:
                 event_num = get_key_from_value(cls.event_encode_dict, event)
                 calc_uncont = event_num % 2 == 0
                 if is_uncontrollable != calc_uncont and create:
-                    raise RuntimeError(f"Detect same name controllable and uncontrollable event (event: {event}). If you change c or u, please run pytct.init().")
+                    raise RuntimeError(f"Detect same name controllable and uncontrollable event (event: {event}). If you change c or u, please run pitct.init().")
                 return event_num
             elif create is False:
                 # readonly mode
