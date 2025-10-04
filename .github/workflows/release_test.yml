@@ -11,24 +11,42 @@ jobs:
   # This workflow contains jobs for testing the release build process
   build-bdist:
     # The type of runner that the job will run on
-    runs-on: ${{ matrix.os }}
+    name: Build wheels for ${{ matrix.os }}
+    runs-on: ${{ matrix.runs-on }}
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: linux-intel
+            runs-on: ubuntu-latest
+          - os: linux-arm
+            runs-on: ubuntu-24.04-arm
+          - os: windows-intel
+            runs-on: windows-latest
+          - os: windows-arm
+            runs-on: windows-11-arm
+          - os: macos-arm
+            runs-on: macos-latest
+          - os: pyodide
+            runs-on: ubuntu-latest
+            platform: pyodide
+
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v5
-      
-      - name: Build
+
+      - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.0
+        env:
+          CIBW_PLATFORM: ${{ matrix.platform || 'auto' }}
+          CIBW_ARCHS: ${{ matrix.archs || 'auto' }}
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: pitct-${{ runner.os }}
+          name: pitct-${{ runner.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
           retention-days: 7
       
@@ -60,15 +78,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          # Version range or exact version of a Python version to use, using SemVer's version range syntax.
-          python-version: '3.x'
-          # The target architecture (x86, x64) of the Python interpreter.
-          architecture: x64
+      - uses: actions/checkout@v5
       
       - name: Build
         run: pipx run build --sdist
@@ -98,7 +108,6 @@ jobs:
       name: pypi-test
       url: https://test.pypi.org/p/PiTCT
     # Test: Only run on manual trigger or specific conditions
-    if: github.event_name == 'workflow_dispatch'
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
 
