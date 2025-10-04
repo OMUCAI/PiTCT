@@ -16,7 +16,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://omucai.github.io/PiTCT/"
-Documentation = "https://omucai.github.io/PyTCT-docs/"
+Documentation = "https://omucai.github.io/PiTCT-docs/"
 Repository = "https://github.com/OMUCAI/PiTCT.git"
 
 [project.readme]
