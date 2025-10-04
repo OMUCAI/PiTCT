@@ -110,12 +110,17 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
     
     steps:
-      - name: Download all artifacts
+      - name: Download regular platform artifacts
         uses: actions/download-artifact@v5
         with:
           pattern: pitct-*
           path: dist
           merge-multiple: true
+
+      - name: Remove pyodide artifacts if any
+        run: |
+          # Remove any pyodide wheels that might have been downloaded
+          find dist -name "*pyodide*" -delete || true
 
       - name: Print out packages
         run: ls dist
