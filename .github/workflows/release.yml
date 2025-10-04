@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -35,7 +35,7 @@ jobs:
           retention-days: 7
       
       - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2.11.2
+        uses: svenstaro/upload-release-action@2.11.2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./wheelhouse/*.whl
