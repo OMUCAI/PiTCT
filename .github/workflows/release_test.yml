@@ -29,12 +29,7 @@ jobs:
           python-version: '3.x'
       
       - name: Build
-        uses: pypa/cibuildwheel@v2.22.0
-        env:
-          CIBW_ARCHS_LINUX: "auto64"
-          CIBW_ARCHS_MACOS: "universal2"
-          CIBW_ARCHS_WINDOWS: "auto64"
-          CIBW_SKIP: "pp*-manylinux_aarch64 cp*-musllinux*"
+        uses: pypa/cibuildwheel@v3.2.0
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
@@ -105,6 +100,9 @@ jobs:
     name: Test PyPI Publishing Process
     needs: [build-bdist, build-sdist]
     runs-on: ubuntu-latest
+    environment:
+      name: pypi-test
+      url: https://test.pypi.org/p/PiTCT
     # Test: Only run on manual trigger or specific conditions
     if: github.event_name == 'workflow_dispatch'
     
