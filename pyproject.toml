@@ -15,8 +15,13 @@ dependencies = [
 ]
 
 [project.urls]
-documentation = "https://omucai.github.io/PyTCT-docs/"
-repository = "https://omucai.github.io/PiTCT/"
+Homepage = "https://omucai.github.io/PiTCT/"
+Documentation = "https://omucai.github.io/PyTCT-docs/"
+Repository = "https://github.com/OMUCAI/PiTCT.git"
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
 
 [project.optional-dependencies]
 dev = [
