@@ -6,6 +6,43 @@ TCT is based on [this repository](https://github.com/TCT-Wonham/TCT)
 ## Requirement
 Python >= 3.8
 
+## How To Use
+
+### Install
+
+1. Install pitct library
+```bash
+pip install pitct
+```
+
+2. Install graphviz
+- Mac
+```bash
+brew install graphviz
+```
+
+- Linux(Ubuntu)
+```bash
+apt install graphviz
+```
+
+- Windows  
+Download graphviz installer from [here](https://graphviz.org/download/)
+
+### How to Use
+
+Please see [Documents](https://omucai.github.io/PyTCT-docs/).
+
+## Relate Informatiom
+Graphviz Document  
+https://graphviz.readthedocs.io/en/stable/index.html
+
+Graphviz Sourcecode  
+https://github.com/xflr6/graphviz
+
+
+----
+
 ## Build
 1. (optional) create virtual environment
 ```
@@ -30,13 +67,13 @@ python -m build --wheel --sdist
 
 PiTCT distributable file is generated in dist/ folder.
 
-## PiTCT Install
+## PiTCT Install from wheel
 1. copy pitct-***.whl
 2. Install PiTCT
 ```bash
 pip install pitct-****.whl
 ```
-3. Install graphviz(mac, linux)
+3. Install graphviz
 - Mac
 ```bash
 brew install graphviz
@@ -49,17 +86,6 @@ apt install graphviz
 
 - Windows  
 Download graphviz installer from [here](https://graphviz.org/download/)
-
-## How To Use
-Please see [Documents](https://omucai.github.io/PyTCT-docs/).
-
-
-## Relate Informatiom
-Graphviz Document  
-https://graphviz.readthedocs.io/en/stable/index.html
-
-Graphviz Sourcecode  
-https://github.com/xflr6/graphviz
 
 ## License
 
