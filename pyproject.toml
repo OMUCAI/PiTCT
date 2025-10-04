@@ -40,7 +40,7 @@ write_to = "pitct/_version.py"
 archs = ["auto64"]
 build = "*"
 build-frontend = "build"
-skip = ["*-musllinux_*", "*ios*, "*android*", "pp*-manylinux_aarch64"]
+skip = ["*-musllinux_*", "*ios*", "*android*", "pp*-manylinux_aarch64"]
 
 [tool.cibuildwheel.linux]
 archs = ["auto", "aarch64"]
