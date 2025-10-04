@@ -22,27 +22,15 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        if: runner.os == 'macOS'
-        with:
-          python-version: '3.x'
-      
       - name: Build
         uses: pypa/cibuildwheel@v3.2.0
           
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PiTCT-${{ runner.os }}
+          name: pitct-${{ runner.os }}
           path: ./wheelhouse/*.whl
           retention-days: 7
       
@@ -74,14 +62,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          # Version range or exact version of a Python version to use, using SemVer's version range syntax.
-          python-version: '3.x'
-          # The target architecture (x86, x64) of the Python interpreter.
-          architecture: x64
       
       - name: Build
         run: pipx run build --sdist
@@ -89,7 +69,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: PiTCT-sdist
+          name: pitct-sdist
           path: dist
           retention-days: 7
           
@@ -109,15 +89,15 @@ jobs:
     environment:
       name: pypi
       url: https://pypi.org/p/PiTCT
-    
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
-
+    if: github.event_name == 'release' && github.event.action == 'published'
+    
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
-          pattern: PiTCT-*
+          pattern: pitct-*
           path: dist
           merge-multiple: true
 
@@ -125,6 +105,5 @@ jobs:
         run: ls dist
 
       - name: Publish to PyPI
-        if: github.event_name == 'release'
         uses: pypa/gh-action-pypi-publish@release/v1
 
