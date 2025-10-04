@@ -201,3 +201,5 @@ dmypy.json
 
 wheelhouse
 pitct/_version.py
+
+pytct/
