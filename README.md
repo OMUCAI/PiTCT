@@ -3,6 +3,10 @@ Python TCT binding Library
 
 TCT is based on [this repository](https://github.com/TCT-Wonham/TCT)
 
+> [!WARNING]
+> `PiTCT` was renamed when it was changed to OSS as v1, having previously been provided as `pytct`.  
+> The migration documentation is [here](https://omucai.github.io/PiTCT-docs/migration/v0_to_v1/). 
+
 ## Requirement
 Python >= 3.8
 
