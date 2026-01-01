@@ -9,7 +9,7 @@ dynamic = ["version"]
 keywords = ["pitct", "control", "discrete"]
 license = "Apache-2.0 AND BSD-3-Clause"
 license-files = ["LICENSE", "libtct/LICENSE"]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "graphviz>=0.20,<0.23",
     "u-msgpack-python>=2.7.1,<3.0.0"
@@ -44,8 +44,7 @@ build-frontend = "build"
 
 [build-system]
 requires = [
-    "setuptools>=61",
-    "setuptools<72.2.0; implementation_name == 'pypy'",
-    "setuptools_scm[toml]>=6.2",
+    "setuptools>=80",
+    "setuptools_scm>=8",
 ]
 build-backend = "setuptools.build_meta"
