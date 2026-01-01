@@ -1,6 +1,7 @@
 # PiTCT
 
 [![Latest PyPI version](https://img.shields.io/pypi/v/pitct?logo=pypi)](https://pypi.python.org/pypi/pitct)
+[![Documentation Page Status](https://img.shields.io/github/actions/workflow/status/OMUCAI/PiTCT-docs/build-docs.yml?label=docs)](https://omucai.github.io/PiTCT-docs/)
 
 The TCT software package is designed for the synthesis of supervisory controls for untimed discrete-event systems (DES).
 PiTCT provides Python Binding of the TCT so that TCT can be used from Python.
@@ -17,6 +18,11 @@ Please see [Documents](https://omucai.github.io/PiTCT-docs/).
 
 ### Install
 
+Requirements:
+
+- Python 3.9+
+- Graphviz (system package)
+
 1. Install pitct library
     ```bash
     pip install pitct
@@ -24,7 +30,7 @@ Please see [Documents](https://omucai.github.io/PiTCT-docs/).
 
 2. Install graphviz
     PiTCT depends on [Graphviz](https://graphviz.org/).  
-    Please install graphviz from
+    Please install graphviz from:
 
     - [Windows](https://graphviz.org/download/#windows) 
     - [Mac](https://graphviz.org/download/#mac)
