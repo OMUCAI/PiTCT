@@ -1,15 +1,15 @@
 # PiTCT
-Python TCT binding Library
+
+[![Latest PyPI version](https://img.shields.io/pypi/v/pitct?logo=pypi)](https://pypi.python.org/pypi/pitct)
+
+The TCT software package is designed for the synthesis of supervisory controls for untimed discrete-event systems (DES).
+PiTCT provides Python Binding of the TCT so that TCT can be used from Python.
 
 TCT is based on [this repository](https://github.com/TCT-Wonham/TCT)
 
 > [!WARNING]
 > `PiTCT` was renamed when it was changed to OSS as v1, having previously been provided as `pytct`.  
 > The migration documentation is [here](https://omucai.github.io/PiTCT-docs/migration/v0_to_v1/). 
-
-## Requirement
-
-Python >= 3.8
 
 ## How To Use
 
@@ -18,73 +18,17 @@ Please see [Documents](https://omucai.github.io/PiTCT-docs/).
 ### Install
 
 1. Install pitct library
-
     ```bash
     pip install pitct
     ```
 
 2. Install graphviz
-
-    PiTCT depend on [Graphviz](https://graphviz.org/).  
+    PiTCT depends on [Graphviz](https://graphviz.org/).  
     Please install graphviz from
 
-    - [Official Installer(Windows)](https://graphviz.org/download/#windows) 
-    - [Homebrew(Mac)](https://graphviz.org/download/#mac)
+    - [Windows](https://graphviz.org/download/#windows) 
+    - [Mac](https://graphviz.org/download/#mac)
     - [Linux](https://graphviz.org/download/)
-
-## Relate Informatiom
-Graphviz Document  
-https://graphviz.readthedocs.io/en/stable/index.html
-
-Graphviz Sourcecode  
-https://github.com/xflr6/graphviz
-
-
-----
-
-## Build
-1. (optional) create virtual environment
-```
-python -m venv venv
-```
-
-1-1. (when use virtual environment) Activate virtual environment
-```
-source venv/bin/activate
-```
-
-2. install dependency
-```bash
-pip install -e "."
-pip install -e ".[dev]" 
-```
-
-3. build PiTCT
-```bash
-python -m build --wheel --sdist
-```
-
-PiTCT distributable file is generated in dist/ folder.
-
-## PiTCT Install from wheel
-1. copy pitct-***.whl
-2. Install PiTCT
-```bash
-pip install pitct-****.whl
-```
-3. Install graphviz
-- Mac
-```bash
-brew install graphviz
-```
-
-- Linux(Ubuntu)
-```bash
-apt install graphviz
-```
-
-- Windows  
-Download graphviz installer from [here](https://graphviz.org/download/)
 
 ## License
 
@@ -92,3 +36,35 @@ This project uses multiple licenses due to the inclusion of third-party code. It
 
 - The python source code (`/pitct` directory and other root files) is licensed under the **Apache 2.0 License**. See [LICENSE](LICENSE) for more details.
 - The tct source code (`/libtct` directory) is licensed under the **BSD 3-Clause License**. See [libtct/LICENSE](libtct/LICENSE) for more details.
+
+
+## Development Information
+
+### Build
+1. (optional) create virtual environment
+    ```
+    python -m venv venv
+    ```
+
+2. (when using virtual environment) Activate virtual environment
+    ```
+    source venv/bin/activate
+    ```
+
+3. install dependencies
+    ```bash
+    pip install -e "."
+    pip install -e ".[dev]" 
+    ```
+
+4. build PiTCT
+    ```bash
+    python -m build --wheel --sdist
+    ```
+
+    PiTCT distributable file is generated in dist/ folder.
+
+### Related Information
+
+- [Graphviz Documentation](https://graphviz.readthedocs.io/en/stable/index.html)
+- [Graphviz Source Code](https://github.com/xflr6/graphviz)
