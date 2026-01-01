@@ -14,7 +14,7 @@ TCT is based on [this repository](https://github.com/TCT-Wonham/TCT)
 
 ## How To Use
 
-Please see [Documents](https://omucai.github.io/PiTCT-docs/).
+For a quick tutorial and API reference, see the [documentation](https://omucai.github.io/PiTCT-docs/).
 
 ### Install
 
