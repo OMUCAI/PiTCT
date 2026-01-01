@@ -8,34 +8,29 @@ TCT is based on [this repository](https://github.com/TCT-Wonham/TCT)
 > The migration documentation is [here](https://omucai.github.io/PiTCT-docs/migration/v0_to_v1/). 
 
 ## Requirement
+
 Python >= 3.8
 
 ## How To Use
 
+Please see [Documents](https://omucai.github.io/PiTCT-docs/).
+
 ### Install
 
 1. Install pitct library
-```bash
-pip install pitct
-```
+
+    ```bash
+    pip install pitct
+    ```
 
 2. Install graphviz
-- Mac
-```bash
-brew install graphviz
-```
 
-- Linux(Ubuntu)
-```bash
-apt install graphviz
-```
+    PiTCT depend on [Graphviz](https://graphviz.org/).  
+    Please install graphviz from
 
-- Windows  
-Download graphviz installer from [here](https://graphviz.org/download/)
-
-### How to Use
-
-Please see [Documents](https://omucai.github.io/PiTCT-docs/).
+    - [Official Installer(Windows)](https://graphviz.org/download/#windows) 
+    - [Homebrew(Mac)](https://graphviz.org/download/#mac)
+    - [Linux](https://graphviz.org/download/)
 
 ## Relate Informatiom
 Graphviz Document  
