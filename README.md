@@ -35,7 +35,7 @@ Download graphviz installer from [here](https://graphviz.org/download/)
 
 ### How to Use
 
-Please see [Documents](https://omucai.github.io/PyTCT-docs/).
+Please see [Documents](https://omucai.github.io/PiTCT-docs/).
 
 ## Relate Informatiom
 Graphviz Document  
