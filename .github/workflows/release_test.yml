@@ -17,11 +17,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: linux-intel
+          - os: linux-x86_64
             runs-on: ubuntu-latest
           - os: linux-arm
             runs-on: ubuntu-24.04-arm
-          - os: windows-intel
+          - os: windows-x86_64
             runs-on: windows-latest
           - os: windows-arm
             runs-on: windows-11-arm
