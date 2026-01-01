@@ -116,7 +116,9 @@ class AutomatonDisplay(object):
             return self
         else:
             # shell
-            return self.__graph.render(tempfile.mktemp('.gv'), view=True, format=format, cleanup=True)
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.gv') as tmp:
+                tmp_path = tmp.name
+            return self.__graph.render(tmp_path, view=True, format=format, cleanup=True)
 
     def _repr_html_(self):
         svg = self.__graph._repr_svg_()
