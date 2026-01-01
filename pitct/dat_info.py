@@ -28,8 +28,8 @@ class DatInfo:
                 extruct_data = one.split(':')  # e.g. (['0', '  15   13 '])
                 state = int(extruct_data[0])  # e.g. (0)
                 prohibit_raw = extruct_data[1]  # e.g. ('  15   13 ')
-                prohibit = re.sub('(^\s*|\s*$)', '', prohibit_raw)  # remove start and end space e.g. ('15   13')
-                prohibit = re.sub('\s+', ',', prohibit)  # replace space to , e.g. ('15,13')
+                prohibit = re.sub(r'(^\s*|\s*$)', '', prohibit_raw)  # remove start and end space e.g. ('15   13')
+                prohibit = re.sub(r'\s+', ',', prohibit)  # replace space to , e.g. ('15,13')
                 prohibit = prohibit.split(',')  # split by ',' (e.g. '15,13' -> ['15','13'])
                 prohibit = [NameConverter.event_decode(int(e), convert=self._convert) for e in prohibit]  # change int e.g. ([15, 13]) and change string event
                 control_data[state] = prohibit
