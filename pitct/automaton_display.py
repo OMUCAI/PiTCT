@@ -158,7 +158,7 @@ class AutomatonDisplay(object):
             // B. Fallback to dynamic import if not found
             if (!loadPromise) {{
                 console.warn("Graphviz not pre-loaded. Loading now...");
-                const {{ Graphviz }} = await import("{self.HPCC_WASM_URL}");
+                const {{ Graphviz }} = await import("{HPCC_WASM_URL}");
                 // save the promise to avoid re-loading
                 window.jupyterGraphvizPromise = Graphviz.load();
                 loadPromise = window.jupyterGraphvizPromise;
