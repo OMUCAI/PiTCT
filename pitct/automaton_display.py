@@ -169,7 +169,7 @@ class AutomatonDisplay(object):
             const svg = graphviz.dot(dot);
             div.innerHTML = svg;  
         }} catch (err) {{
-            div.innerHTML = `<div style="color:red">Error: ${{err.message}}</div>`;
+            div.innerHTML = `<div style="color:red">Error: ${{String(err)}}</div>`;
             console.error(err);
         }}
     }})();
