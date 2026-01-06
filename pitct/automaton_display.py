@@ -136,7 +136,10 @@ class AutomatonDisplay(object):
             return html
 
     def _repr_svg_(self):
-        return self.__graph._repr_svg_()
+        if is_env_jupyterlite():
+            return None
+        else:
+            return self.__graph._repr_svg_()
 
     def _jupyterlite_html_(self, dot: str):
         # generate uuid
