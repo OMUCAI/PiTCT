@@ -1,3 +1,5 @@
+import sys
+
 def is_env_notebook():
     """Determine wheather is the environment Jupyter Notebook"""
     try:
@@ -10,3 +12,13 @@ def is_env_notebook():
             return False  # Other type (?)
     except NameError:
         return False      # Probably standard Python interpreter
+    
+def is_env_jupyterlite():
+    """Determine whether the environment is JupyterLite (Pyodide/Emscripten)"""
+    if sys.platform == "emscripten":
+        try:
+            shell = get_ipython().__class__.__name__
+            return shell == 'Interpreter'
+        except NameError:
+            return False
+    return False

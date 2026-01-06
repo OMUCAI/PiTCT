@@ -5,9 +5,16 @@ from datetime import datetime
 import tempfile
 
 from pitct.name_converter import NameConverter
-from .util import is_env_notebook
+from .util import is_env_notebook, is_env_jupyterlite
 from .config import Config, DES_FILE_EXTENSION
 import base64
+
+# For JupyterLite
+try:
+    from jupyter_anywidget_graphviz import graphviz_headless
+    HAS_ANYWIDGET = True
+except ImportError:
+    HAS_ANYWIDGET = False
 
 BASE_HTML = '<img width="{}" src="data:image/svg+xml;base64,{}" >'
 
@@ -114,6 +121,9 @@ class AutomatonDisplay(object):
         if is_env_notebook():
             # Jupyter Environment
             return self
+        elif is_env_jupyterlite():
+            # JupyterLite Environment
+            return self
         else:
             # shell
             with tempfile.NamedTemporaryFile(delete=False, suffix='.gv') as tmp:
@@ -127,4 +137,10 @@ class AutomatonDisplay(object):
         return html
 
     def _repr_svg_(self):
-        return self.__graph._repr_svg_()
+        if is_env_jupyterlite() and HAS_ANYWIDGET:
+            g = graphviz_headless()
+            g.set_code_content(self.__graph.source)
+            g.blocking_reply()
+            return g.svg
+        else:
+            return self.__graph._repr_svg_()
