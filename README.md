@@ -23,12 +23,12 @@ Requirements:
 - Python 3.9+
 - Graphviz (system package)
 
-1. Install pitct library
+1. Install pitct library  
     ```bash
     pip install pitct
     ```
 
-2. Install graphviz
+2. Install graphviz  
     PiTCT depends on [Graphviz](https://graphviz.org/).  
     Please install graphviz from:
 
