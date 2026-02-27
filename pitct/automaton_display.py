@@ -130,7 +130,7 @@ class AutomatonDisplay(object):
             dot = self.__graph.source
             return self._jupyterlite_html_(dot)
         else:
-            svg = self.__graph._repr_svg_()
+            svg = self.__graph.pipe(format='svg').decode('utf-8')
             # svg文字列をb64エンコードしてから埋め込み
             html = BASE_HTML.format("100%", base64.b64encode(svg.encode()).decode())
             return html
@@ -139,7 +139,7 @@ class AutomatonDisplay(object):
         if is_env_jupyterlite():
             return None
         else:
-            return self.__graph._repr_svg_()
+            return self.__graph.pipe(format='svg').decode('utf-8')
 
     def _jupyterlite_html_(self, dot: str):
         # generate uuid
