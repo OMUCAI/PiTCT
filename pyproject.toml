@@ -11,7 +11,7 @@ license = "Apache-2.0 AND BSD-3-Clause"
 license-files = ["LICENSE", "libtct/LICENSE"]
 requires-python = ">=3.9"
 dependencies = [
-    "graphviz>=0.20,<0.23",
+    "graphviz>=0.20,<0.22",
     "u-msgpack-python>=2.7.1,<3.0.0"
 ]
 
