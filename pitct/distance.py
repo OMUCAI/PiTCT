@@ -121,7 +121,7 @@ def path_state_list(plant: str, start: State, goal: State, convert: bool = True)
     start_num = NameConverter.state_encode(plant, start, create=False)
     goal_num = NameConverter.state_encode(plant, goal, create=False)
 
-    path, _ = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start_num, goal_node=goal_num)
+    path, _, _ = _dijkstra_with_route(edges=edges, num_node=len(edges), start_node=start_num, goal_node=goal_num)
     conv_path = [NameConverter.state_decode(plant, state, convert=convert) for state in path]
     return conv_path
 
