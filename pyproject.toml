@@ -28,8 +28,13 @@ content-type = "text/markdown"
 dev = [
     "flake8",
     "black",
-    "build"
+    "build",
+    "pytest",
+    "pytest-cov"
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.setuptools]
 packages = ["pitct"]
