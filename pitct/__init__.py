@@ -10,7 +10,7 @@ from .des import (
     marker, trans, events, display_automaton, subautomaton, is_controllable, 
     uncontrollable_states, conact,
     plantification, supervisory_controller_synthesis, supervisory_synthesize,
-    supconbnd
+    supconbnd, hello_pitct,
 )
 from .distance import min_distance
 from .simulation import simulate_automaton, sample_automaton
