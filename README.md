@@ -70,6 +70,10 @@ This project uses multiple licenses due to the inclusion of third-party code. It
 
     PiTCT distributable file is generated in dist/ folder.
 
+### Release 
+
+Please see [the wiki](https://github.com/OMUCAI/PiTCT/wiki/Release) (JP only).
+
 ### Related Information
 
 - [Graphviz Documentation](https://graphviz.readthedocs.io/en/stable/index.html)
